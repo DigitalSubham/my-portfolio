@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <div
       name="home"
-      className="h-screen w-full bg-gradient-to-b from-gray-800 via-black to-gray-600"
+      className="h-screen w-[100%] bg-gradient-to-b from-gray-800 via-black to-gray-600"
     >
       <div className="max-w-screen-lg mx-auto flex flex-col items-center justify-center h-full px-4 md:flex-row">
         <div className="flex flex-col justify-center h-full">
@@ -43,9 +43,9 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div className="">
+        <div className="w-[50%]   ">
           <img
-            className="rounded-3xl mx-auto  mr-10 m-2 md:w-[350px] animate-hero-image"
+            className=" mx-auto  mr-10 m-2 md:w-[250px] sm:w-11 rounded-full   animate-hero-image"
             src={HeroImage}
             alt="my-pic"
           />

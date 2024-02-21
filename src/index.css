@@ -25,5 +25,5 @@
 
 /* Add the animation class to the element */
 .animate-hero-image {
-  animation: ani123 8s infinite; /* Adjust the duration as needed */
+  animation: ani123 10s infinite; /* Adjust the duration as needed */
 }

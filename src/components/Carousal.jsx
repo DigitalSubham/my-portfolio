@@ -1,7 +1,7 @@
 import React from "react";
-import blockchain_Nptel from "../assets/blockchain_Nptel.jpeg";
-import youtube_Clone from "../assets/portfolio/youtube_Clone.svg";
-import installNode from "../assets/portfolio/installNode.jpg";
+import blockchain_Nptel from "../assets/certificates/blockchain_Nptel.jpeg";
+import namastereact from "../assets/certificates/namastereact.webp";
+import domainage from "../assets/portfolio/domainage.png";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -20,20 +20,20 @@ const Carousal = () => {
       description: "Done Certifivation on Blockchain from Nptel",
     },
     {
-      img: youtube_Clone,
-      name: "Nptel",
-      description: "Done Certifivation on Blockchain from Nptel",
+      img: namastereact,
+      name: "Namaste React",
+      description: "Done Certifivation on React from Akshay Saini",
     },
     {
-      img: installNode,
+      img: domainage,
       name: "Nptel",
       description: "Done Certifivation on Blockchain from Nptel",
     },
   ];
   return (
-    <div className="w-[60%] md:w-1/5  mx-auto ">
+    <div className="w-[60%] md:w-1/5  mx-auto md:mr-52 ">
       <div className="pt-5">
-        <p className="text-4xl font-bold border-b-4 border-gray-500 inline">
+        <p className="text-4xl font-bold md:inline border-b-4 border-gray-500 sm:(flex items-center justify-center)">
           Certificates
         </p>
       </div>
@@ -45,7 +45,7 @@ const Carousal = () => {
                 <img
                   src={d.img}
                   alt="d.img"
-                  className=" hover:scale-105 h-[97%] w-[97%] rounded-xl "
+                  className=" hover:scale-110 h-[97%] w-[97%] rounded-xl "
                 />
               </div>
               <div className="flex flex-col justify-center items-center gap-4 p-4">

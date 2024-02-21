@@ -1,15 +1,15 @@
 import React from "react";
 
-import html from "../assets/html.png";
-import css from "../assets/css.png";
-import javascript from "../assets/javascript.png";
-import reactImage from "../assets/react.png";
-import node from "../assets/node.png";
-import expressjs from "../assets/expressjs.png";
-import mongodb from "../assets/mongodb.png";
+import html from "../assets/skills/html.png";
+import css from "../assets/skills/css.png";
+import javascript from "../assets/skills/javascript.png";
+import reactImage from "../assets/skills/react.png";
+import node from "../assets/skills/node.png";
+import expressjs from "../assets/skills/expressjs.png";
+import mongodb from "../assets/skills/mongodb.png";
 
-import github from "../assets/github.png";
-import tailwind from "../assets/tailwind.png";
+import github from "../assets/skills/github.png";
+import tailwind from "../assets/skills/tailwind.png";
 
 const Experience = () => {
   const techs = [
