@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import streamSage from "../assets/portfolio/streamSage.png";
 import youtube_Clone from "../assets/portfolio/youtube_Clone.svg";
 import domainage from "../assets/portfolio/domainage.png";
-import kidsJoy from "../assets/portfolio/kidsJoy.png";
+import kidsJoy from "../assets/portfolio/kidsjoy.png";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { AdvancedVideo, lazyload } from "@cloudinary/react";
 
@@ -57,7 +57,7 @@ const Portfolio = () => {
   ];
 
   const videoRefs = portfolios.map(() => useRef());
-  console.log(videoRefs);
+  // console.log(videoRefs);
 
   const onMouseOver = (index) => {
     videoRefs[index].current.videoRef.current.play();
