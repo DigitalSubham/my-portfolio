@@ -2,6 +2,8 @@ import React, { useRef } from "react";
 import streamSage from "../assets/portfolio/streamSage.png";
 import youtube_Clone from "../assets/portfolio/youtube_Clone.svg";
 import domainage from "../assets/portfolio/domainage.png";
+import CodeSync from "../assets/portfolio/CodeSync.png";
+import iskills from "../assets/portfolio/iskills.png";
 import kidsJoy from "../assets/portfolio/kidsjoy.png";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { AdvancedVideo, lazyload } from "@cloudinary/react";
@@ -19,11 +21,13 @@ const Portfolio = () => {
       src: streamSage,
       code: "https://github.com/DigitalSubham/StreamSage-AI-Movie-Explorer",
       demo: "https://stream-sage-ai-movie-explorer.vercel.app/",
-      vidsrc: "portfolio/domainAge",
+      vidsrc: "portfolio/vid2",
     },
     {
       id: 1,
       src: youtube_Clone,
+      code: "https://github.com/DigitalSubham/kidsJoy",
+      demo: "https://kids-joy.vercel.app/",
       vidsrc: "portfolio/vid2",
     },
     {
@@ -38,20 +42,20 @@ const Portfolio = () => {
       src: domainage,
       code: "https://github.com/DigitalSubham/Domain-Age-Checker-Chrome-Extension",
       demo: "#",
-      vidsrc: "portfolio/vid2",
+      vidsrc: "portfolio/domain",
     },
     {
       id: 4,
-      src: domainage,
-      code: "https://github.com/DigitalSubham/Domain-Age-Checker-Chrome-Extension",
-      demo: "#",
-      vidsrc: "portfolio/domainAge",
+      src: CodeSync,
+      code: "https://github.com/DigitalSubham/CodeSync-real-time-code-editor",
+      demo: "https://code-sync-real-time-code-editor.vercel.app/",
+      vidsrc: "portfolio/codesync",
     },
     {
       id: 5,
-      src: domainage,
-      code: "https://github.com/DigitalSubham/Domain-Age-Checker-Chrome-Extension",
-      demo: "#",
+      src: iskills,
+      code: "https://github.com/DigitalSubham/iSkills",
+      demo: "https://i-skills.vercel.app/",
       vidsrc: null,
     },
   ];
@@ -81,7 +85,7 @@ const Portfolio = () => {
         </div>
 
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 px-12 sm:px-0 ">
-          {portfolios.map(({ id, src, vidsrc }) => (
+          {portfolios.map(({ id, src, vidsrc, demo, code }) => (
             <div
               key={id}
               className="shadow-md shadow-gray-600 rounded-lg  relative group"
@@ -110,12 +114,16 @@ const Portfolio = () => {
               )}
 
               <div className="flex items-center justify-center">
-                <button className="w-1/2 px-6 py-3 m-4 duration-200 hover:scale-105">
-                  Demo
-                </button>
-                <button className="w-1/2 px-6 py-3 m-4 duration-200 hover:scale-105">
-                  Code
-                </button>
+                <a href={demo} target="_">
+                  <button className="w-1/2 px-6 py-3 m-4 duration-200 hover:scale-105">
+                    Demo
+                  </button>
+                </a>
+                <a href={code} target="_">
+                  <button className="w-1/2 px-6 py-3 m-4 duration-200 hover:scale-105">
+                    Code
+                  </button>
+                </a>
               </div>
             </div>
           ))}
