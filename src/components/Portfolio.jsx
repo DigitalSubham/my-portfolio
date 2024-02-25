@@ -21,21 +21,21 @@ const Portfolio = () => {
       src: streamSage,
       code: "https://github.com/DigitalSubham/StreamSage-AI-Movie-Explorer",
       demo: "https://stream-sage-ai-movie-explorer.vercel.app/",
-      vidsrc: "portfolio/vid2",
+      vidsrc: "portfolio/streamsage",
     },
     {
       id: 1,
       src: youtube_Clone,
       code: "https://github.com/DigitalSubham/kidsJoy",
       demo: "https://kids-joy.vercel.app/",
-      vidsrc: "portfolio/vid2",
+      vidsrc: null,
     },
     {
       id: 2,
       src: kidsJoy,
       code: "https://github.com/DigitalSubham/kidsJoy",
       demo: "https://kids-joy.vercel.app/",
-      vidsrc: "portfolio/vid3",
+      vidsrc: "portfolio/kidsjoy",
     },
     {
       id: 3,
@@ -109,18 +109,24 @@ const Portfolio = () => {
                 <img
                   src={src}
                   alt={src}
-                  className="rounded-md duration-200 hover:scale-150 relative"
+                  className="rounded-md   duration-200 hover:scale-110 relative"
                 />
               )}
 
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center mt-8">
                 <a href={demo} target="_">
-                  <button className="w-1/2 px-6 py-3 m-4 duration-200 hover:scale-105">
+                  <button
+                    type="button"
+                    class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+                  >
                     Demo
                   </button>
                 </a>
                 <a href={code} target="_">
-                  <button className="w-1/2 px-6 py-3 m-4 duration-200 hover:scale-105">
+                  <button
+                    type="button"
+                    class="text-yellow-400 hover:text-white border border-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900"
+                  >
                     Code
                   </button>
                 </a>
