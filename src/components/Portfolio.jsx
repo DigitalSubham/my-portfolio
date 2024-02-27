@@ -26,9 +26,9 @@ const Portfolio = () => {
     {
       id: 1,
       src: youtube_Clone,
-      code: "https://github.com/DigitalSubham/kidsJoy",
-      demo: "https://kids-joy.vercel.app/",
-      vidsrc: null,
+      code: "https://github.com/DigitalSubham/youtube-clone",
+      demo: "https://youtube-clone-nine-livid.vercel.app/",
+      vidsrc: "portfolio/youtube",
     },
     {
       id: 2,
