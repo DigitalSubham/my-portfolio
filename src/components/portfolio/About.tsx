@@ -33,19 +33,19 @@ const About = () => {
           <div className="space-y-6">
             <h3 className="text-2xl font-bold">Who am I?</h3>
             <p className="text-gray-600 dark:text-gray-400">
-              I'm a passionate Full Stack Developer with over 1.5 years of
+              {`I'm`} a passionate Full Stack Developer with over 1.5 years of
               experience in building web applications. I specialize in
-              JavaScript, React, Node.js, and modern web technologies.
+              {`JavaScript, React, Node.js,`} and modern web technologies.
             </p>
             <p className="text-gray-600 dark:text-gray-400">
               My journey in web development started when I was in college, and
-              since then, I've worked on various projects ranging from small
+              {`since then, I've`} worked on various projects ranging from small
               business websites to complex enterprise applications.
             </p>
             <p className="text-gray-600 dark:text-gray-400">
-              When I'm not coding, you can find me hiking, reading, or
-              experimenting with new technologies. I'm always eager to learn and
-              grow in this ever-evolving field.
+              When {`I'm`} not {`coding,`} you can find me {`hiking, reading,`}{" "}
+              or experimenting with new technologies. {`I'm`} always eager to
+              learn and grow in this ever-evolving field.
             </p>
             <div className="pt-4">
               <Link

@@ -35,8 +35,8 @@ const Certificates = () => {
               </div>
             </div>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Certified in designing, developing, and deploying cloud-based
-              solutions using AWS services and best practices.
+              {`Certified in designing, developing, and deploying cloud-based
+              solutions using AWS services and best practices.`}
             </p>
             <Link
               href="#"
@@ -66,8 +66,8 @@ const Certificates = () => {
               </div>
             </div>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Advanced certification in building scalable applications with
-              React, Redux, and related technologies.
+              {`Advanced certification in building scalable applications with
+              React, Redux, and related technologies.`}
             </p>
             <Link
               href="#"

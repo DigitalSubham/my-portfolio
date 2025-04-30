@@ -24,7 +24,7 @@ const Notes = () => {
                 </h3>
               </div>
               <span className="text-xs text-gray-500 dark:text-gray-400">
-                Apr 10, 2023
+                {`Apr 10, 2023`}
               </span>
             </div>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
@@ -61,8 +61,8 @@ const Notes = () => {
               </span>
             </div>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Essential techniques for optimizing React applications, including
-              memoization, code splitting, and efficient state management.
+              {`Essential techniques for optimizing React applications, including
+              memoization, code splitting, and efficient state management.`}
             </p>
             <div className="flex items-center justify-between">
               <Link
@@ -94,8 +94,8 @@ const Notes = () => {
               </span>
             </div>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              A comparison of CSS Grid and Flexbox, with practical examples of
-              when to use each for optimal layout design.
+              {`A comparison of CSS Grid and Flexbox, with practical examples of
+              when to use each for optimal layout design.`}
             </p>
             <div className="flex items-center justify-between">
               <Link
@@ -162,9 +162,9 @@ const Notes = () => {
               </span>
             </div>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              A guide to establishing an efficient Git workflow for team
+              {`A guide to establishing an efficient Git workflow for team
               collaboration, including branching strategies and commit
-              conventions.
+              conventions.`}
             </p>
             <div className="flex items-center justify-between">
               <Link
@@ -198,8 +198,8 @@ const Notes = () => {
               </span>
             </div>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Understanding MongoDB's powerful aggregation framework for complex
-              data processing and analysis.
+              {`Understanding MongoDB's powerful aggregation framework for complex
+              data processing and analysis.`}
             </p>
             <div className="flex items-center justify-between">
               <Link

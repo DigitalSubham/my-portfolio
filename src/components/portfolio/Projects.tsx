@@ -31,8 +31,8 @@ const Projects = () => {
             <div className="p-6">
               <h3 className="text-xl font-bold mb-2">E-Commerce Platform</h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                A full-featured online store with payment processing, inventory
-                management, and admin dashboard.
+                {`A full-featured online store with payment processing, inventory
+                management, and admin dashboard.`}
               </p>
               <div className="flex flex-wrap gap-2 mb-4">
                 <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs rounded-full">
@@ -131,8 +131,8 @@ const Projects = () => {
             <div className="p-6">
               <h3 className="text-xl font-bold mb-2">Weather Dashboard</h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                A weather application with location-based forecasts, historical
-                data, and interactive maps.
+                {`A weather application with location-based forecasts, historical
+                data, and interactive maps.`}
               </p>
               <div className="flex flex-wrap gap-2 mb-4">
                 <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs rounded-full">

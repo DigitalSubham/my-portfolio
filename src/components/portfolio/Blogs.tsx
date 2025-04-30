@@ -11,7 +11,7 @@ const Blogs = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">My Blog</h2>
           <div className="w-20 h-1 bg-gradient-to-r from-purple-600 to-pink-600 mx-auto mb-6"></div>
           <p className="text-lg text-gray-600 dark:text-gray-400">
-            Thoughts, tutorials and insights
+            {`Thoughts, tutorials and insights`}
           </p>
         </div>
 
@@ -44,9 +44,9 @@ const Blogs = () => {
                 The Future of Web Development: Trends to Watch in 2023
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Explore the cutting-edge technologies and methodologies that are
+                {` Explore the cutting-edge technologies and methodologies that are
                 shaping the future of web development. From AI-driven interfaces
-                to WebAssembly, discover what's next.
+                to WebAssembly, discover what's next.`}
               </p>
               <Link
                 href="/blog/future-web-development"
@@ -101,7 +101,7 @@ const Blogs = () => {
                 Mastering React Hooks: A Comprehensive Guide
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Learn how to leverage React Hooks to write cleaner, more
+                Learn how to leverage React Hooks to write {`cleaner,`} more
                 efficient functional components in your React applications.
               </p>
               <Link
@@ -154,8 +154,9 @@ const Blogs = () => {
                 Optimizing Web Performance: Strategies That Work
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Discover practical techniques to improve your website's loading
-                speed and overall performance for better user experience.
+                Discover practical techniques to improve your {`website `}
+                loading speed and overall performance for better user
+                experience.
               </p>
               <Link
                 href="/blog/optimizing-web-performance"

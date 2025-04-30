@@ -8,16 +8,16 @@ const Contact = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
           <div className="w-20 h-1 bg-gradient-to-r from-purple-600 to-pink-600 mx-auto mb-6"></div>
           <p className="text-lg text-gray-600 dark:text-gray-400">
-            Have a project in mind? Let's work together!
+            {`Have a project in mind? Let's work together!`}
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
           <div className="space-y-6">
             <h3 className="text-2xl font-bold">Contact Information</h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Feel free to reach out to me through any of these channels. I'm
+              {` Feel free to reach out to me through any of these channels. I'm
               always open to discussing new projects, creative ideas, or
-              opportunities to be part of your vision.
+              opportunities to be part of your vision.`}
             </p>
             <div className="space-y-4">
               <div className="flex items-start">

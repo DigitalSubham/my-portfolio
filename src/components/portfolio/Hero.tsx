@@ -14,7 +14,7 @@ const Hero = () => {
           <div className="space-y-8 text-center md:text-left">
             <div className="space-y-2">
               <h2 className="text-2xl font-medium text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
-                Hello, I'm
+                {`Hello, I'm`}
               </h2>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
                 <span className="block">Subham Kumar</span>
@@ -24,9 +24,9 @@ const Hero = () => {
               </p>
             </div>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-lg mx-auto md:mx-0">
-              I build exceptional digital experiences with modern technologies.
+              {`I build exceptional digital experiences with modern technologies.
               Focused on creating intuitive and high-performance web
-              applications.
+              applications.`}
             </p>
             <div className="flex flex-wrap gap-4 justify-center md:justify-start">
               <Link
