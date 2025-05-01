@@ -13,7 +13,7 @@ interface ProjectProps {
     title: string;
     description: string;
     image: string;
-    video: string; // Cloudinary video URL
+    video: string | null;
     tags: string[];
     demoLink: string;
     codeLink: string;
@@ -34,10 +34,11 @@ export default function ProjectCard({ project }: ProjectProps) {
         .replace("/upload/", "/upload/q_auto,f_auto,c_fill/")
         // Add low initial quality for faster loading
         .replace("/upload/", "/upload/q_auto:low,f_auto/")
-    : project.video;
+    : project.video || ""; // Fallback to empty string if video is null
 
   // Preload video when component mounts
   useEffect(() => {
+    if (!optimizedVideoUrl) return; // If there is no valid video URL, skip loading
     const videoElement = document.createElement("video");
     videoElement.src = optimizedVideoUrl;
     videoElement.preload = "metadata";
@@ -102,52 +103,36 @@ export default function ProjectCard({ project }: ProjectProps) {
       onMouseLeave={handleMouseLeave}
     >
       <div className="relative h-48 overflow-hidden">
-        {/* Always render the video but keep it hidden until hover */}
-        <video
-          ref={videoRef}
-          className={`object-cover w-full h-full absolute inset-0 transition-opacity duration-300 ${
-            isHovering && videoLoaded ? "opacity-100" : "opacity-0"
-          }`}
-          muted
-          loop
-          playsInline
-          src={optimizedVideoUrl}
-          poster={project.image}
-        />
+        {/* Only render the video if it's a valid string */}
+        {optimizedVideoUrl && (
+          <video
+            ref={videoRef}
+            className={`object-cover w-full h-full absolute inset-0 transition-opacity duration-300 ${
+              isHovering && videoLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            muted
+            loop
+            playsInline
+            src={optimizedVideoUrl}
+            poster={project.image}
+          />
+        )}
 
-        <Image
-          src={project.image || "/placeholder.svg"}
-          alt={project.title}
-          width={600}
-          height={400}
-          className={`object-contain w-full h-full transition-opacity duration-300 ${
-            isHovering && videoLoaded ? "opacity-0" : "opacity-100"
-          }`}
-          priority
-        />
+        {/* Fallback to image if there's no video */}
+        {!optimizedVideoUrl && (
+          <Image
+            src={project.image || "/placeholder.svg"}
+            alt={project.title}
+            width={600}
+            height={400}
+            className="object-contain w-full h-full"
+            priority
+          />
+        )}
 
         <div className="absolute top-2 right-2 bg-white dark:bg-gray-950 rounded-full p-2 shadow-md z-10">
           {project.icon}
         </div>
-
-        {/* Overlay with gradient and play indicator */}
-        {/* <div
-          className={`absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-center justify-center transition-opacity duration-300 z-10 ${
-            isHovering ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-            <div className="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center">
-              <svg
-                className="w-6 h-6 text-white"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </div>
-          </div>
-        </div> */}
       </div>
       <div className="p-6">
         <h3 className="text-xl font-bold mb-2">{project.title}</h3>

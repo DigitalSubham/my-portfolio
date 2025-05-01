@@ -2,6 +2,18 @@ import Link from "next/link";
 import { ExternalLink, Code, Briefcase, Globe } from "lucide-react";
 import ProjectCard from "./ProjectCard";
 
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  video: string | null; // Allow null here
+  tags: string[];
+  demoLink: string;
+  codeLink: string;
+  icon: React.ReactNode;
+}
+
 const Projects = () => {
   const projects = [
     {
@@ -97,7 +109,7 @@ const Projects = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project: any) => (
+          {projects.map((project: Project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
         </div>
