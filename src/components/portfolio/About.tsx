@@ -35,12 +35,12 @@ const About = () => {
             <p className="text-gray-600 dark:text-gray-400">
               {`I'm`} a passionate Full Stack Developer with over 1.5 years of
               experience in building web applications. I specialize in
-              {`JavaScript, React, Node.js,`} and modern web technologies.
+              {` JavaScript, React, Node.js,`} and modern web technologies.
             </p>
             <p className="text-gray-600 dark:text-gray-400">
               My journey in web development started when I was in college, and
-              {`since then, I've`} worked on various projects ranging from small
-              business websites to complex enterprise applications.
+              {` since then, I've `} worked on various projects ranging from
+              small business websites to complex enterprise applications.
             </p>
             <p className="text-gray-600 dark:text-gray-400">
               When {`I'm`} not {`coding,`} you can find me {`hiking, reading,`}{" "}
