@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { ExternalLink, Award } from "lucide-react";
 import CertificateCard from "./CertificateCard";
 
 const Certificates = () => {

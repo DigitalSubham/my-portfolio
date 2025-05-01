@@ -1,6 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Github, ExternalLink, Code, Briefcase, Globe } from "lucide-react";
+import { ExternalLink, Code, Briefcase, Globe } from "lucide-react";
 import ProjectCard from "./ProjectCard";
 
 const Projects = () => {
