@@ -77,7 +77,7 @@ const Blogs = () => {
           <div className="bg-white dark:bg-gray-950 rounded-xl overflow-hidden shadow-lg transition-all hover:shadow-2xl hover:-translate-y-1 duration-300">
             <div className="relative h-48 overflow-hidden">
               <Image
-                src="/placeholder.svg?height=400&width=600"
+                src="https://cdn.hashnode.com/res/hashnode/image/upload/v1703459140733/66e2b85d-0152-436c-983f-275565765579.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress,format&format=webp"
                 alt="Blog Post 1"
                 width={600}
                 height={400}
@@ -94,18 +94,19 @@ const Blogs = () => {
                 </span>
                 <span className="mx-2 text-gray-300 dark:text-gray-600">•</span>
                 <span className="text-sm text-purple-600 dark:text-purple-400">
-                  React
+                  Resume
                 </span>
               </div>
               <h3 className="text-xl font-bold mb-2">
-                Mastering React Hooks: A Comprehensive Guide
+                Resume for Freshers: Important Points to Keep in Mind
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
                 Learn how to leverage React Hooks to write {`cleaner,`} more
                 efficient functional components in your React applications.
               </p>
               <Link
-                href="/blog/mastering-react-hooks"
+                target="_blank"
+                href="https://digitalsubham.hashnode.dev/resume-for-freshers-important-points-to-keep-in-mind"
                 className="inline-flex items-center text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 font-medium"
               >
                 Read More
@@ -130,7 +131,7 @@ const Blogs = () => {
           <div className="bg-white dark:bg-gray-950 rounded-xl overflow-hidden shadow-lg transition-all hover:shadow-2xl hover:-translate-y-1 duration-300">
             <div className="relative h-48 overflow-hidden">
               <Image
-                src="/placeholder.svg?height=400&width=600"
+                src="https://cdn.hashnode.com/res/hashnode/image/upload/v1702698589974/088bbe3a-9e5f-48b3-bfec-3e12e57bb936.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress,format&format=webp"
                 alt="Blog Post 2"
                 width={600}
                 height={400}
@@ -151,7 +152,7 @@ const Blogs = () => {
                 </span>
               </div>
               <h3 className="text-xl font-bold mb-2">
-                Optimizing Web Performance: Strategies That Work
+                A JavaScript Developer Must know these Number & Maths Methods
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
                 Discover practical techniques to improve your {`website `}

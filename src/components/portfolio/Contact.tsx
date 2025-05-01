@@ -25,7 +25,7 @@ const Contact = () => {
                 <div>
                   <h4 className="font-medium">Email</h4>
                   <p className="text-gray-600 dark:text-gray-400">
-                    subham@example.com
+                    shubhamkr354@gmail.com
                   </p>
                 </div>
               </div>
@@ -34,7 +34,7 @@ const Contact = () => {
                 <div>
                   <h4 className="font-medium">LinkedIn</h4>
                   <p className="text-gray-600 dark:text-gray-400">
-                    linkedin.com/in/subhamkumar
+                    linkedin.com/in/digital-subham-kumar
                   </p>
                 </div>
               </div>
@@ -43,14 +43,18 @@ const Contact = () => {
                 <div>
                   <h4 className="font-medium">GitHub</h4>
                   <p className="text-gray-600 dark:text-gray-400">
-                    github.com/subhamkumar
+                    github.com/DigitalSubham
                   </p>
                 </div>
               </div>
             </div>
           </div>
           <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6">
-            <form className="space-y-4">
+            <form
+              action="https://getform.io/f/a6c78b4d-9b14-4de4-b94f-705a82847702"
+              method="POST"
+              className="space-y-4"
+            >
               <div>
                 <label
                   htmlFor="name"

@@ -1,8 +1,91 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Github, ExternalLink, Code, Briefcase } from "lucide-react";
+import { Github, ExternalLink, Code, Briefcase, Globe } from "lucide-react";
+import ProjectCard from "./ProjectCard";
 
 const Projects = () => {
+  const projects = [
+    {
+      id: 0,
+      title: "StreamSage AI Movie Explorer",
+      description:
+        "AI-powered movie discovery platform for finding recommendations and details.",
+      image: "/projects/streamSage.png",
+      video:
+        "https://res.cloudinary.com/donutatdq/video/upload/q_auto/f_auto/v1/portfolio/streamsage.webm?_a=DATC1RAAZAA0",
+      tags: ["Next.js", "TMDB API", "Tailwind"],
+      demoLink: "https://stream-sage-ai-movie-explorer.vercel.app/",
+      codeLink: "https://github.com/DigitalSubham/StreamSage-AI-Movie-Explorer",
+      icon: <Globe className="w-4 h-4 text-purple-600" />,
+    },
+    {
+      id: 1,
+      title: "YouTube Clone",
+      description:
+        "A responsive clone of YouTube using RapidAPI and modern UI practices.",
+      image: "/projects/youtube_Clone.svg",
+      video:
+        "https://res.cloudinary.com/donutatdq/video/upload/q_auto/f_auto/v1/portfolio/youtube.webm?_a=DATC1RAAZAA0",
+      tags: ["React", "RapidAPI", "Tailwind"],
+      demoLink: "https://youtube-clone-nine-livid.vercel.app/",
+      codeLink: "https://github.com/DigitalSubham/youtube-clone",
+      icon: <Code className="w-4 h-4 text-purple-600" />,
+    },
+    {
+      id: 2,
+      title: "KidsJoy",
+      description:
+        "A fun and interactive website for children to play, learn, and explore.",
+      image: "/projects/kidsjoy.png",
+      video:
+        "https://res.cloudinary.com/donutatdq/video/upload/q_auto/f_auto/v1/portfolio/kidsjoy.webm?_a=DATC1RAAZAA0",
+      tags: ["React", "JavaScript", "CSS"],
+      demoLink: "https://kids-joy.vercel.app/",
+      codeLink: "https://github.com/DigitalSubham/kidsJoy",
+      icon: <Briefcase className="w-4 h-4 text-purple-600" />,
+    },
+    {
+      id: 3,
+      title: "Domain Age Checker Extension",
+      description:
+        "Chrome extension to check the age of a domain directly from your browser.",
+      image: "/projects/domainage.png",
+      video:
+        "https://res.cloudinary.com/donutatdq/video/upload/q_auto/f_auto/v1/portfolio/domain.webm?_a=DATC1RAAZAA0",
+      tags: ["JavaScript", "Chrome Extension", "Web Tools"],
+      demoLink: "#",
+      codeLink:
+        "https://github.com/DigitalSubham/Domain-Age-Checker-Chrome-Extension",
+      icon: <Globe className="w-4 h-4 text-purple-600" />,
+    },
+    {
+      id: 4,
+      title: "CodeSync",
+      description:
+        "A real-time collaborative code editor with multi-user support.",
+      image: "/projects/CodeSync.png",
+      video:
+        "https://res.cloudinary.com/donutatdq/video/upload/q_auto/f_auto/v1/portfolio/codesync.webm?_a=DATC1RAAZAA0",
+      tags: ["React", "Socket.IO", "Node.js"],
+      demoLink: "https://code-sync-real-time-code-editor.vercel.app/",
+      codeLink:
+        "https://github.com/DigitalSubham/CodeSync-real-time-code-editor",
+      icon: <Code className="w-4 h-4 text-purple-600" />,
+    },
+    {
+      id: 5,
+      title: "iSkills",
+      description:
+        "An ed-tech platform for skill development and course discovery.",
+      image: "/projects/iskills.png",
+      video: null,
+      tags: ["React", "Firebase", "Tailwind"],
+      demoLink: "https://i-skills.vercel.app/",
+      codeLink: "https://github.com/DigitalSubham/iSkills",
+      icon: <Briefcase className="w-4 h-4 text-purple-600" />,
+    },
+  ];
+
   return (
     <section id="projects" className="py-20 bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,157 +96,13 @@ const Projects = () => {
             Check out some of my recent work
           </p>
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Project 1 */}
-          <div className="bg-white dark:bg-gray-950 rounded-xl overflow-hidden shadow-lg transition-all hover:shadow-2xl hover:-translate-y-1 duration-300">
-            <div className="relative h-48 overflow-hidden">
-              <Image
-                src="/placeholder.svg?height=400&width=600"
-                alt="Project 1"
-                width={600}
-                height={400}
-                className="object-cover w-full h-full transition-transform duration-500 hover:scale-110"
-              />
-              <div className="absolute top-2 right-2 bg-white dark:bg-gray-950 rounded-full p-2 shadow-md">
-                <Briefcase className="w-4 h-4 text-purple-600" />
-              </div>
-            </div>
-            <div className="p-6">
-              <h3 className="text-xl font-bold mb-2">E-Commerce Platform</h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
-                {`A full-featured online store with payment processing, inventory
-                management, and admin dashboard.`}
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs rounded-full">
-                  React
-                </span>
-                <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs rounded-full">
-                  Node.js
-                </span>
-                <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs rounded-full">
-                  MongoDB
-                </span>
-              </div>
-              <div className="flex gap-4">
-                <Link
-                  href="#"
-                  className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 inline-flex items-center"
-                >
-                  <Github className="w-4 h-4 mr-1" />
-                  Code
-                </Link>
-                <Link
-                  href="#"
-                  className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 inline-flex items-center"
-                >
-                  <ExternalLink className="w-4 h-4 mr-1" />
-                  Demo
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Project 2 */}
-          <div className="bg-white dark:bg-gray-950 rounded-xl overflow-hidden shadow-lg transition-all hover:shadow-2xl hover:-translate-y-1 duration-300">
-            <div className="relative h-48 overflow-hidden">
-              <Image
-                src="/placeholder.svg?height=400&width=600"
-                alt="Project 2"
-                width={600}
-                height={400}
-                className="object-cover w-full h-full transition-transform duration-500 hover:scale-110"
-              />
-              <div className="absolute top-2 right-2 bg-white dark:bg-gray-950 rounded-full p-2 shadow-md">
-                <Code className="w-4 h-4 text-purple-600" />
-              </div>
-            </div>
-            <div className="p-6">
-              <h3 className="text-xl font-bold mb-2">Task Management App</h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
-                A collaborative task management application with real-time
-                updates and team collaboration features.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs rounded-full">
-                  Next.js
-                </span>
-                <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs rounded-full">
-                  Firebase
-                </span>
-                <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs rounded-full">
-                  Tailwind
-                </span>
-              </div>
-              <div className="flex gap-4">
-                <Link
-                  href="#"
-                  className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 inline-flex items-center"
-                >
-                  <Github className="w-4 h-4 mr-1" />
-                  Code
-                </Link>
-                <Link
-                  href="#"
-                  className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 inline-flex items-center"
-                >
-                  <ExternalLink className="w-4 h-4 mr-1" />
-                  Demo
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Project 3 */}
-          <div className="bg-white dark:bg-gray-950 rounded-xl overflow-hidden shadow-lg transition-all hover:shadow-2xl hover:-translate-y-1 duration-300">
-            <div className="relative h-48 overflow-hidden">
-              <Image
-                src="/placeholder.svg?height=400&width=600"
-                alt="Project 3"
-                width={600}
-                height={400}
-                className="object-cover w-full h-full transition-transform duration-500 hover:scale-110"
-              />
-              <div className="absolute top-2 right-2 bg-white dark:bg-gray-950 rounded-full p-2 shadow-md">
-                <Code className="w-4 h-4 text-purple-600" />
-              </div>
-            </div>
-            <div className="p-6">
-              <h3 className="text-xl font-bold mb-2">Weather Dashboard</h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
-                {`A weather application with location-based forecasts, historical
-                data, and interactive maps.`}
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs rounded-full">
-                  React
-                </span>
-                <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs rounded-full">
-                  OpenWeather API
-                </span>
-                <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs rounded-full">
-                  Chart.js
-                </span>
-              </div>
-              <div className="flex gap-4">
-                <Link
-                  href="#"
-                  className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 inline-flex items-center"
-                >
-                  <Github className="w-4 h-4 mr-1" />
-                  Code
-                </Link>
-                <Link
-                  href="#"
-                  className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 inline-flex items-center"
-                >
-                  <ExternalLink className="w-4 h-4 mr-1" />
-                  Demo
-                </Link>
-              </div>
-            </div>
-          </div>
+          {projects.map((project: any) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
         </div>
+
         <div className="text-center mt-12">
           <Link
             href="#"
