@@ -119,16 +119,15 @@ export default function ProjectCard({ project }: ProjectProps) {
         )}
 
         {/* Fallback to image if there's no video */}
-        {!optimizedVideoUrl && (
-          <Image
-            src={project.image || "/placeholder.svg"}
-            alt={project.title}
-            width={600}
-            height={400}
-            className="object-contain w-full h-full"
-            priority
-          />
-        )}
+
+        <Image
+          src={project.image || "/placeholder.svg"}
+          alt={project.title}
+          width={600}
+          height={400}
+          className="object-contain w-full h-full"
+          priority
+        />
 
         <div className="absolute top-2 right-2 bg-white dark:bg-gray-950 rounded-full p-2 shadow-md z-10">
           {project.icon}

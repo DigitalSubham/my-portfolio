@@ -9,8 +9,10 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0 font-bold text-xl">
             <Link href="/" className="flex items-center">
-              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                Subham Kumar
+              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent flex items-center gap-2">
+                <span className="text-green-500">{`<`}</span>{" "}
+                <span>{`Subham Kumar`} </span>
+                <span className="text-green-500">{`/>`}</span>
               </span>
             </Link>
           </div>

@@ -11,7 +11,11 @@ const Footer = () => {
               href="/"
               className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600"
             >
-              Subham Kumar
+              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent flex items-center gap-2">
+                <span className="text-green-500">{`<`}</span>{" "}
+                <span>{`Subham Kumar`} </span>
+                <span className="text-green-500">{`/>`}</span>
+              </span>
             </Link>
           </div>
           <div className="flex space-x-6">
