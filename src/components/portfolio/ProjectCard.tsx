@@ -125,7 +125,7 @@ export default function ProjectCard({ project }: ProjectProps) {
           alt={project.title}
           width={600}
           height={400}
-          className="object-contain w-full h-full"
+          className="object-fill w-full h-full"
           priority
         />
 
@@ -150,6 +150,7 @@ export default function ProjectCard({ project }: ProjectProps) {
         </div>
         <div className="flex gap-4">
           <Link
+            target="_blank"
             href={project.codeLink}
             className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 inline-flex items-center"
           >
@@ -157,6 +158,7 @@ export default function ProjectCard({ project }: ProjectProps) {
             Code
           </Link>
           <Link
+            target="_blank"
             href={project.demoLink}
             className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 inline-flex items-center"
           >

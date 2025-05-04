@@ -1,4 +1,5 @@
 import { Github, Linkedin, Mail } from "lucide-react";
+import Link from "next/link";
 
 const Contact = () => {
   return (
@@ -24,27 +25,39 @@ const Contact = () => {
                 <Mail className="w-5 h-5 text-purple-600 dark:text-purple-400 mt-1 mr-3" />
                 <div>
                   <h4 className="font-medium">Email</h4>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <Link
+                    target="_blank"
+                    href={"mailto:shubhamkr354@gmail.com/"}
+                    className="text-gray-600 dark:text-gray-400"
+                  >
                     shubhamkr354@gmail.com
-                  </p>
+                  </Link>
                 </div>
               </div>
               <div className="flex items-start">
                 <Linkedin className="w-5 h-5 text-purple-600 dark:text-purple-400 mt-1 mr-3" />
                 <div>
                   <h4 className="font-medium">LinkedIn</h4>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    linkedin.com/in/digital-subham-kumar
-                  </p>
+                  <Link
+                    target="_blank"
+                    href={"https://www.linkedin.com/in/subham-kr/"}
+                    className="text-gray-600 dark:text-gray-400"
+                  >
+                    linkedin.com/in/subham-kr
+                  </Link>
                 </div>
               </div>
               <div className="flex items-start">
                 <Github className="w-5 h-5 text-purple-600 dark:text-purple-400 mt-1 mr-3" />
                 <div>
                   <h4 className="font-medium">GitHub</h4>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <Link
+                    target="_blank"
+                    href="https://github.com/DigitalSubham"
+                    className="text-gray-600 dark:text-gray-400"
+                  >
                     github.com/DigitalSubham
-                  </p>
+                  </Link>
                 </div>
               </div>
             </div>

@@ -52,7 +52,7 @@ const Hero = () => {
                 <span className="sr-only">GitHub</span>
               </Link>
               <Link
-                href="https://www.linkedin.com/in/digital-subham-kumar/"
+                href="https://www.linkedin.com/in/subham-kr/"
                 target="_blank"
                 className="text-gray-600 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 transition-colors"
               >

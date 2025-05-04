@@ -8,6 +8,7 @@ import Notes from "@/components/portfolio/Notes";
 import Contact from "@/components/portfolio/Contact";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
+import WorkExperience from "@/components/portfolio/WorkExperience";
 
 export default function Home() {
   return (
@@ -20,6 +21,23 @@ export default function Home() {
 
       {/* About Section */}
       <About />
+
+      {/* Work Experience Section */}
+      <section id="experience" className="py-20 bg-gray-50 dark:bg-gray-900">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Work Experience
+            </h2>
+            <div className="w-20 h-1 bg-gradient-to-r from-purple-600 to-pink-600 mx-auto mb-6"></div>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              My professional journey
+            </p>
+          </div>
+
+          <WorkExperience />
+        </div>
+      </section>
 
       {/* Projects Section */}
       <Projects />

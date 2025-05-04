@@ -1,4 +1,4 @@
-import { ExternalLink } from "lucide-react";
+import { Download, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -17,7 +17,7 @@ const About = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="relative rounded-2xl overflow-hidden shadow-xl h-96 group">
             <Image
-              src="/shubham.png?height=600&width=800"
+              src="/shubham.jpg?height=600&width=800"
               alt="About Subham Kumar"
               width={800}
               height={600}
@@ -47,14 +47,27 @@ const About = () => {
               or experimenting with new technologies. {`I'm`} always eager to
               learn and grow in this ever-evolving field.
             </p>
-            <div className="pt-4">
-              <Link
+            <div className="flex flex-col sm:flex-row gap-4">
+              {/* View Resume */}
+              <a
                 href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-colors shadow-lg hover:shadow-xl"
               >
-                Download Resume
+                View Resume
                 <ExternalLink className="ml-2 w-4 h-4" />
-              </Link>
+              </a>
+
+              {/* Download Resume */}
+              <a
+                href="/resume.pdf"
+                download
+                className="inline-flex items-center px-6 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg transition-colors shadow-lg hover:shadow-xl"
+              >
+                Download Resume
+                <Download className="ml-2 w-4 h-4" />
+              </a>
             </div>
           </div>
         </div>

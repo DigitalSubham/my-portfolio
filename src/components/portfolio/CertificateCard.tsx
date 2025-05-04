@@ -24,7 +24,7 @@ export default function CertificateCard({ certificate }: CertificateProps) {
           alt={certificate.title}
           width={400}
           height={300}
-          className="object-contain w-full h-full transition-transform duration-500 group-hover:scale-105"
+          className="object-fill w-full h-full transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
@@ -53,6 +53,7 @@ export default function CertificateCard({ certificate }: CertificateProps) {
         </p>
 
         <Link
+          target="_blank"
           href={certificate.link}
           className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-colors text-sm font-medium shadow-md"
         >
