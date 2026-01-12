@@ -30,10 +30,10 @@ export default function ProjectCard({ project }: ProjectProps) {
   // Optimize Cloudinary URL for better performance
   const optimizedVideoUrl = project.video?.includes("cloudinary.com")
     ? project.video
-        // Add quality and format transformations if not already present
-        .replace("/upload/", "/upload/q_auto,f_auto,c_fill/")
-        // Add low initial quality for faster loading
-        .replace("/upload/", "/upload/q_auto:low,f_auto/")
+      // Add quality and format transformations if not already present
+      .replace("/upload/", "/upload/q_auto,f_auto,c_fill/")
+      // Add low initial quality for faster loading
+      .replace("/upload/", "/upload/q_auto:low,f_auto/")
     : project.video || ""; // Fallback to empty string if video is null
 
   // Preload video when component mounts
@@ -107,9 +107,8 @@ export default function ProjectCard({ project }: ProjectProps) {
         {optimizedVideoUrl && (
           <video
             ref={videoRef}
-            className={`object-cover w-full h-full absolute inset-0 transition-opacity duration-300 ${
-              isHovering && videoLoaded ? "opacity-100" : "opacity-0"
-            }`}
+            className={`object-cover w-full h-full absolute inset-0 transition-opacity duration-300 ${isHovering && videoLoaded ? "opacity-100" : "opacity-0"
+              }`}
             muted
             loop
             playsInline

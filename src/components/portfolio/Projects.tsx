@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ExternalLink, Code, Briefcase, Globe } from "lucide-react";
+import { ExternalLink, Code, Briefcase, Globe, QrCode, Milk } from "lucide-react";
 import ProjectCard from "./ProjectCard";
 
 interface Project {
@@ -15,86 +15,82 @@ interface Project {
 }
 
 const Projects = () => {
-  const projects = [
-    {
-      id: 0,
-      title: "StreamSage AI Movie Explorer",
-      description:
-        "AI-powered movie discovery platform for finding recommendations and details.",
-      image: "/projects/streamSage.png",
-      video:
-        "https://res.cloudinary.com/donutatdq/video/upload/q_auto/f_auto/v1/portfolio/streamsage.webm?_a=DATC1RAAZAA0",
-      tags: ["Next.js", "TMDB API", "Tailwind"],
-      demoLink: "https://stream-sage-ai-movie-explorer.vercel.app/",
-      codeLink: "https://github.com/DigitalSubham/StreamSage-AI-Movie-Explorer",
-      icon: <Globe className="w-4 h-4 text-purple-600" />,
-    },
-    {
-      id: 1,
-      title: "YouTube Clone",
-      description:
-        "A responsive clone of YouTube using RapidAPI and modern UI practices.",
-      image: "/projects/youtube_Clone.svg",
-      video:
-        "https://res.cloudinary.com/donutatdq/video/upload/q_auto/f_auto/v1/portfolio/youtube.webm?_a=DATC1RAAZAA0",
-      tags: ["React", "RapidAPI", "Tailwind"],
-      demoLink: "https://youtube-clone-nine-livid.vercel.app/",
-      codeLink: "https://github.com/DigitalSubham/youtube-clone",
-      icon: <Code className="w-4 h-4 text-purple-600" />,
-    },
-    {
-      id: 2,
-      title: "KidsJoy",
-      description:
-        "A fun and interactive website for children to play, learn, and explore.",
-      image: "/projects/kidsjoy.png",
-      video:
-        "https://res.cloudinary.com/donutatdq/video/upload/q_auto/f_auto/v1/portfolio/kidsjoy.webm?_a=DATC1RAAZAA0",
-      tags: ["React", "JavaScript", "CSS"],
-      demoLink: "https://kids-joy.vercel.app/",
-      codeLink: "https://github.com/DigitalSubham/kidsJoy",
-      icon: <Briefcase className="w-4 h-4 text-purple-600" />,
-    },
-    {
-      id: 3,
-      title: "Domain Age Checker Extension",
-      description:
-        "Chrome extension to check the age of a domain directly from your browser.",
-      image: "/projects/domainage.png",
-      video:
-        "https://res.cloudinary.com/donutatdq/video/upload/q_auto/f_auto/v1/portfolio/domain.webm?_a=DATC1RAAZAA0",
-      tags: ["JavaScript", "Chrome Extension", "Web Tools"],
-      demoLink: "#",
-      codeLink:
-        "https://github.com/DigitalSubham/Domain-Age-Checker-Chrome-Extension",
-      icon: <Globe className="w-4 h-4 text-purple-600" />,
-    },
-    {
-      id: 4,
-      title: "CodeSync",
-      description:
-        "A real-time collaborative code editor with multi-user support.",
-      image: "/projects/CodeSync.png",
-      video:
-        "https://res.cloudinary.com/donutatdq/video/upload/q_auto/f_auto/v1/portfolio/codesync.webm?_a=DATC1RAAZAA0",
-      tags: ["React", "Socket.IO", "Node.js"],
-      demoLink: "https://code-sync-real-time-code-editor.vercel.app/",
-      codeLink:
-        "https://github.com/DigitalSubham/CodeSync-real-time-code-editor",
-      icon: <Code className="w-4 h-4 text-purple-600" />,
-    },
-    {
-      id: 5,
-      title: "iSkills",
-      description:
-        "An ed-tech platform for skill development and course discovery.",
-      image: "/projects/iskills.png",
-      video: null,
-      tags: ["React", "Firebase", "Tailwind"],
-      demoLink: "https://i-skills.vercel.app/",
-      codeLink: "https://github.com/DigitalSubham/iSkills",
-      icon: <Briefcase className="w-4 h-4 text-purple-600" />,
-    },
+  const projects = [{
+    id: 0,
+    title: "QR Coin – Reward & Redemption App",
+    description:
+      "Mobile reward platform with secure QR code generation and coin-based redemption system.",
+    image: "/placeholder.svg?height=400&width=600",
+    video: null,
+    tags: ["React Native", "Expo", "Express.js", "JWT", "RBAC"],
+    demoLink: "https://github.com/DigitalSubham/tng-hardware",
+    codeLink: "https://github.com/DigitalSubham/tng-hardware",
+    icon: <QrCode className="w-4 h-4 text-purple-600" />,
+  },
+  {
+    id: 1,
+    title: "Sita Dairy – Dairy Management System",
+    description:
+      "End-to-end dairy management app for milk collection, customer records, billing, and daily transactions.",
+    image: "/placeholder.svg?height=400&width=600",
+    video: null,
+    tags: ["React Native", "Expo", "Billing", "Reports"],
+    demoLink: "https://play.google.com/store/apps/details?id=com.digitalsubham.sita_dairy&hl=en",
+    codeLink: "https://github.com/DigitalSubham/sita-dairy-app",
+    icon: <Milk className="w-4 h-4 text-purple-600" />,
+  },
+  {
+    id: 2,
+    title: "Invoice Generator – Billing & Stock Platform",
+    description:
+      "Multi-user invoice management platform with customer, stock, GST billing, and real-time analytics.",
+    image: "/placeholder.svg?height=400&width=600",
+    video: null,
+    tags: ["React Native", "Express.js", "Postgres", "Analytics"],
+    demoLink: "https://github.com/DigitalSubham/bill-book",
+    codeLink: "https://github.com/DigitalSubham/bill-book",
+    icon: <Briefcase className="w-4 h-4 text-purple-600" />,
+  },
+  {
+    id: 3,
+    title: "Domain Age Checker Extension",
+    description:
+      "Chrome extension to check the age of a domain directly from your browser.",
+    image: "/projects/domainage.png",
+    video:
+      "https://res.cloudinary.com/donutatdq/video/upload/q_auto/f_auto/v1/portfolio/domain.webm?_a=DATC1RAAZAA0",
+    tags: ["JavaScript", "Chrome Extension", "Web Tools"],
+    demoLink: "#",
+    codeLink:
+      "https://github.com/DigitalSubham/Domain-Age-Checker-Chrome-Extension",
+    icon: <Globe className="w-4 h-4 text-purple-600" />,
+  },
+  {
+    id: 4,
+    title: "CodeSync",
+    description:
+      "A real-time collaborative code editor with multi-user support.",
+    image: "/projects/CodeSync.png",
+    video:
+      "https://res.cloudinary.com/donutatdq/video/upload/q_auto/f_auto/v1/portfolio/codesync.webm?_a=DATC1RAAZAA0",
+    tags: ["React", "Socket.IO", "Node.js"],
+    demoLink: "https://code-sync-real-time-code-editor.vercel.app/",
+    codeLink:
+      "https://github.com/DigitalSubham/CodeSync-real-time-code-editor",
+    icon: <Code className="w-4 h-4 text-purple-600" />,
+  },
+  {
+    id: 5,
+    title: "iSkills",
+    description:
+      "An ed-tech platform for skill development and course discovery.",
+    image: "/projects/iskills.png",
+    video: null,
+    tags: ["React", "Firebase", "Tailwind"],
+    demoLink: "https://i-skills.vercel.app/",
+    codeLink: "https://github.com/DigitalSubham/iSkills",
+    icon: <Briefcase className="w-4 h-4 text-purple-600" />,
+  },
   ];
 
   return (

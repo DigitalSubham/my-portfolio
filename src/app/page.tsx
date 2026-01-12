@@ -4,7 +4,6 @@ import Projects from "@/components/portfolio/Projects";
 import Skills from "@/components/portfolio/Skills";
 import Blogs from "@/components/portfolio/Blogs";
 import Certificates from "@/components/portfolio/Certificates";
-import Notes from "@/components/portfolio/Notes";
 import Contact from "@/components/portfolio/Contact";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
@@ -52,7 +51,7 @@ export default function Home() {
       <Certificates />
 
       {/* Notes Section - New */}
-      <Notes />
+      {/* <Notes /> */}
 
       {/* Contact Section */}
       <Contact />

@@ -16,7 +16,7 @@ const Blogs = () => {
         </div>
 
         {/* Featured Blog Post */}
-        <div className="mb-12">
+        {/* <div className="mb-12">
           <div className="bg-white dark:bg-gray-950 rounded-xl overflow-hidden shadow-lg transition-all hover:shadow-2xl duration-300 md:flex">
             <div className="md:w-1/2 relative h-64 md:h-auto">
               <Image
@@ -69,7 +69,7 @@ const Blogs = () => {
               </Link>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Blog Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -131,7 +131,7 @@ const Blogs = () => {
           <div className="bg-white dark:bg-gray-950 rounded-xl overflow-hidden shadow-lg transition-all hover:shadow-2xl hover:-translate-y-1 duration-300">
             <div className="relative h-48 overflow-hidden">
               <Image
-                src="https://cdn.hashnode.com/res/hashnode/image/upload/v1702698589974/088bbe3a-9e5f-48b3-bfec-3e12e57bb936.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress,format&format=webp"
+                src="/placeholder.svg?height=400&width=600"
                 alt="Blog Post 2"
                 width={600}
                 height={400}
@@ -144,23 +144,23 @@ const Blogs = () => {
             <div className="p-6">
               <div className="flex items-center mb-4">
                 <span className="text-sm text-gray-500 dark:text-gray-400">
-                  February 15, 2023
+                  Oct 30, 2025
                 </span>
                 <span className="mx-2 text-gray-300 dark:text-gray-600">•</span>
                 <span className="text-sm text-purple-600 dark:text-purple-400">
-                  Performance
+                  Set up
                 </span>
               </div>
               <h3 className="text-xl font-bold mb-2">
-                A JavaScript Developer Must know these Number & Maths Methods
+                Complete Guide: Setting up React Native CLI for Android on macOS (2026 Edition)
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Discover practical techniques to improve your {`website `}
-                loading speed and overall performance for better user
-                experience.
+                If you’re on macOS and want to develop React Native apps using the CLI (not Expo), this guide walks you through everything.
+
+
               </p>
               <Link
-                href="/blog/optimizing-web-performance"
+                href="https://dev.to/digital_subham/complete-guide-setting-up-react-native-cli-for-android-on-macos-2025-edition-58h3"
                 className="inline-flex items-center text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 font-medium"
               >
                 Read More
@@ -198,22 +198,22 @@ const Blogs = () => {
             <div className="p-6">
               <div className="flex items-center mb-4">
                 <span className="text-sm text-gray-500 dark:text-gray-400">
-                  January 8, 2023
+                  Nov 21, 2025
                 </span>
                 <span className="mx-2 text-gray-300 dark:text-gray-600">•</span>
                 <span className="text-sm text-purple-600 dark:text-purple-400">
-                  TypeScript
+                  Deployment
                 </span>
               </div>
               <h3 className="text-xl font-bold mb-2">
-                TypeScript Best Practices for Large-Scale Applications
+                How to Update a React Native App Without Play Store (Using Google Drive + JSON)
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Learn how to structure and organize your TypeScript code for
-                maintainability and scalability in enterprise applications.
+                Publishing an Android app on the Play Store takes time.
+                But what if you want to share your app immediately with your users and still push updates easily?
               </p>
               <Link
-                href="/blog/typescript-best-practices"
+                href="https://dev.to/digital_subham/how-to-update-a-react-native-app-without-play-store-using-google-drive-json-2id6"
                 className="inline-flex items-center text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 font-medium"
               >
                 Read More

@@ -53,12 +53,12 @@ const Navbar = () => {
             >
               Certificates
             </Link>
-            <Link
+            {/* <Link
               href="#notes"
               className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
             >
               Notes
-            </Link>
+            </Link> */}
             <Link
               href="#contact"
               className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"

@@ -42,17 +42,7 @@ const Skills = () => {
                   >
                     <div className="text-2xl mb-2">{skill.icon}</div>
                     <h4 className="font-medium text-sm">{skill.name}</h4>
-                    <span
-                      className={`text-xs mt-1 px-2 py-1 rounded-full ${
-                        skill.level === "Expert"
-                          ? "bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300"
-                          : skill.level === "Advanced"
-                          ? "bg-pink-100 dark:bg-pink-900/30 text-pink-800 dark:text-pink-300"
-                          : "bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300"
-                      }`}
-                    >
-                      {skill.level}
-                    </span>
+
                   </div>
                 ))}
               </div>
@@ -89,7 +79,6 @@ const Skills = () => {
                   { name: "Express", level: "Advanced", icon: "🚂" },
                   { name: "MongoDB", level: "Intermediate", icon: "🍃" },
                   { name: "SQL", level: "Intermediate", icon: "📊" },
-                  { name: "GraphQL", level: "Intermediate", icon: "⬢" },
                   { name: "Firebase", level: "Intermediate", icon: "🔥" },
                   { name: "REST APIs", level: "Advanced", icon: "🔌" },
                   { name: "Authentication", level: "Advanced", icon: "🔐" },
@@ -100,17 +89,6 @@ const Skills = () => {
                   >
                     <div className="text-2xl mb-2">{skill.icon}</div>
                     <h4 className="font-medium text-sm">{skill.name}</h4>
-                    <span
-                      className={`text-xs mt-1 px-2 py-1 rounded-full ${
-                        skill.level === "Expert"
-                          ? "bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300"
-                          : skill.level === "Advanced"
-                          ? "bg-pink-100 dark:bg-pink-900/30 text-pink-800 dark:text-pink-300"
-                          : "bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300"
-                      }`}
-                    >
-                      {skill.level}
-                    </span>
                   </div>
                 ))}
               </div>
@@ -164,17 +142,7 @@ const Skills = () => {
                   >
                     <div className="text-2xl mb-2">{skill.icon}</div>
                     <h4 className="font-medium text-sm">{skill.name}</h4>
-                    <span
-                      className={`text-xs mt-1 px-2 py-1 rounded-full ${
-                        skill.level === "Expert"
-                          ? "bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300"
-                          : skill.level === "Advanced"
-                          ? "bg-pink-100 dark:bg-pink-900/30 text-pink-800 dark:text-pink-300"
-                          : "bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300"
-                      }`}
-                    >
-                      {skill.level}
-                    </span>
+
                   </div>
                 ))}
               </div>
@@ -198,7 +166,6 @@ const Skills = () => {
               { name: "Tailwind CSS", level: "Advanced" },
               { name: "MongoDB", level: "Intermediate" },
               { name: "SQL", level: "Intermediate" },
-              { name: "GraphQL", level: "Intermediate" },
               { name: "Git", level: "Advanced" },
               { name: "Docker", level: "Intermediate" },
               { name: "AWS", level: "Intermediate" },
@@ -207,13 +174,12 @@ const Skills = () => {
             ].map((skill, index) => (
               <div
                 key={index}
-                className={`px-4 py-2 rounded-full ${
-                  skill.level === "Expert"
-                    ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-medium shadow-md"
-                    : skill.level === "Advanced"
+                className={`px-4 py-2 rounded-full ${skill.level === "Expert"
+                  ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-medium shadow-md"
+                  : skill.level === "Advanced"
                     ? "bg-gradient-to-r from-purple-500/90 to-pink-500/90 text-white text-sm font-medium shadow-md"
                     : "bg-gradient-to-r from-purple-400/80 to-pink-400/80 text-white text-sm font-medium shadow-md"
-                }`}
+                  }`}
               >
                 {skill.name}
               </div>
