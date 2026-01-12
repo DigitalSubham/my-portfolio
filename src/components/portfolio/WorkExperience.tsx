@@ -1,11 +1,8 @@
 "use client";
-
-import { useState } from "react";
 import WorkCard from "./WorkCard";
 
 
 export default function WorkExperience() {
-  const [activeProject, setActiveProject] = useState<string | null>("sarthaks");
 
   const workExperiences = [
     {
