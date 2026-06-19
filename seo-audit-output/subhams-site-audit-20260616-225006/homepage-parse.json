@@ -1,0 +1,368 @@
+{
+  "title": "Subham Kumar",
+  "meta_description": "Portfolio of Subham Kumar \u2013 Full-stack Developer passionate about building scalable web applications and delightful user experiences.",
+  "meta_robots": null,
+  "canonical": "https://subhams.site/",
+  "h1": [
+    "Subham Kumar"
+  ],
+  "h2": [
+    "Hello, I'm",
+    "About Me",
+    "Work Experience",
+    "My Projects",
+    "My Skills",
+    "My Blog",
+    "Certificates & Achievements",
+    "Get In Touch"
+  ],
+  "h3": [
+    "Subham Kumar",
+    "Who am I?",
+    "SDE - 1 (Frontend / Mobile)",
+    "Projects",
+    "Enterprise ERP System",
+    "COMFED (Sudha) Gov App",
+    "Frontend Developer",
+    "Projects",
+    "Sarthaks.com",
+    "Admin Dashboard",
+    "BloomTuition",
+    "Quizard",
+    "QR Coin \u2013 Reward & Redemption App",
+    "Sita Dairy \u2013 Dairy Management System",
+    "Invoice Generator \u2013 Billing & Stock Platform",
+    "Domain Age Checker Extension",
+    "CodeSync",
+    "iSkills",
+    "Frontend",
+    "Backend",
+    "Tools & Others",
+    "Proficiency Overview",
+    "Resume for Freshers: Important Points to Keep in Mind",
+    "Complete Guide: Setting up React Native CLI for Android on macOS (2026 Edition)",
+    "How to Update a React Native App Without Play Store (Using Google Drive + JSON)",
+    "AWS Cloud Practitioner",
+    "React Certification",
+    "Blockchain Certification",
+    "Contact Information"
+  ],
+  "images": [
+    {
+      "src": "https://subhams.site/_next/image?url=%2Favatar.png%3Fheight%3D400%26width%3D400&w=828&q=75",
+      "alt": "Subham Kumar",
+      "width": "400",
+      "height": "400",
+      "loading": null
+    },
+    {
+      "src": "https://subhams.site/_next/image?url=%2Fshubham.jpg%3Fheight%3D600%26width%3D800&w=1920&q=75",
+      "alt": "About Subham Kumar",
+      "width": "800",
+      "height": "600",
+      "loading": "lazy"
+    },
+    {
+      "src": "https://subhams.site/placeholder.svg?height=200&width=600",
+      "alt": "Project background",
+      "width": "600",
+      "height": "200",
+      "loading": "lazy"
+    },
+    {
+      "src": "https://subhams.site/placeholder.svg?height=200&width=600",
+      "alt": "Project background",
+      "width": "600",
+      "height": "200",
+      "loading": "lazy"
+    },
+    {
+      "src": "https://subhams.site/placeholder.svg?height=200&width=600",
+      "alt": "Project background",
+      "width": "600",
+      "height": "200",
+      "loading": "lazy"
+    },
+    {
+      "src": "https://subhams.site/placeholder.svg?height=200&width=600",
+      "alt": "Project background",
+      "width": "600",
+      "height": "200",
+      "loading": "lazy"
+    },
+    {
+      "src": "https://subhams.site/placeholder.svg?height=200&width=600",
+      "alt": "Project background",
+      "width": "600",
+      "height": "200",
+      "loading": "lazy"
+    },
+    {
+      "src": "https://subhams.site/placeholder.svg?height=200&width=600",
+      "alt": "Project background",
+      "width": "600",
+      "height": "200",
+      "loading": "lazy"
+    },
+    {
+      "src": "https://subhams.site/placeholder.svg?height=400&width=600",
+      "alt": "QR Coin \u2013 Reward & Redemption App",
+      "width": "600",
+      "height": "400",
+      "loading": null
+    },
+    {
+      "src": "https://subhams.site/placeholder.svg?height=400&width=600",
+      "alt": "Sita Dairy \u2013 Dairy Management System",
+      "width": "600",
+      "height": "400",
+      "loading": null
+    },
+    {
+      "src": "https://subhams.site/placeholder.svg?height=400&width=600",
+      "alt": "Invoice Generator \u2013 Billing & Stock Platform",
+      "width": "600",
+      "height": "400",
+      "loading": null
+    },
+    {
+      "src": "https://subhams.site/_next/image?url=%2Fprojects%2Fdomainage.png&w=1200&q=75",
+      "alt": "Domain Age Checker Extension",
+      "width": "600",
+      "height": "400",
+      "loading": null
+    },
+    {
+      "src": "https://subhams.site/_next/image?url=%2Fprojects%2FCodeSync.png&w=1200&q=75",
+      "alt": "CodeSync",
+      "width": "600",
+      "height": "400",
+      "loading": null
+    },
+    {
+      "src": "https://subhams.site/_next/image?url=%2Fprojects%2Fiskills.png&w=1200&q=75",
+      "alt": "iSkills",
+      "width": "600",
+      "height": "400",
+      "loading": null
+    },
+    {
+      "src": "https://subhams.site/_next/image?url=https%3A%2F%2Fcdn.hashnode.com%2Fres%2Fhashnode%2Fimage%2Fupload%2Fv1703459140733%2F66e2b85d-0152-436c-983f-275565765579.png%3Fw%3D1600%26h%3D840%26fit%3Dcrop%26crop%3Dentropy%26auto%3Dcompress%2Cformat%26format%3Dwebp&w=1200&q=75",
+      "alt": "Blog Post 1",
+      "width": "600",
+      "height": "400",
+      "loading": "lazy"
+    },
+    {
+      "src": "https://subhams.site/placeholder.svg?height=400&width=600",
+      "alt": "Blog Post 2",
+      "width": "600",
+      "height": "400",
+      "loading": "lazy"
+    },
+    {
+      "src": "https://subhams.site/placeholder.svg?height=400&width=600",
+      "alt": "Blog Post 3",
+      "width": "600",
+      "height": "400",
+      "loading": "lazy"
+    },
+    {
+      "src": "https://subhams.site/placeholder.svg?height=300&width=400",
+      "alt": "AWS Cloud Practitioner",
+      "width": "400",
+      "height": "300",
+      "loading": "lazy"
+    },
+    {
+      "src": "https://subhams.site/_next/image?url=%2Fcertificates%2Fnamastereact.webp%3Fheight%3D300%26width%3D400&w=828&q=75",
+      "alt": "React Certification",
+      "width": "400",
+      "height": "300",
+      "loading": "lazy"
+    },
+    {
+      "src": "https://subhams.site/_next/image?url=%2Fcertificates%2Fblockchain_Nptel.jpeg%3Fheight%3D300%26width%3D400&w=828&q=75",
+      "alt": "Blockchain Certification",
+      "width": "400",
+      "height": "300",
+      "loading": "lazy"
+    }
+  ],
+  "links": {
+    "internal": [
+      {
+        "href": "https://subhams.site/",
+        "text": "< Subham Kumar />",
+        "rel": []
+      },
+      {
+        "href": "https://subhams.site/resume.pdf",
+        "text": "View Resume",
+        "rel": [
+          "noopener",
+          "noreferrer"
+        ]
+      },
+      {
+        "href": "https://subhams.site/resume.pdf",
+        "text": "Download Resume",
+        "rel": []
+      },
+      {
+        "href": "https://subhams.site/blog",
+        "text": "View All Posts",
+        "rel": []
+      },
+      {
+        "href": "https://subhams.site/",
+        "text": "< Subham Kumar />",
+        "rel": []
+      }
+    ],
+    "external": [
+      {
+        "href": "https://github.com/DigitalSubham",
+        "text": "GitHub",
+        "rel": []
+      },
+      {
+        "href": "https://www.linkedin.com/in/subham-kr/",
+        "text": "LinkedIn",
+        "rel": []
+      },
+      {
+        "href": "mailto:shubhamkr354@gmail.com/",
+        "text": "Email",
+        "rel": []
+      },
+      {
+        "href": "https://github.com/DigitalSubham/tng-hardware",
+        "text": "Code",
+        "rel": []
+      },
+      {
+        "href": "https://github.com/DigitalSubham/tng-hardware",
+        "text": "Demo",
+        "rel": []
+      },
+      {
+        "href": "https://github.com/DigitalSubham/sita-dairy-app",
+        "text": "Code",
+        "rel": []
+      },
+      {
+        "href": "https://play.google.com/store/apps/details?id=com.digitalsubham.sita_dairy&hl=en",
+        "text": "Demo",
+        "rel": []
+      },
+      {
+        "href": "https://github.com/DigitalSubham/bill-book",
+        "text": "Code",
+        "rel": []
+      },
+      {
+        "href": "https://github.com/DigitalSubham/bill-book",
+        "text": "Demo",
+        "rel": []
+      },
+      {
+        "href": "https://github.com/DigitalSubham/Domain-Age-Checker-Chrome-Extension",
+        "text": "Code",
+        "rel": []
+      },
+      {
+        "href": "https://github.com/DigitalSubham/CodeSync-real-time-code-editor",
+        "text": "Code",
+        "rel": []
+      },
+      {
+        "href": "https://code-sync-real-time-code-editor.vercel.app/",
+        "text": "Demo",
+        "rel": []
+      },
+      {
+        "href": "https://github.com/DigitalSubham/iSkills",
+        "text": "Code",
+        "rel": []
+      },
+      {
+        "href": "https://i-skills.vercel.app/",
+        "text": "Demo",
+        "rel": []
+      },
+      {
+        "href": "https://digitalsubham.hashnode.dev/resume-for-freshers-important-points-to-keep-in-mind",
+        "text": "Read More",
+        "rel": []
+      },
+      {
+        "href": "https://dev.to/digital_subham/complete-guide-setting-up-react-native-cli-for-android-on-macos-2025-edition-58h3",
+        "text": "Read More",
+        "rel": []
+      },
+      {
+        "href": "https://dev.to/digital_subham/how-to-update-a-react-native-app-without-play-store-using-google-drive-json-2id6",
+        "text": "Read More",
+        "rel": []
+      },
+      {
+        "href": "https://namastedev.com/shubhamkr354/certificates/namaste-react",
+        "text": "View Certificate",
+        "rel": []
+      },
+      {
+        "href": "mailto:shubhamkr354@gmail.com/",
+        "text": "shubhamkr354@gmail.com",
+        "rel": []
+      },
+      {
+        "href": "https://www.linkedin.com/in/subham-kr/",
+        "text": "linkedin.com/in/subham-kr",
+        "rel": []
+      },
+      {
+        "href": "https://github.com/DigitalSubham",
+        "text": "github.com/DigitalSubham",
+        "rel": []
+      },
+      {
+        "href": "https://github.com/DigitalSubham",
+        "text": "GitHub",
+        "rel": []
+      },
+      {
+        "href": "https://www.linkedin.com/in/subham-kr/",
+        "text": "LinkedIn",
+        "rel": []
+      },
+      {
+        "href": "mailto:shubhamkr354@gmail.com/",
+        "text": "Email",
+        "rel": []
+      }
+    ]
+  },
+  "schema": [],
+  "open_graph": {
+    "og:title": "Subham Kumar",
+    "og:description": "Explore the portfolio of Subham Kumar \u2013 showcasing web apps, open source projects, and technical writing.",
+    "og:url": "https://subhamkumar.dev",
+    "og:site_name": "Subham Kumar",
+    "og:locale": "en_US",
+    "og:image": "https://subhamkumar.dev/og-image.jpg",
+    "og:image:width": "1200",
+    "og:image:height": "630",
+    "og:image:alt": "Subham Kumar Portfolio",
+    "og:type": "website"
+  },
+  "twitter_card": {
+    "twitter:card": "summary_large_image",
+    "twitter:creator": "@yourTwitterHandle",
+    "twitter:title": "Subham Kumar",
+    "twitter:description": "Full-stack Developer portfolio with projects in React, Next.js, and more.",
+    "twitter:image": "https://subhamkumar.dev/og-image.jpg"
+  },
+  "word_count": 1002,
+  "hreflang": []
+}

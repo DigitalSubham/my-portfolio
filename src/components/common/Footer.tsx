@@ -3,50 +3,55 @@ import { Github, Linkedin, Mail } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="py-8 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-4 md:mb-0">
-            <Link
-              href="/"
-              className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600"
-            >
-              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent flex items-center gap-2">
-                <span className="text-green-500">{`<`}</span>{" "}
-                <span>{`Subham Kumar`} </span>
-                <span className="text-green-500">{`/>`}</span>
-              </span>
-            </Link>
-          </div>
-          <div className="flex space-x-6">
-            <Link
-              href="https://github.com/DigitalSubham"
-              target="_blank"
-              className="text-gray-600 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 transition-colors"
-            >
-              <Github className="w-5 h-5" />
-              <span className="sr-only">GitHub</span>
-            </Link>
-            <Link
-              href="https://www.linkedin.com/in/subham-kr/"
-              target="_blank"
-              className="text-gray-600 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 transition-colors"
-            >
-              <Linkedin className="w-5 h-5" />
-              <span className="sr-only">LinkedIn</span>
-            </Link>
-            <Link
-              href="mailto:shubhamkr354@gmail.com/"
-              className="text-gray-600 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 transition-colors"
-            >
-              <Mail className="w-5 h-5" />
-              <span className="sr-only">Email</span>
-            </Link>
-          </div>
-          <div className="mt-4 md:mt-0 text-sm text-gray-600 dark:text-gray-400">
-            © {new Date().getFullYear()} Subham Kumar. All rights reserved.
-          </div>
+    <footer className="border-t border-gray-200 bg-white py-8 dark:border-gray-800 dark:bg-gray-950">
+      <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+        <Link
+          href="/"
+          className="inline-flex min-h-11 items-center gap-3 font-semibold tracking-tight text-gray-950 dark:text-white"
+        >
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-950 text-xs font-bold text-white dark:bg-white dark:text-gray-950">
+            SK
+          </span>
+          Subham Kumar
+        </Link>
+
+        <div className="flex gap-2">
+          {[
+            {
+              href: "https://github.com/DigitalSubham",
+              label: "GitHub",
+              icon: Github,
+            },
+            {
+              href: "https://www.linkedin.com/in/subham-kr/",
+              label: "LinkedIn",
+              icon: Linkedin,
+            },
+            {
+              href: "mailto:shubhamkr354@gmail.com",
+              label: "Email",
+              icon: Mail,
+            },
+          ].map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                target={item.href.startsWith("http") ? "_blank" : undefined}
+                rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-gray-200 text-gray-600 transition-colors hover:border-gray-950 hover:text-gray-950 dark:border-gray-800 dark:text-gray-400 dark:hover:border-white dark:hover:text-white"
+              >
+                <Icon className="h-5 w-5" />
+                <span className="sr-only">{item.label}</span>
+              </Link>
+            );
+          })}
         </div>
+
+        <p className="text-sm text-gray-500">
+          © {new Date().getFullYear()} Subham Kumar. All rights reserved.
+        </p>
       </div>
     </footer>
   );

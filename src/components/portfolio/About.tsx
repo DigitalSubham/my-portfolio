@@ -1,73 +1,69 @@
 import { Download, ExternalLink } from "lucide-react";
-import Image from "next/image";
-import React from "react";
+import Link from "next/link";
+
+const focus = [
+  "React and Next.js interfaces",
+  "React Native production apps",
+  "Dashboards, forms, and workflows",
+  "Performance and SEO-aware UI",
+];
 
 const About = () => {
   return (
-    <section id="about" className="py-20 bg-white dark:bg-gray-950">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">About Me</h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-purple-600 to-pink-600 mx-auto mb-6"></div>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
-            Get to know me better
+    <section id="about" className="bg-white py-24 dark:bg-gray-950">
+      <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.72fr_1.28fr] lg:px-8">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400">
+            About
           </p>
+          <h2 className="mt-4 text-4xl font-semibold tracking-tight text-gray-950 dark:text-white md:text-6xl">
+            I turn product requirements into usable interfaces.
+          </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className="relative rounded-2xl overflow-hidden shadow-xl h-96 group">
-            <Image
-              src="/shubham.jpg?height=600&width=800"
-              alt="About Subham Kumar"
-              width={800}
-              height={600}
-              className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-              <div className="p-6">
-                <h3 className="text-white text-xl font-bold">Subham Kumar</h3>
-                <p className="text-gray-200">Full Stack Developer</p>
-              </div>
-            </div>
-          </div>
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold">Who am I?</h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              {`I'm`} a passionate Full Stack Developer with over 1.5 years of
-              experience in building web applications. I specialize in
-              {` JavaScript, React, Node.js,`} and modern web technologies.
-            </p>
-            <p className="text-gray-600 dark:text-gray-400">
-              My journey in web development started when I was in college, and
-              {` since then, I've `} worked on various projects ranging from
-              small business websites to complex enterprise applications.
-            </p>
-            <p className="text-gray-600 dark:text-gray-400">
-              When {`I'm`} not {`coding,`} you can find me {`hiking, reading,`}{" "}
-              or experimenting with new technologies. {`I'm`} always eager to
-              learn and grow in this ever-evolving field.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              {/* View Resume */}
-              <a
-                href="/resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-colors shadow-lg hover:shadow-xl"
-              >
-                View Resume
-                <ExternalLink className="ml-2 w-4 h-4" />
-              </a>
 
-              {/* Download Resume */}
-              <a
-                href="/resume.pdf"
-                download
-                className="inline-flex items-center px-6 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg transition-colors shadow-lg hover:shadow-xl"
+        <div>
+          <p className="text-2xl leading-10 text-gray-900 dark:text-gray-100">
+            I am a full-stack developer with over 1.5 years of experience
+            building production web and mobile applications across enterprise
+            ERP, government workflows, education platforms, admin dashboards,
+            and developer tools.
+          </p>
+          <p className="mt-6 text-lg leading-9 text-gray-600 dark:text-gray-400">
+            My strength is working close to the product surface: structuring
+            messy flows, designing component systems, improving form
+            experience, and keeping interfaces responsive, accessible, and easy
+            to maintain.
+          </p>
+
+          <div className="mt-10 grid gap-3 sm:grid-cols-2">
+            {focus.map((item) => (
+              <div
+                key={item}
+                className="border-t border-gray-200 py-4 text-sm font-semibold uppercase tracking-[0.12em] text-gray-700 dark:border-gray-800 dark:text-gray-300"
               >
-                Download Resume
-                <Download className="ml-2 w-4 h-4" />
-              </a>
-            </div>
+                {item}
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-12 items-center justify-center bg-gray-950 px-7 text-sm font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200"
+            >
+              View resume
+              <ExternalLink className="ml-2 h-4 w-4" />
+            </Link>
+            <a
+              href="/resume.pdf"
+              download
+              className="inline-flex min-h-12 items-center justify-center border border-gray-950 px-7 text-sm font-semibold uppercase tracking-[0.12em] text-gray-950 transition-colors hover:bg-gray-950 hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-gray-950"
+            >
+              Download
+              <Download className="ml-2 h-4 w-4" />
+            </a>
           </div>
         </div>
       </div>

@@ -1,0 +1,32 @@
+{
+  "screenshots": [
+    {
+      "url": "https://subhams.site/",
+      "output": "/Users/subhamkumar/Downloads/webApps/pravartak-logistics/seo-audit-output/subhams-site-audit-20260616-225626/screenshots/subhams-site-desktop.png",
+      "viewport": "desktop",
+      "success": true,
+      "error": null
+    },
+    {
+      "url": "https://subhams.site/",
+      "output": "/Users/subhamkumar/Downloads/webApps/pravartak-logistics/seo-audit-output/subhams-site-audit-20260616-225626/screenshots/subhams-site-laptop.png",
+      "viewport": "laptop",
+      "success": true,
+      "error": null
+    },
+    {
+      "url": "https://subhams.site/",
+      "output": "/Users/subhamkumar/Downloads/webApps/pravartak-logistics/seo-audit-output/subhams-site-audit-20260616-225626/screenshots/subhams-site-tablet.png",
+      "viewport": "tablet",
+      "success": true,
+      "error": null
+    },
+    {
+      "url": "https://subhams.site/",
+      "output": "/Users/subhamkumar/Downloads/webApps/pravartak-logistics/seo-audit-output/subhams-site-audit-20260616-225626/screenshots/subhams-site-mobile.png",
+      "viewport": "mobile",
+      "success": true,
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+# Subham Kumar
+
+Subham Kumar is a full-stack developer building web and mobile applications with React, Next.js, React Native, Node.js, TypeScript, and related JavaScript technologies.
+
+Canonical site: https://subhams.site/
+
+Important pages:
+- Portfolio homepage: https://subhams.site/
+- Blog index: https://subhams.site/blog
+
+External profiles:
+- GitHub: https://github.com/DigitalSubham
+- LinkedIn: https://www.linkedin.com/in/subham-kr/
+
+Primary topics:
+- Full-stack development
+- Frontend engineering
+- React and Next.js
+- React Native mobile apps
+- Node.js applications
+- Portfolio projects and technical writing

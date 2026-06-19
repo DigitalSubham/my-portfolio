@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink, Award } from "lucide-react";
+import { ArrowUpRight, Award } from "lucide-react";
 
 interface CertificateProps {
   certificate: {
@@ -16,55 +16,49 @@ interface CertificateProps {
 
 export default function CertificateCard({ certificate }: CertificateProps) {
   return (
-    <div className="group relative bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-lg transition-all hover:shadow-2xl hover:-translate-y-1 duration-300">
-      {/* Certificate Image */}
-      <div className="relative h-48 overflow-hidden">
+    <article className="overflow-hidden rounded-2xl border border-gray-200 bg-gray-50 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg dark:border-gray-800 dark:bg-gray-900/70">
+      <div className="relative aspect-[4/3] overflow-hidden bg-white dark:bg-gray-950">
         <Image
-          src={certificate.image || "/placeholder.svg"}
+          src={certificate.image}
           alt={certificate.title}
-          width={400}
-          height={300}
-          className="object-fill w-full h-full transition-transform duration-500 group-hover:scale-105"
+          width={600}
+          height={450}
+          className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-        {/* Date Badge */}
-        <div className="absolute top-4 right-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+        <div className="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-gray-800 shadow-sm backdrop-blur dark:bg-gray-950/80 dark:text-gray-100">
           {certificate.date}
         </div>
       </div>
 
-      {/* Certificate Content */}
-      <div className="p-6">
-        <div className="flex items-center mb-4">
-          <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mr-3">
-            <Award className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+      <div className="p-5">
+        <div className="flex items-start gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-950 text-white dark:bg-white dark:text-gray-950">
+            <Award className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="text-xl font-bold">{certificate.title}</h3>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
+            <h3 className="text-lg font-semibold text-gray-950 dark:text-white">
+              {certificate.title}
+            </h3>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
               {certificate.issuer}
             </p>
           </div>
         </div>
 
-        <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
+        <p className="mt-4 text-sm leading-6 text-gray-600 dark:text-gray-400">
           {certificate.description}
         </p>
 
         <Link
           target="_blank"
+          rel="noopener noreferrer"
           href={certificate.link}
-          className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-colors text-sm font-medium shadow-md"
+          className="mt-5 inline-flex min-h-11 items-center text-sm font-semibold text-gray-950 dark:text-white"
         >
-          View Certificate
-          <ExternalLink className="ml-2 w-4 h-4" />
+          View credential
+          <ArrowUpRight className="ml-2 h-4 w-4" />
         </Link>
       </div>
-
-      {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-600 to-pink-600"></div>
-      <div className="absolute bottom-0 right-0 w-20 h-20 bg-gradient-to-tl from-purple-600/10 to-pink-600/10 rounded-tl-full -z-10"></div>
-    </div>
+    </article>
   );
 }

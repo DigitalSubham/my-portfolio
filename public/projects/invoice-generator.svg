@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Invoice generator platform preview</title>
+  <desc id="desc">Invoice, inventory, GST billing, and analytics dashboard preview.</desc>
+  <rect width="1200" height="800" fill="#312e81"/>
+  <rect x="92" y="86" width="1016" height="628" rx="32" fill="#f8fafc"/>
+  <rect x="160" y="150" width="410" height="500" rx="22" fill="#ffffff" stroke="#e5e7eb" stroke-width="4"/>
+  <text x="210" y="220" font-family="Arial, sans-serif" font-size="44" font-weight="700" fill="#111827">Invoice</text>
+  <rect x="210" y="270" width="300" height="18" rx="9" fill="#c7d2fe"/>
+  <rect x="210" y="320" width="250" height="18" rx="9" fill="#ddd6fe"/>
+  <rect x="210" y="390" width="300" height="24" rx="12" fill="#e5e7eb"/>
+  <rect x="210" y="440" width="300" height="24" rx="12" fill="#e5e7eb"/>
+  <rect x="210" y="490" width="300" height="24" rx="12" fill="#e5e7eb"/>
+  <rect x="340" y="565" width="170" height="46" rx="12" fill="#4f46e5"/>
+  <text x="425" y="597" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#ffffff">GST Total</text>
+  <text x="650" y="225" font-family="Arial, sans-serif" font-size="54" font-weight="700" fill="#111827">Billing + Stock</text>
+  <text x="650" y="285" font-family="Arial, sans-serif" font-size="32" fill="#4b5563">Customers, inventory, GST, analytics</text>
+  <rect x="650" y="360" width="360" height="220" rx="24" fill="#eef2ff"/>
+  <path d="M700 520v-70m70 70V410m70 110v-95m70 95V390" stroke="#4f46e5" stroke-width="34" stroke-linecap="round"/>
+</svg>

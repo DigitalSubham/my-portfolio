@@ -1,91 +1,77 @@
+"use client";
+
 import Link from "next/link";
-import React from "react";
+import { Menu, X } from "lucide-react";
+import { useState } from "react";
 import { ThemeToggle } from "../themes/theme-toggle";
 
-const Navbar = () => {
-  return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex-shrink-0 font-bold text-xl">
-            <Link href="/" className="flex items-center">
-              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent flex items-center gap-2">
-                <span className="text-green-500">{`<`}</span>{" "}
-                <span>{`Subham Kumar`} </span>
-                <span className="text-green-500">{`/>`}</span>
-              </span>
-            </Link>
-          </div>
-          <nav className="hidden md:flex md:items-center space-x-8">
-            <Link
-              href="#about"
-              className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-            >
-              About
-            </Link>
-            <Link
-              href="#experience"
-              className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-            >
-              Experience
-            </Link>
-            <Link
-              href="#projects"
-              className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-            >
-              Projects
-            </Link>
-            <Link
-              href="#skills"
-              className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-            >
-              Skills
-            </Link>
-            <Link
-              href="#blogs"
-              className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-            >
-              Blogs
-            </Link>
-            <Link
-              href="#certificates"
-              className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-            >
-              Certificates
-            </Link>
-            {/* <Link
-              href="#notes"
-              className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-            >
-              Notes
-            </Link> */}
-            <Link
-              href="#contact"
-              className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-            >
-              Contact
-            </Link>
+const navItems = [
+  { href: "#about", label: "About" },
+  { href: "#experience", label: "Experience" },
+  { href: "#projects", label: "Projects" },
+  { href: "#skills", label: "Skills" },
+  { href: "#blogs", label: "Writing" },
+  { href: "#contact", label: "Contact" },
+];
 
-            <ThemeToggle />
-          </nav>
-          <div className="flex md:hidden">
-            <button className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+const Navbar = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <header className="fixed left-0 right-0 top-0 z-50 border-b border-black/5 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-gray-950/80">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          <Link
+            href="/"
+            className="inline-flex min-h-11 items-center gap-3 font-semibold tracking-tight text-gray-950 dark:text-white"
+            onClick={() => setOpen(false)}
+          >
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-950 text-xs font-bold text-white dark:bg-white dark:text-gray-950">
+              SK
+            </span>
+            <span>Subham Kumar</span>
+          </Link>
+
+          <nav className="hidden items-center gap-1 rounded-full border border-gray-200 bg-white/70 p-1 text-sm text-gray-600 shadow-sm dark:border-gray-800 dark:bg-gray-900/60 dark:text-gray-300 md:flex">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="inline-flex min-h-10 items-center rounded-full px-4 transition-colors hover:bg-gray-100 hover:text-gray-950 dark:hover:bg-gray-800 dark:hover:text-white"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button
+              type="button"
+              aria-label={open ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={open}
+              onClick={() => setOpen((value) => !value)}
+              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 shadow-sm transition-colors hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800 md:hidden"
+            >
+              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
+
+        {open && (
+          <nav className="grid gap-1 border-t border-gray-100 py-3 text-sm text-gray-700 dark:border-gray-800 dark:text-gray-200 md:hidden">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className="inline-flex min-h-11 items-center rounded-lg px-3 transition-colors hover:bg-gray-100 dark:hover:bg-gray-900"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        )}
       </div>
     </header>
   );

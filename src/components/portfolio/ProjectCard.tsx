@@ -1,11 +1,17 @@
 "use client";
 
-import type React from "react";
-
-import { useState, useRef, useEffect } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Github, ExternalLink } from "lucide-react";
+import { Briefcase, Code, ExternalLink, Github, Globe, Milk, QrCode } from "lucide-react";
+
+const iconMap = {
+  qr: QrCode,
+  milk: Milk,
+  briefcase: Briefcase,
+  globe: Globe,
+  code: Code,
+};
 
 interface ProjectProps {
   project: {
@@ -17,53 +23,26 @@ interface ProjectProps {
     tags: string[];
     demoLink: string;
     codeLink: string;
-    icon: React.ReactNode;
+    icon: keyof typeof iconMap;
+    impact: string;
   };
 }
 
 export default function ProjectCard({ project }: ProjectProps) {
   const [isHovering, setIsHovering] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const ProjectIcon = iconMap[project.icon];
 
-  // Optimize Cloudinary URL for better performance
-  const optimizedVideoUrl = project.video?.includes("cloudinary.com")
-    ? project.video
-      // Add quality and format transformations if not already present
-      .replace("/upload/", "/upload/q_auto,f_auto,c_fill/")
-      // Add low initial quality for faster loading
-      .replace("/upload/", "/upload/q_auto:low,f_auto/")
-    : project.video || ""; // Fallback to empty string if video is null
+  const videoUrl = project.video?.includes("cloudinary.com")
+    ? project.video.replace("/upload/", "/upload/q_auto,f_auto/")
+    : project.video || "";
 
-  // Preload video when component mounts
-  useEffect(() => {
-    if (!optimizedVideoUrl) return; // If there is no valid video URL, skip loading
-    const videoElement = document.createElement("video");
-    videoElement.src = optimizedVideoUrl;
-    videoElement.preload = "metadata";
-
-    // Listen for enough data to start playback
-    videoElement.addEventListener("loadeddata", () => {
-      setVideoLoaded(true);
-    });
-
-    return () => {
-      videoElement.src = "";
-    };
-  }, [optimizedVideoUrl]);
-
-  const handleMouseEnter = () => {
+  const onEnter = () => {
     setIsHovering(true);
-    if (videoRef.current && videoLoaded) {
-      // Use play() with catch for browsers that block autoplay
-      videoRef.current.play().catch((error) => {
-        console.error("Error playing video:", error);
-      });
-    }
+    videoRef.current?.play().catch(() => undefined);
   };
 
-  const handleMouseLeave = () => {
+  const onLeave = () => {
     setIsHovering(false);
     if (videoRef.current) {
       videoRef.current.pause();
@@ -71,101 +50,83 @@ export default function ProjectCard({ project }: ProjectProps) {
     }
   };
 
-  // Use Intersection Observer to pause videos when not visible
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting && videoRef.current) {
-            videoRef.current.pause();
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    observer.observe(containerRef.current);
-
-    return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
-      }
-    };
-  }, []);
-
   return (
-    <div
-      ref={containerRef}
-      className="bg-white dark:bg-gray-950 rounded-xl overflow-hidden shadow-lg transition-all hover:shadow-2xl hover:-translate-y-1 duration-300"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+    <article
+      className="group overflow-hidden border border-gray-200 bg-white transition-colors duration-300 hover:border-gray-950 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-white"
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
     >
-      <div className="relative h-48 overflow-hidden">
-        {/* Only render the video if it's a valid string */}
-        {optimizedVideoUrl && (
+      <div className="relative aspect-[16/10] overflow-hidden bg-gray-100 dark:bg-gray-900">
+        <Image
+          src={project.image}
+          alt={project.title}
+          width={900}
+          height={560}
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.025]"
+          loading="lazy"
+        />
+        {videoUrl && (
           <video
             ref={videoRef}
-            className={`object-cover w-full h-full absolute inset-0 transition-opacity duration-300 ${isHovering && videoLoaded ? "opacity-100" : "opacity-0"
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${isHovering ? "opacity-100" : "opacity-0"
               }`}
             muted
             loop
             playsInline
-            src={optimizedVideoUrl}
-            poster={project.image}
+            src={videoUrl}
           />
         )}
-
-        {/* Fallback to image if there's no video */}
-
-        <Image
-          src={project.image || "/placeholder.svg"}
-          alt={project.title}
-          width={600}
-          height={400}
-          className="object-fill w-full h-full"
-          priority
-        />
-
-        <div className="absolute top-2 right-2 bg-white dark:bg-gray-950 rounded-full p-2 shadow-md z-10">
-          {project.icon}
+        <div className="absolute left-4 top-4 inline-flex items-center gap-2 bg-white/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-gray-800 backdrop-blur dark:bg-gray-950/80 dark:text-gray-100">
+          <ProjectIcon className="h-4 w-4" />
+          Case study
         </div>
       </div>
-      <div className="p-6">
-        <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-        <p className="text-gray-600 dark:text-gray-400 mb-4">
+
+      <div className="p-5">
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="text-xl font-semibold tracking-tight text-gray-950 dark:text-white">
+            {project.title}
+          </h3>
+        </div>
+        <p className="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
           {project.description}
         </p>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {project.tags.map((tag, index) => (
+        <p className="mt-4 border-l border-gray-300 pl-4 text-sm leading-6 text-gray-700 dark:border-gray-700 dark:text-gray-300">
+          {project.impact}
+        </p>
+
+        <div className="mt-4 flex flex-wrap gap-2">
+          {project.tags.map((tag) => (
             <span
-              key={index}
-              className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 text-xs rounded-full"
+              key={tag}
+              className="border border-gray-200 px-3 py-1 text-xs font-medium text-gray-600 dark:border-gray-800 dark:text-gray-300"
             >
               {tag}
             </span>
           ))}
         </div>
-        <div className="flex gap-4">
+
+        <div className="mt-5 flex flex-wrap gap-3">
           <Link
             target="_blank"
+            rel="noopener noreferrer"
             href={project.codeLink}
-            className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 inline-flex items-center"
+            className="inline-flex min-h-11 items-center border border-gray-300 px-4 text-sm font-semibold text-gray-800 transition-colors hover:border-gray-950 dark:border-gray-800 dark:text-gray-200 dark:hover:border-white"
           >
-            <Github className="w-4 h-4 mr-1" />
+            <Github className="mr-2 h-4 w-4" />
             Code
           </Link>
           <Link
             target="_blank"
+            rel="noopener noreferrer"
             href={project.demoLink}
-            className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 inline-flex items-center"
+            className="inline-flex min-h-11 items-center bg-gray-950 px-4 text-sm font-semibold text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200"
           >
-            <ExternalLink className="w-4 h-4 mr-1" />
+            <ExternalLink className="mr-2 h-4 w-4" />
             Demo
           </Link>
         </div>
       </div>
-    </div>
+    </article>
   );
 }

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">QR Coin reward app preview</title>
+  <desc id="desc">Product-style preview for a mobile rewards app with QR codes and coin balance.</desc>
+  <rect width="1200" height="800" fill="#111827"/>
+  <rect x="90" y="90" width="1020" height="620" rx="32" fill="#f8fafc"/>
+  <rect x="160" y="160" width="300" height="480" rx="38" fill="#1f2937"/>
+  <rect x="190" y="215" width="240" height="240" rx="20" fill="#ffffff"/>
+  <path d="M220 245h60v60h-60zm120 0h60v60h-60zM220 365h60v60h-60zm95-25h25v25h-25zm55 55h30v30h-30zm-55 45h35v35h-35zm-95 20h60v35h-60z" fill="#111827"/>
+  <circle cx="310" cy="545" r="46" fill="#facc15"/>
+  <text x="310" y="558" text-anchor="middle" font-family="Arial, sans-serif" font-size="40" font-weight="700" fill="#854d0e">₹</text>
+  <text x="540" y="275" font-family="Arial, sans-serif" font-size="54" font-weight="700" fill="#111827">QR Coin</text>
+  <text x="540" y="340" font-family="Arial, sans-serif" font-size="34" fill="#4b5563">Reward and redemption app</text>
+  <rect x="540" y="405" width="420" height="26" rx="13" fill="#c084fc"/>
+  <rect x="540" y="455" width="300" height="26" rx="13" fill="#f472b6"/>
+  <rect x="540" y="535" width="220" height="74" rx="18" fill="#7c3aed"/>
+  <text x="650" y="582" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">Scan Reward</text>
+</svg>

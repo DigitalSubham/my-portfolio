@@ -1,137 +1,127 @@
 import { Github, Linkedin, Mail } from "lucide-react";
 import Link from "next/link";
+import SectionHeading from "./SectionHeading";
+
+const contactLinks = [
+  {
+    label: "Email",
+    value: "shubhamkr354@gmail.com",
+    href: "mailto:shubhamkr354@gmail.com",
+    icon: Mail,
+  },
+  {
+    label: "LinkedIn",
+    value: "linkedin.com/in/subham-kr",
+    href: "https://www.linkedin.com/in/subham-kr/",
+    icon: Linkedin,
+  },
+  {
+    label: "GitHub",
+    value: "github.com/DigitalSubham",
+    href: "https://github.com/DigitalSubham",
+    icon: Github,
+  },
+];
+
+const fieldClass =
+  "min-h-12 w-full rounded-xl border border-gray-200 bg-white px-4 text-sm text-gray-950 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-950 dark:border-gray-800 dark:bg-gray-950 dark:text-white dark:focus:border-white";
 
 const Contact = () => {
   return (
-    <section id="contact" className="py-20 bg-white dark:bg-gray-950">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-purple-600 to-pink-600 mx-auto mb-6"></div>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
-            {`Have a project in mind? Let's work together!`}
-          </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold">Contact Information</h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              {` Feel free to reach out to me through any of these channels. I'm
-              always open to discussing new projects, creative ideas, or
-              opportunities to be part of your vision.`}
+    <section id="contact" className="bg-[#f7f7f5] py-24 dark:bg-gray-950">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <SectionHeading
+          eyebrow="Contact"
+          title="Have a product, role, or collaboration in mind?"
+          description="Send a message with a little context. I am happy to discuss frontend, mobile, portfolio, dashboard, and full-stack product work."
+        />
+
+        <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900/70">
+            <h3 className="text-xl font-semibold text-gray-950 dark:text-white">
+              Direct channels
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-400">
+              Prefer email for project details. LinkedIn and GitHub are best for
+              quick profile checks and code references.
             </p>
-            <div className="space-y-4">
-              <div className="flex items-start">
-                <Mail className="w-5 h-5 text-purple-600 dark:text-purple-400 mt-1 mr-3" />
-                <div>
-                  <h4 className="font-medium">Email</h4>
+
+            <div className="mt-6 grid gap-3">
+              {contactLinks.map((item) => {
+                const Icon = item.icon;
+                return (
                   <Link
-                    target="_blank"
-                    href={"mailto:shubhamkr354@gmail.com/"}
-                    className="text-gray-600 dark:text-gray-400"
+                    key={item.label}
+                    href={item.href}
+                    target={item.href.startsWith("http") ? "_blank" : undefined}
+                    rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    className="flex min-h-14 items-center gap-4 rounded-xl border border-gray-200 bg-gray-50 px-4 transition-colors hover:border-gray-950 dark:border-gray-800 dark:bg-gray-950 dark:hover:border-white"
                   >
-                    shubhamkr354@gmail.com
+                    <Icon className="h-5 w-5 text-gray-500" />
+                    <span>
+                      <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">
+                        {item.label}
+                      </span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                        {item.value}
+                      </span>
+                    </span>
                   </Link>
-                </div>
-              </div>
-              <div className="flex items-start">
-                <Linkedin className="w-5 h-5 text-purple-600 dark:text-purple-400 mt-1 mr-3" />
-                <div>
-                  <h4 className="font-medium">LinkedIn</h4>
-                  <Link
-                    target="_blank"
-                    href={"https://www.linkedin.com/in/subham-kr/"}
-                    className="text-gray-600 dark:text-gray-400"
-                  >
-                    linkedin.com/in/subham-kr
-                  </Link>
-                </div>
-              </div>
-              <div className="flex items-start">
-                <Github className="w-5 h-5 text-purple-600 dark:text-purple-400 mt-1 mr-3" />
-                <div>
-                  <h4 className="font-medium">GitHub</h4>
-                  <Link
-                    target="_blank"
-                    href="https://github.com/DigitalSubham"
-                    className="text-gray-600 dark:text-gray-400"
-                  >
-                    github.com/DigitalSubham
-                  </Link>
-                </div>
-              </div>
+                );
+              })}
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6">
-            <form
-              action="https://getform.io/f/a6c78b4d-9b14-4de4-b94f-705a82847702"
-              method="POST"
-              className="space-y-4"
-            >
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium mb-1"
-                >
-                  Name
-                </label>
+
+          <form
+            action="https://getform.io/f/a6c78b4d-9b14-4de4-b94f-705a82847702"
+            method="POST"
+            className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900/70"
+          >
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="grid gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                Name
                 <input
                   type="text"
-                  id="name"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 dark:focus:ring-purple-400 focus:border-transparent dark:bg-gray-800"
-                  placeholder="Your Name"
+                  name="name"
+                  className={fieldClass}
+                  placeholder="Your name"
                 />
-              </div>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium mb-1"
-                >
-                  Email
-                </label>
+              </label>
+              <label className="grid gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                Email
                 <input
                   type="email"
-                  id="email"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 dark:focus:ring-purple-400 focus:border-transparent dark:bg-gray-800"
-                  placeholder="Your Email"
+                  name="email"
+                  className={fieldClass}
+                  placeholder="you@example.com"
                 />
-              </div>
-              <div>
-                <label
-                  htmlFor="subject"
-                  className="block text-sm font-medium mb-1"
-                >
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  id="subject"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 dark:focus:ring-purple-400 focus:border-transparent dark:bg-gray-800"
-                  placeholder="Subject"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-medium mb-1"
-                >
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  rows={4}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-600 dark:focus:ring-purple-400 focus:border-transparent dark:bg-gray-800"
-                  placeholder="Your Message"
-                ></textarea>
-              </div>
-              <button
-                type="submit"
-                className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-colors shadow-lg hover:shadow-xl"
-              >
-                Send Message
-              </button>
-            </form>
-          </div>
+              </label>
+            </div>
+            <label className="mt-4 grid gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+              Subject
+              <input
+                type="text"
+                name="subject"
+                className={fieldClass}
+                placeholder="Project, role, or collaboration"
+              />
+            </label>
+            <label className="mt-4 grid gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+              Message
+              <textarea
+                name="message"
+                rows={5}
+                className={`${fieldClass} min-h-36 py-3`}
+                placeholder="Tell me what you are building and what kind of help you need."
+              />
+            </label>
+            <button
+              type="submit"
+              className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-gray-950 px-6 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 dark:bg-white dark:text-gray-950"
+            >
+              Send message
+            </button>
+          </form>
         </div>
       </div>
     </section>

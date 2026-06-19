@@ -1,0 +1,67 @@
+{
+  "cache_type": "audit-scores",
+  "analyzed_at": "2026-06-16T22:56:51Z",
+  "domain": "subhams.site",
+  "business_type": "publisher",
+  "industry": "media",
+  "overall_score": 60,
+  "category_scores": {
+    "technical": 73,
+    "content": 52,
+    "on_page": 82,
+    "schema": 41,
+    "performance": 35,
+    "geo": 44,
+    "images": 72
+  },
+  "priority_issues": [
+    {
+      "severity": "critical",
+      "issue": "Content: Several long sentences may reduce scannability."
+    },
+    {
+      "severity": "critical",
+      "issue": "Content: The page has limited answer-first formatting such as lists or tables."
+    },
+    {
+      "severity": "critical",
+      "issue": "Geo: Author/date attribution is weak in the visible content."
+    },
+    {
+      "severity": "critical",
+      "issue": "Geo: No llms.txt file was detected."
+    },
+    {
+      "severity": "critical",
+      "issue": "Geo: No strong 134-167 word self-contained answer block was detected."
+    },
+    {
+      "severity": "critical",
+      "issue": "Performance: INP is above target at 348ms."
+    },
+    {
+      "severity": "critical",
+      "issue": "Performance: LCP is above target at 2.89s."
+    },
+    {
+      "severity": "critical",
+      "issue": "Performance: Real-user/PageSpeed performance data was unavailable, so the report uses deterministic lab heuristics."
+    },
+    {
+      "severity": "critical",
+      "issue": "Schema: No schema markup was detected on the page."
+    },
+    {
+      "severity": "critical",
+      "issue": "Schema: Recommended schema type(s) are missing: WebPage, WebSite, Organization."
+    },
+    {
+      "severity": "critical",
+      "issue": "Schema: Schema recommendations are less trustworthy because the page lacks a canonical URL."
+    },
+    {
+      "severity": "critical",
+      "issue": "Sitemap: No sitemap could be discovered from robots.txt or /sitemap.xml."
+    }
+  ]
+}

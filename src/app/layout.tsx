@@ -1,19 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/themes/theme-provider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const siteUrl = "https://subhams.site";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-// Update this with your actual details
 export const metadata: Metadata = {
   title: {
     default: "Subham Kumar",
@@ -29,18 +19,21 @@ export const metadata: Metadata = {
     "React Developer",
     "Next.js Portfolio",
   ],
-  authors: [{ name: "Subham Kumar", url: "https://subhamkumar.dev" }],
+  authors: [{ name: "Subham Kumar", url: siteUrl }],
   creator: "Subham Kumar",
-  metadataBase: new URL("https://subhamkumar.dev"),
+  metadataBase: new URL(siteUrl),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Subham Kumar",
     description:
       "Explore the portfolio of Subham Kumar – showcasing web apps, open source projects, and technical writing.",
-    url: "https://subhamkumar.dev",
+    url: siteUrl,
     siteName: "Subham Kumar",
     images: [
       {
-        url: "/og-image.jpg", // Put this in your public directory
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Subham Kumar Portfolio",
@@ -54,12 +47,15 @@ export const metadata: Metadata = {
     title: "Subham Kumar",
     description:
       "Full-stack Developer portfolio with projects in React, Next.js, and more.",
-    creator: "@yourTwitterHandle", // replace with your actual Twitter handle
     images: ["/og-image.jpg"],
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-32x32.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
   manifest: "/site.webmanifest",
@@ -70,11 +66,50 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Subham Kumar",
+    url: siteUrl,
+    jobTitle: "Full Stack Developer",
+    email: "mailto:shubhamkr354@gmail.com",
+    sameAs: [
+      "https://github.com/DigitalSubham",
+      "https://www.linkedin.com/in/subham-kr/",
+    ],
+    knowsAbout: [
+      "React",
+      "Next.js",
+      "React Native",
+      "Node.js",
+      "TypeScript",
+      "Full Stack Development",
+    ],
+  };
+
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Subham Kumar",
+    url: siteUrl,
+    description:
+      "Portfolio of Subham Kumar, a full-stack developer building React, Next.js, React Native, and Node.js applications.",
+    inLanguage: "en",
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className="antialiased"
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

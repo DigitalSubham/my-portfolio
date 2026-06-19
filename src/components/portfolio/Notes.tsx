@@ -33,7 +33,7 @@ const Notes = () => {
             </p>
             <div className="flex items-center justify-between">
               <Link
-                href="#"
+                href="/blog"
                 className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 text-sm font-medium"
               >
                 Read More
@@ -66,7 +66,7 @@ const Notes = () => {
             </p>
             <div className="flex items-center justify-between">
               <Link
-                href="#"
+                href="/blog"
                 className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 text-sm font-medium"
               >
                 Read More
@@ -99,7 +99,7 @@ const Notes = () => {
             </p>
             <div className="flex items-center justify-between">
               <Link
-                href="#"
+                href="/blog"
                 className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 text-sm font-medium"
               >
                 Read More
@@ -132,7 +132,7 @@ const Notes = () => {
             </p>
             <div className="flex items-center justify-between">
               <Link
-                href="#"
+                href="/blog"
                 className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 text-sm font-medium"
               >
                 Read More
@@ -168,7 +168,7 @@ const Notes = () => {
             </p>
             <div className="flex items-center justify-between">
               <Link
-                href="#"
+                href="/blog"
                 className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 text-sm font-medium"
               >
                 Read More
@@ -203,7 +203,7 @@ const Notes = () => {
             </p>
             <div className="flex items-center justify-between">
               <Link
-                href="#"
+                href="/blog"
                 className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 text-sm font-medium"
               >
                 Read More
@@ -222,7 +222,7 @@ const Notes = () => {
 
         <div className="text-center mt-12">
           <Link
-            href="/notes"
+            href="/blog"
             className="inline-flex items-center px-6 py-3 border border-gray-300 dark:border-gray-700 hover:border-purple-600 dark:hover:border-purple-400 rounded-lg transition-colors"
           >
             View All Notes

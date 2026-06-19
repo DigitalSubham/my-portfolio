@@ -8,55 +8,31 @@ import Contact from "@/components/portfolio/Contact";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
 import WorkExperience from "@/components/portfolio/WorkExperience";
+import SectionHeading from "@/components/portfolio/SectionHeading";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-50 to-gray-100 dark:from-gray-950 dark:via-gray-900 dark:to-gray-900 text-gray-800 dark:text-gray-100">
-      {/* Navigation */}
+    <div className="min-h-screen overflow-x-hidden bg-[#f7f7f5] text-gray-900 dark:bg-gray-950 dark:text-gray-100">
       <Navbar />
-
-      {/* Hero Section */}
       <Hero />
-
-      {/* About Section */}
       <About />
 
-      {/* Work Experience Section */}
-      <section id="experience" className="py-20 bg-gray-50 dark:bg-gray-900">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Work Experience
-            </h2>
-            <div className="w-20 h-1 bg-gradient-to-r from-purple-600 to-pink-600 mx-auto mb-6"></div>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
-              My professional journey
-            </p>
-          </div>
-
+      <section id="experience" className="border-y border-gray-200 bg-white py-24 dark:border-gray-800 dark:bg-gray-950">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            eyebrow="Experience"
+            title="Products I have helped ship"
+            description="A practical timeline of production work across enterprise ERP, government mobile apps, education platforms, dashboards, and SEO-sensitive React apps."
+          />
           <WorkExperience />
         </div>
       </section>
 
-      {/* Projects Section */}
       <Projects />
-
-      {/* Skills Section - Completely Redesigned */}
       <Skills />
-
-      {/* Blog Section - New */}
       <Blogs />
-
-      {/* Certificates Section - New */}
       <Certificates />
-
-      {/* Notes Section - New */}
-      {/* <Notes /> */}
-
-      {/* Contact Section */}
       <Contact />
-
-      {/* Footer */}
       <Footer />
     </div>
   );
