@@ -1,7 +1,13 @@
 import Link from "next/link";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { getIcon } from "@/components/common/Icon";
+import type { SiteProfile, SocialLink } from "@/lib/portfolio-types";
 
-const Footer = () => {
+type Props = {
+  site: SiteProfile;
+  socials: SocialLink[];
+};
+
+const Footer = ({ site, socials }: Props) => {
   return (
     <footer className="border-t border-gray-200 bg-white py-8 dark:border-gray-800 dark:bg-gray-950">
       <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
@@ -10,30 +16,14 @@ const Footer = () => {
           className="inline-flex min-h-11 items-center gap-3 font-semibold tracking-tight text-gray-950 dark:text-white"
         >
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-950 text-xs font-bold text-white dark:bg-white dark:text-gray-950">
-            SK
+            {site.initials}
           </span>
-          Subham Kumar
+          {site.name}
         </Link>
 
         <div className="flex gap-2">
-          {[
-            {
-              href: "https://github.com/DigitalSubham",
-              label: "GitHub",
-              icon: Github,
-            },
-            {
-              href: "https://www.linkedin.com/in/subham-kr/",
-              label: "LinkedIn",
-              icon: Linkedin,
-            },
-            {
-              href: "mailto:shubhamkr354@gmail.com",
-              label: "Email",
-              icon: Mail,
-            },
-          ].map((item) => {
-            const Icon = item.icon;
+          {socials.map((item) => {
+            const Icon = getIcon(item.icon);
             return (
               <Link
                 key={item.label}
@@ -50,7 +40,7 @@ const Footer = () => {
         </div>
 
         <p className="text-sm text-gray-500">
-          © {new Date().getFullYear()} Subham Kumar. All rights reserved.
+          © {new Date().getFullYear()} {site.name}. All rights reserved.
         </p>
       </div>
     </footer>

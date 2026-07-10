@@ -1,41 +1,24 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { Briefcase, Code, ExternalLink, Github, Globe, Milk, QrCode } from "lucide-react";
-
-const iconMap = {
-  qr: QrCode,
-  milk: Milk,
-  briefcase: Briefcase,
-  globe: Globe,
-  code: Code,
-};
+import { ExternalLink, Github } from "lucide-react";
+import SmartImage from "@/components/common/SmartImage";
+import { getIcon } from "@/components/common/Icon";
+import type { Project } from "@/lib/portfolio-types";
 
 interface ProjectProps {
-  project: {
-    id: number;
-    title: string;
-    description: string;
-    image: string;
-    video: string | null;
-    tags: string[];
-    demoLink: string;
-    codeLink: string;
-    icon: keyof typeof iconMap;
-    impact: string;
-  };
+  project: Project;
 }
 
 export default function ProjectCard({ project }: ProjectProps) {
   const [isHovering, setIsHovering] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const ProjectIcon = iconMap[project.icon];
+  const ProjectIcon = getIcon(project.icon);
 
-  const videoUrl = project.video?.includes("cloudinary.com")
-    ? project.video.replace("/upload/", "/upload/q_auto,f_auto/")
-    : project.video || "";
+  const videoUrl = project.videoUrl?.includes("cloudinary.com")
+    ? project.videoUrl.replace("/upload/", "/upload/q_auto,f_auto/")
+    : project.videoUrl || "";
 
   const onEnter = () => {
     setIsHovering(true);
@@ -57,9 +40,9 @@ export default function ProjectCard({ project }: ProjectProps) {
       onMouseLeave={onLeave}
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-gray-100 dark:bg-gray-900">
-        <Image
-          src={project.image}
-          alt={project.title}
+        <SmartImage
+          src={project.imageUrl}
+          alt={project.imageAlt || project.title}
           width={900}
           height={560}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.025]"
@@ -110,7 +93,7 @@ export default function ProjectCard({ project }: ProjectProps) {
           <Link
             target="_blank"
             rel="noopener noreferrer"
-            href={project.codeLink}
+            href={project.codeUrl}
             className="inline-flex min-h-11 items-center border border-gray-300 px-4 text-sm font-semibold text-gray-800 transition-colors hover:border-gray-950 dark:border-gray-800 dark:text-gray-200 dark:hover:border-white"
           >
             <Github className="mr-2 h-4 w-4" />
@@ -119,7 +102,7 @@ export default function ProjectCard({ project }: ProjectProps) {
           <Link
             target="_blank"
             rel="noopener noreferrer"
-            href={project.demoLink}
+            href={project.demoUrl}
             className="inline-flex min-h-11 items-center bg-gray-950 px-4 text-sm font-semibold text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200"
           >
             <ExternalLink className="mr-2 h-4 w-4" />

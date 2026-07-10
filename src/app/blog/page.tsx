@@ -1,40 +1,37 @@
 import { ExternalLink } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
+import { getPortfolioData } from "@/lib/db";
 
-export const metadata = {
-  title: "Blog",
-  description:
-    "Technical writing by Subham Kumar on React Native, deployment, career growth, and web development.",
-  alternates: {
-    canonical: "/blog",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const data = await getPortfolioData();
+  return {
+    title: "Blog",
+    description:
+      "Technical writing by Subham Kumar on React Native, deployment, career growth, and web development.",
+    alternates: {
+      canonical: `${data.site.siteUrl}/blog`,
+    },
+    openGraph: {
+      title: `Blog | ${data.site.name}`,
+      description:
+        "Technical writing by Subham Kumar on React Native, deployment, career growth, and web development.",
+      url: `${data.site.siteUrl}/blog`,
+      images: [data.seo.ogImage],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Blog | ${data.site.name}`,
+      description:
+        "Technical writing by Subham Kumar on React Native, deployment, career growth, and web development.",
+      images: [data.seo.twitterImage],
+    },
+  };
+}
 
-const posts = [
-  {
-    title: "Resume for Freshers: Important Points to Keep in Mind",
-    description:
-      "Practical resume advice for freshers preparing for software development roles.",
-    href: "https://digitalsubham.hashnode.dev/resume-for-freshers-important-points-to-keep-in-mind",
-    source: "Hashnode",
-  },
-  {
-    title: "Complete Guide: Setting up React Native CLI for Android on macOS",
-    description:
-      "A step-by-step setup guide for React Native CLI Android development on macOS.",
-    href: "https://dev.to/digital_subham/complete-guide-setting-up-react-native-cli-for-android-on-macos-2025-edition-58h3",
-    source: "DEV",
-  },
-  {
-    title: "How to Update a React Native App Without Play Store",
-    description:
-      "A lightweight update workflow for sharing Android app updates using Google Drive and JSON.",
-    href: "https://dev.to/digital_subham/how-to-update-a-react-native-app-without-play-store-using-google-drive-json-2id6",
-    source: "DEV",
-  },
-];
+export default async function BlogPage() {
+  const { blogPosts: posts } = await getPortfolioData();
 
-export default function BlogPage() {
   return (
     <main className="min-h-screen bg-[#f7f7f5] px-4 py-16 text-gray-900 dark:bg-gray-950 dark:text-gray-100 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">
@@ -59,7 +56,7 @@ export default function BlogPage() {
         <div className="mt-10 grid gap-6">
           {posts.map((post) => (
             <article
-              key={post.href}
+              key={post.id}
               className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg dark:border-gray-800 dark:bg-gray-900"
             >
               <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
@@ -69,10 +66,10 @@ export default function BlogPage() {
                 {post.title}
               </h2>
               <p className="mt-3 text-gray-600 dark:text-gray-400">
-                {post.description}
+                {post.seoDescription || post.excerpt}
               </p>
               <Link
-                href={post.href}
+                href={post.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-gray-950 px-5 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 dark:bg-white dark:text-gray-950"

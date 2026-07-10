@@ -1,31 +1,20 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
+import { ArrowDown } from "lucide-react";
+import SmartImage from "@/components/common/SmartImage";
+import { getIcon } from "@/components/common/Icon";
+import type { HeroContent, SocialLink } from "@/lib/portfolio-types";
 
-const socials = [
-  {
-    href: "https://github.com/DigitalSubham",
-    label: "GitHub",
-    icon: Github,
-  },
-  {
-    href: "https://www.linkedin.com/in/subham-kr/",
-    label: "LinkedIn",
-    icon: Linkedin,
-  },
-  {
-    href: "mailto:shubhamkr354@gmail.com",
-    label: "Email",
-    icon: Mail,
-  },
-];
+type Props = {
+  hero: HeroContent;
+  socials: SocialLink[];
+};
 
-const Hero = () => {
+const Hero = ({ hero, socials }: Props) => {
   return (
     <section className="relative min-h-screen overflow-hidden bg-[#eef3f6] pt-16 dark:bg-gray-950">
-      <Image
-        src="/portrait-hero-wide.png"
-        alt="Subham Kumar professional portrait"
+      <SmartImage
+        src={hero.imageUrl}
+        alt={hero.imageAlt}
         fill
         priority
         unoptimized
@@ -38,34 +27,33 @@ const Hero = () => {
       <div className="relative z-10 mx-auto flex min-h-[calc(100vh-4rem)] max-w-7xl items-center px-4 py-16 sm:px-6 lg:px-8">
         <div className="max-w-3xl">
           <p className="mb-6 text-sm font-semibold uppercase tracking-[0.32em] text-gray-500 dark:text-gray-400">
-            Full Stack Developer
+            {hero.eyebrow}
           </p>
           <h1 className="max-w-4xl text-[clamp(4rem,9vw,8.8rem)] font-semibold leading-[0.88] tracking-tight text-gray-950 dark:text-white">
-            Subham Kumar
+            {hero.name}
           </h1>
           <p className="mt-8 max-w-xl text-xl leading-9 text-gray-700 dark:text-gray-300">
-            I build modern web and mobile products with React, Next.js, React
-            Native, and Node.js.
+            {hero.description}
           </p>
 
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <Link
-              href="#projects"
+              href={hero.primaryHref}
               className="inline-flex min-h-12 items-center justify-center rounded-none bg-gray-950 px-7 text-sm font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200"
             >
-              View work
+              {hero.primaryLabel}
             </Link>
             <Link
-              href="#contact"
+              href={hero.secondaryHref}
               className="inline-flex min-h-12 items-center justify-center rounded-none border border-gray-950 px-7 text-sm font-semibold uppercase tracking-[0.12em] text-gray-950 transition-colors hover:bg-gray-950 hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-gray-950"
             >
-              Contact
+              {hero.secondaryLabel}
             </Link>
           </div>
 
           <div className="mt-12 flex items-center gap-4">
             {socials.map((item) => {
-              const Icon = item.icon;
+              const Icon = getIcon(item.icon);
               return (
                 <Link
                   key={item.label}

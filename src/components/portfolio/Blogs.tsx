@@ -1,35 +1,15 @@
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import SectionHeading from "./SectionHeading";
+import type { BlogPost } from "@/lib/portfolio-types";
 
-const posts = [
-  {
-    title: "Resume for Freshers: Important Points to Keep in Mind",
-    category: "Career",
-    date: "Mar 22, 2023",
-    href: "https://digitalsubham.hashnode.dev/resume-for-freshers-important-points-to-keep-in-mind",
-    excerpt:
-      "Practical resume guidance for freshers preparing for software development roles.",
-  },
-  {
-    title: "Complete Guide: Setting up React Native CLI for Android on macOS",
-    category: "React Native",
-    date: "Oct 30, 2025",
-    href: "https://dev.to/digital_subham/complete-guide-setting-up-react-native-cli-for-android-on-macos-2025-edition-58h3",
-    excerpt:
-      "A step-by-step Android setup guide for React Native CLI development on macOS.",
-  },
-  {
-    title: "How to Update a React Native App Without Play Store",
-    category: "Deployment",
-    date: "Nov 21, 2025",
-    href: "https://dev.to/digital_subham/how-to-update-a-react-native-app-without-play-store-using-google-drive-json-2id6",
-    excerpt:
-      "A lightweight update workflow for distributing Android app updates with JSON metadata.",
-  },
-];
+type Props = {
+  posts: BlogPost[];
+};
 
-const Blogs = () => {
+const Blogs = ({ posts }: Props) => {
+  if (posts.length === 0) return null;
+
   return (
     <section id="blogs" className="bg-[#f7f7f5] py-24 dark:bg-gray-950">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -52,11 +32,11 @@ const Blogs = () => {
         <div className="divide-y divide-gray-200 border-y border-gray-200 dark:divide-gray-800 dark:border-gray-800">
           {posts.map((post) => (
             <article
-              key={post.href}
+              key={post.id}
               className="grid gap-4 py-7 transition-colors hover:bg-white/70 dark:hover:bg-gray-900/40 md:grid-cols-[0.22fr_1fr_auto]"
             >
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                <p>{post.date}</p>
+                <p>{post.publishedAt}</p>
                 <p className="mt-1 font-semibold uppercase tracking-[0.14em]">
                   {post.category}
                 </p>
@@ -66,11 +46,11 @@ const Blogs = () => {
                   {post.title}
                 </h3>
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-400">
-                  {post.excerpt}
+                {post.excerpt}
                 </p>
               </div>
               <Link
-                href={post.href}
+                href={post.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex min-h-11 items-center justify-start text-sm font-semibold uppercase tracking-[0.12em] text-gray-950 dark:text-white md:justify-center"

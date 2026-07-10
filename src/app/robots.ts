@@ -1,11 +1,17 @@
 import type { MetadataRoute } from "next";
+import { getPortfolioData } from "@/lib/db";
 
-export default function robots(): MetadataRoute.Robots {
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const { site } = await getPortfolioData();
+
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-    },
-    sitemap: "https://subhams.site/sitemap.xml",
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/admin", "/admin/"],
+      },
+    ],
+    sitemap: `${site.siteUrl}/sitemap.xml`,
   };
 }

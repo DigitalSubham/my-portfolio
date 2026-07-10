@@ -4,17 +4,14 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { ThemeToggle } from "../themes/theme-toggle";
+import type { NavItem, SiteProfile } from "@/lib/portfolio-types";
 
-const navItems = [
-  { href: "#about", label: "About" },
-  { href: "#experience", label: "Experience" },
-  { href: "#projects", label: "Projects" },
-  { href: "#skills", label: "Skills" },
-  { href: "#blogs", label: "Writing" },
-  { href: "#contact", label: "Contact" },
-];
+type Props = {
+  site: SiteProfile;
+  navItems: NavItem[];
+};
 
-const Navbar = () => {
+const Navbar = ({ site, navItems }: Props) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -27,9 +24,9 @@ const Navbar = () => {
             onClick={() => setOpen(false)}
           >
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-950 text-xs font-bold text-white dark:bg-white dark:text-gray-950">
-              SK
+              {site.initials}
             </span>
-            <span>Subham Kumar</span>
+            <span>{site.name}</span>
           </Link>
 
           <nav className="hidden items-center gap-1 rounded-full border border-gray-200 bg-white/70 p-1 text-sm text-gray-600 shadow-sm dark:border-gray-800 dark:bg-gray-900/60 dark:text-gray-300 md:flex">

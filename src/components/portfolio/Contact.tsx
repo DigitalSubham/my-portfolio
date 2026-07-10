@@ -1,32 +1,17 @@
-import { Github, Linkedin, Mail } from "lucide-react";
 import Link from "next/link";
+import { submitContactMessage } from "@/app/actions";
+import { getIcon } from "@/components/common/Icon";
+import type { ContactChannel } from "@/lib/portfolio-types";
 import SectionHeading from "./SectionHeading";
-
-const contactLinks = [
-  {
-    label: "Email",
-    value: "shubhamkr354@gmail.com",
-    href: "mailto:shubhamkr354@gmail.com",
-    icon: Mail,
-  },
-  {
-    label: "LinkedIn",
-    value: "linkedin.com/in/subham-kr",
-    href: "https://www.linkedin.com/in/subham-kr/",
-    icon: Linkedin,
-  },
-  {
-    label: "GitHub",
-    value: "github.com/DigitalSubham",
-    href: "https://github.com/DigitalSubham",
-    icon: Github,
-  },
-];
 
 const fieldClass =
   "min-h-12 w-full rounded-xl border border-gray-200 bg-white px-4 text-sm text-gray-950 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-950 dark:border-gray-800 dark:bg-gray-950 dark:text-white dark:focus:border-white";
 
-const Contact = () => {
+type Props = {
+  channels: ContactChannel[];
+};
+
+const Contact = ({ channels }: Props) => {
   return (
     <section id="contact" className="bg-[#f7f7f5] py-24 dark:bg-gray-950">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -47,8 +32,8 @@ const Contact = () => {
             </p>
 
             <div className="mt-6 grid gap-3">
-              {contactLinks.map((item) => {
-                const Icon = item.icon;
+              {channels.map((item) => {
+                const Icon = getIcon(item.icon);
                 return (
                   <Link
                     key={item.label}
@@ -73,8 +58,7 @@ const Contact = () => {
           </div>
 
           <form
-            action="https://getform.io/f/a6c78b4d-9b14-4de4-b94f-705a82847702"
-            method="POST"
+            action={submitContactMessage}
             className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900/70"
           >
             <div className="grid gap-4 sm:grid-cols-2">

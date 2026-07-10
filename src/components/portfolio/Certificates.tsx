@@ -1,37 +1,14 @@
 import { ArrowUpRight, Award } from "lucide-react";
 import Link from "next/link";
 import SectionHeading from "./SectionHeading";
+import type { Certificate } from "@/lib/portfolio-types";
 
-const Certificates = () => {
-  const certificates = [
-    {
-      id: 1,
-      title: "AWS Cloud Practitioner",
-      issuer: "Amazon Web Services",
-      date: "2025",
-      description:
-        "Cloud basics, deployment concepts, shared responsibility, and platform best practices.",
-      link: "https://aws.amazon.com/certification/certified-cloud-practitioner/",
-    },
-    {
-      id: 2,
-      title: "React Certification",
-      issuer: "NamasteDev (Akshay Saini)",
-      date: "2023",
-      description:
-        "Scalable React applications using React, Redux, component patterns, and modern tooling.",
-      link: "https://namastedev.com/shubhamkr354/certificates/namaste-react",
-    },
-    {
-      id: 3,
-      title: "Blockchain Certification",
-      issuer: "NPTEL",
-      date: "2023",
-      description:
-        "Blockchain fundamentals, distributed ledgers, and smart contract development concepts.",
-      link: "https://archive.nptel.ac.in/",
-    },
-  ];
+type Props = {
+  certificates: Certificate[];
+};
+
+const Certificates = ({ certificates }: Props) => {
+  if (certificates.length === 0) return null;
 
   return (
     <section id="certificates" className="border-y border-gray-200 bg-white py-24 dark:border-gray-800 dark:bg-gray-950">
@@ -57,7 +34,7 @@ const Certificates = () => {
                     {certificate.title}
                   </h3>
                   <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {certificate.date}
+                    {certificate.issuedAtLabel}
                   </span>
                 </div>
                 <p className="mt-1 text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -68,7 +45,7 @@ const Certificates = () => {
                 </p>
               </div>
               <Link
-                href={certificate.link}
+                href={certificate.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex min-h-11 items-center justify-start text-sm font-semibold uppercase tracking-[0.12em] text-gray-950 dark:text-white md:justify-center"
