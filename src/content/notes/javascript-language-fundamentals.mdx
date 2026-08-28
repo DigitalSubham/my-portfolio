@@ -1,0 +1,792 @@
+You use all fourteen of these every day. You have just never had to say out loud how they work. That is the only thing an interview actually tests.
+
+Read one topic, close the page, and say it in your own words. If it comes out fuzzy, read it again before moving on.
+
+## var, let and const
+
+These are three ways to create a variable. They differ in three things: **where you can use it**, **whether you can change it**, and **what happens if you use it too early**.
+
+|  | var | let | const |
+| --- | --- | --- | --- |
+| Where it works | whole function | only inside braces | only inside braces |
+| Can you create it twice? | yes | no | no |
+| Can you change it? | yes | yes | no |
+| Using it too early gives | `undefined` | an error | an error |
+
+"Only inside braces" means the variable is born at the opening brace and dies at the closing brace. `var` does not care about braces at all. It only cares about functions.
+
+```js
+function demo() {
+  if (true) {
+    var a = 1;
+    let b = 2;
+  }
+  console.log(a); // 1  -- var escaped the if block
+  console.log(b); // Error: b is not defined
+}
+```
+
+### The temporal dead zone
+
+A `let` or `const` variable is created as soon as the block starts. But you cannot touch it until the line that declares it runs. That gap is called the temporal dead zone.
+
+<Figure caption="The variable is not missing during the dead zone. It exists. JavaScript just refuses to let you read it until execution reaches the declaration line.">
+  <svg viewBox="0 0 660 168" role="img" aria-label="A code block from opening to closing brace. Before the let line the variable exists but is locked and throws an error. After that line it is usable." className="w-full">
+    <rect x="14" y="34" width="632" height="86" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <rect x="14" y="34" width="286" height="86" rx="6" fill="rgb(251 191 36 / 0.14)" stroke="rgb(217 119 6)" strokeWidth="1.3" />
+    <line x1="300" y1="34" x2="300" y2="120" stroke="rgb(217 119 6)" strokeWidth="1.6" />
+    <text x="24" y="24" fontSize="11" letterSpacing="1.2" fill="currentColor">BLOCK STARTS</text>
+    <text x="646" y="24" fontSize="11" letterSpacing="1.2" fill="currentColor" textAnchor="end">BLOCK ENDS</text>
+    <text x="157" y="66" fontSize="11.5" letterSpacing="1" fill="rgb(180 83 9)" textAnchor="middle">TEMPORAL DEAD ZONE</text>
+    <text x="157" y="88" fontSize="13" fill="currentColor" textAnchor="middle">exists, but locked</text>
+    <text x="157" y="108" fontSize="11.5" fill="rgb(180 83 9)" textAnchor="middle">ReferenceError</text>
+    <text x="473" y="72" fontSize="11" letterSpacing="1.2" fill="currentColor" textAnchor="middle">USABLE</text>
+    <text x="473" y="95" fontSize="13" fill="currentColor" textAnchor="middle">reading it works normally</text>
+    <text x="300" y="141" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">let name = "Subham";</text>
+    <text x="300" y="159" fontSize="10.5" letterSpacing="1.2" fill="currentColor" textAnchor="middle" opacity="0.7">THE DECLARATION LINE</text>
+  </svg>
+</Figure>
+
+Why does this exist? So that `const` can be trusted. If `const` behaved like `var`, a constant would be `undefined` for part of its life. That makes no sense. An error is better than a wrong value.
+
+<Callout variant="analogy">
+A meeting room booked from 10 a.m. The room exists at 9 a.m. The door is just locked. You cannot walk in early.
+</Callout>
+
+<Callout variant="careful">
+`const` stops you from pointing the variable at something new. It does not stop you from changing what is inside.
+</Callout>
+
+```js
+const user = { name: "Subham" };
+user.name = "Kumar";   // works -- we changed what is inside
+user.age = 26;         // works
+user = {};             // Error -- we tried to point it somewhere new
+
+const list = [1, 2];
+list.push(3);          // works -- list is now [1, 2, 3]
+```
+
+<Callout variant="interview">
+"`var` is function scoped and starts as `undefined`, so reading it early works but gives you nothing useful. `let` and `const` are block scoped and stay locked until their declaration line runs. That locked period is the temporal dead zone, and reading inside it throws a ReferenceError. I use `const` by default, `let` when I need to reassign, and never `var`."
+</Callout>
+
+## Hoisting
+
+JavaScript reads your code **twice**. On the first pass it writes down every name you declared. On the second pass it actually runs the lines. Hoisting is just the name for that first pass.
+
+Nothing physically moves in your file. The names were simply known before line one ran.
+
+<Figure caption="Both passes happen before your first line of output. What each name is worth on the second pass depends entirely on how it was declared.">
+  <svg viewBox="0 0 660 214" role="img" aria-label="Two passes. Pass one records greet as ready, a as undefined, and b as locked. Pass two runs the lines, so greet works, a prints undefined, and b throws." className="w-full">
+    <defs>
+      <marker id="hoist-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="currentColor" />
+      </marker>
+    </defs>
+    <text x="14" y="18" fontSize="11" letterSpacing="1.2" fill="currentColor">PASS 1 — WRITE DOWN THE NAMES</text>
+    <rect x="14" y="28" width="300" height="122" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <line x1="14" y1="60" x2="314" y2="60" stroke="currentColor" strokeWidth="1.2" />
+    <text x="28" y="50" fontSize="10.5" letterSpacing="1.2" fill="currentColor" opacity="0.7">NAME</text>
+    <text x="180" y="50" fontSize="10.5" letterSpacing="1.2" fill="currentColor" opacity="0.7">STARTING VALUE</text>
+    <text x="28" y="83" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor">greet</text>
+    <text x="180" y="83" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor">the function</text>
+    <text x="28" y="110" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor">a</text>
+    <text x="180" y="110" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor">undefined</text>
+    <text x="28" y="137" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor">b</text>
+    <text x="180" y="137" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="rgb(180 83 9)">locked (TDZ)</text>
+    <line x1="328" y1="89" x2="352" y2="89" stroke="currentColor" strokeWidth="1.2" markerEnd="url(#hoist-arrow)" />
+    <text x="366" y="18" fontSize="11" letterSpacing="1.2" fill="currentColor">PASS 2 — RUN THE LINES</text>
+    <rect x="366" y="28" width="280" height="122" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="380" y="55" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor">greet()</text>
+    <text x="560" y="55" fontSize="12" fontFamily="ui-monospace, monospace" fill="rgb(4 120 87)">works</text>
+    <text x="380" y="83" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor">console.log(a)</text>
+    <text x="560" y="83" fontSize="12" fontFamily="ui-monospace, monospace" fill="currentColor">undefined</text>
+    <text x="380" y="111" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor">console.log(b)</text>
+    <text x="560" y="111" fontSize="12" fontFamily="ui-monospace, monospace" fill="rgb(180 83 9)">throws</text>
+    <text x="380" y="139" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor">sayHi()</text>
+    <text x="560" y="139" fontSize="12" fontFamily="ui-monospace, monospace" fill="rgb(180 83 9)">throws</text>
+    <text x="14" y="182" fontSize="10.5" letterSpacing="1.2" fill="currentColor" opacity="0.7">SOURCE ORDER, WHICH NEVER CHANGES</text>
+    <text x="14" y="203" fontSize="12" fontFamily="ui-monospace, monospace" fill="currentColor">function greet()  •  var a = 1  •  let b = 2  •  var sayHi = function()</text>
+  </svg>
+</Figure>
+
+| How you declared it | Value before its line runs | Reading it early gives |
+| --- | --- | --- |
+| `function greet() {}` | the whole function | it works, you can call it |
+| `var a` | `undefined` | `undefined` |
+| `let` / `const` | nothing, it is locked | ReferenceError |
+| `class Person {}` | nothing, it is locked | ReferenceError |
+| `var f = function () {}` | `undefined` | TypeError when you call it |
+
+Look at that last row carefully. The *variable* `f` was hoisted like any `var`, so it holds `undefined`. Calling `undefined()` is a **TypeError**, not a ReferenceError. Interviewers love this difference.
+
+<Callout variant="careful">
+**ReferenceError** means the name does not exist yet. **TypeError** means the name exists, but the value is the wrong kind of thing.
+</Callout>
+
+<Callout variant="interview">
+"Hoisting means JavaScript registers every declaration in a scope before running it. Function declarations are ready with their body, so I can call them before their line. `var` starts as `undefined`. `let`, `const` and `class` are registered but locked, which is the TDZ. A function expression only hoists its variable, so calling it early gives a TypeError instead of a ReferenceError."
+</Callout>
+
+## Primitives and objects
+
+Some values are stored **directly inside** the variable. Others are stored somewhere else, and the variable only holds the address. That one difference explains a lot of confusing bugs.
+
+There are exactly **seven** values stored directly. These are called primitives: `string`, `number`, `boolean`, `null`, `undefined`, `symbol` and `bigint`.
+
+Everything else is an object — objects, arrays, functions, dates, Maps, regex. For those, the variable holds an address.
+
+<Figure caption="Copying a primitive duplicates the value. Copying an object duplicates only the arrow, so both names lead to the same object.">
+  <svg viewBox="0 0 660 226" role="img" aria-label="On the left, two number variables each hold their own copy of ten. On the right, two object variables both hold an arrow pointing to the same object, so changing it through one is visible through the other." className="w-full">
+    <defs>
+      <marker id="ref-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="rgb(217 119 6)" />
+      </marker>
+    </defs>
+    <text x="14" y="18" fontSize="10.5" letterSpacing="1.2" fill="currentColor" opacity="0.75">PRIMITIVE — EACH GETS ITS OWN COPY</text>
+    <rect x="14" y="30" width="292" height="76" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <rect x="34" y="48" width="110" height="40" rx="4" fill="currentColor" opacity="0.06" />
+    <rect x="34" y="48" width="110" height="40" rx="4" fill="none" stroke="currentColor" strokeWidth="1" />
+    <text x="89" y="65" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">a</text>
+    <text x="89" y="82" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">10</text>
+    <rect x="176" y="48" width="110" height="40" rx="4" fill="currentColor" opacity="0.06" />
+    <rect x="176" y="48" width="110" height="40" rx="4" fill="none" stroke="currentColor" strokeWidth="1" />
+    <text x="231" y="65" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">b</text>
+    <text x="231" y="82" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">10</text>
+    <text x="160" y="126" fontSize="12.5" fill="currentColor" textAnchor="middle">b++ changes only b</text>
+    <text x="354" y="18" fontSize="10.5" letterSpacing="1.2" fill="currentColor" opacity="0.75">OBJECT — BOTH HOLD THE SAME ADDRESS</text>
+    <rect x="354" y="30" width="292" height="76" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <rect x="370" y="48" width="76" height="40" rx="4" fill="currentColor" opacity="0.06" />
+    <rect x="370" y="48" width="76" height="40" rx="4" fill="none" stroke="currentColor" strokeWidth="1" />
+    <text x="408" y="73" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">x</text>
+    <rect x="470" y="48" width="76" height="40" rx="4" fill="currentColor" opacity="0.06" />
+    <rect x="470" y="48" width="76" height="40" rx="4" fill="none" stroke="currentColor" strokeWidth="1" />
+    <text x="508" y="73" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">y</text>
+    <rect x="404" y="140" width="112" height="38" rx="4" fill="rgb(251 191 36 / 0.14)" stroke="rgb(217 119 6)" strokeWidth="1.3" />
+    <text x="460" y="164" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">n: 10</text>
+    <path d="M408 90 L 452 138" fill="none" stroke="rgb(217 119 6)" strokeWidth="1.6" markerEnd="url(#ref-arrow)" />
+    <path d="M508 90 L 468 138" fill="none" stroke="rgb(217 119 6)" strokeWidth="1.6" markerEnd="url(#ref-arrow)" />
+    <text x="480" y="204" fontSize="12.5" fill="currentColor" textAnchor="middle">y.n++ is visible through x too</text>
+  </svg>
+</Figure>
+
+```js
+let a = 10;
+let b = a;      // b gets its own 10
+b++;
+console.log(a, b);      // 10 11   -- separate
+
+let x = { n: 10 };
+let y = x;      // y gets a copy of the arrow, not the object
+y.n++;
+console.log(x.n, y.n);  // 11 11   -- same object
+
+y = { n: 99 };  // now y points somewhere else
+console.log(x.n, y.n);  // 11 99
+```
+
+<Callout variant="analogy">
+A primitive is a phone number written on paper. You photocopy it, your friend edits their copy, yours is fine.
+
+An object is your home address. You give it to a friend. They go there and move the furniture. You come home and the furniture has moved.
+</Callout>
+
+### Pass by value or pass by reference?
+
+The answer is **always pass by value**. The catch is that for an object, the value being copied *is the address*.
+
+```js
+function mutate(obj)   { obj.name = "changed"; }   // caller sees this
+function reassign(obj) { obj = { name: "new" }; }  // caller sees nothing
+
+const person = { name: "original" };
+mutate(person);    console.log(person.name);  // "changed"
+reassign(person);  console.log(person.name);  // "changed"  -- still
+```
+
+<Callout variant="careful">
+`{} === {}` is `false`. So is `[1] === [1]`. You are comparing two addresses, not the contents. This is why React re-renders when you did not expect it.
+</Callout>
+
+## Equality, truthy and falsy
+
+`===` is strict. Different types means `false`, immediately. `==` is lenient. It first converts the two sides to the same type, then compares. That converting step is called **coercion**, and almost every strange JavaScript result comes from it.
+
+<Callout variant="analogy">
+`===` is a strict teacher. Wrong format, zero marks. `==` is a lenient teacher who first rewrites your answer into what they think you meant, then marks it.
+</Callout>
+
+### The eight falsy values
+
+`false`, `0`, `-0`, `0n`, `""`, `null`, `undefined`, `NaN`.
+
+**Everything else is truthy.** That includes the ones that surprise people: `[]`, `{}`, `"0"`, `"false"` and `-1`.
+
+<Callout variant="careful">
+`if (arr)` is always true for an array, even an empty one. To check whether an array has items, use `arr.length`.
+</Callout>
+
+### The rules that actually matter
+
+- `null == undefined` is **true**. Neither one equals anything else, not `0` and not `""`.
+- `NaN` is not equal to anything, including itself. Use `Number.isNaN(x)`.
+- A boolean becomes a number first. `true` becomes `1`, `false` becomes `0`.
+- String against number: the string becomes a number.
+- Object against primitive: the object becomes a primitive first.
+
+```js
+// Walking through the famous one, step by step:
+[] == false
+// 1. false is a boolean, so turn it into a number  -> 0
+// 2. [] is an object, so turn it into a primitive  -> ""
+// 3. "" against 0, so turn the string into a number -> 0
+// 4. 0 == 0                                         -> true
+
+null == 0        // false  -- null only ever matches undefined
+null >= 0        // true   -- >= uses a different rule and turns null into 0
+NaN == NaN       // false
+"" == 0          // true
+"0" == 0         // true
+"" == "0"        // false  -- both are strings, so no conversion happens
+
+"5" + 3          // "53"   -- + joins text if either side is a string
+"5" - 3          // 2      -- every other operator only does maths
+```
+
+<Callout variant="work" label="The rule you actually use">
+Always `===`. The one accepted exception is `x == null`, which is a short way to check "is this null or undefined" in a single step.
+</Callout>
+
+## typeof and instanceof
+
+Four ways to ask "what is this value?". Each has a blind spot, so you need to know which to use when.
+
+```js
+typeof 42            // "number"
+typeof "hi"          // "string"
+typeof undefined     // "undefined"
+typeof null          // "object"     <-- famous bug
+typeof []            // "object"     -- no help for arrays
+typeof {}            // "object"
+typeof function(){}  // "function"
+typeof notDeclared   // "undefined"  -- does not throw. Only typeof is safe here.
+```
+
+**Why is `typeof null` equal to `"object"`?** It is a bug from 1995. Back then a value's type was read from a few bits, and the null pointer was all zeroes, which was the same pattern used for objects. Fixing it would break millions of websites, so it stayed.
+
+`instanceof` asks whether a constructor appears anywhere in the object's prototype chain. Good for your own classes. Two blind spots: it does not work on primitives, and it fails across iframes or worker threads.
+
+```js
+[] instanceof Array        // true
+[] instanceof Object       // true  -- it checks the whole chain
+"hi" instanceof String     // false -- primitives are never instances
+new Date() instanceof Date // true
+```
+
+### The two you should actually use
+
+```js
+Array.isArray([]);                            // true  -- always use this for arrays
+
+Object.prototype.toString.call(null);         // "[object Null]"
+Object.prototype.toString.call([]);           // "[object Array]"
+Object.prototype.toString.call(new Date());   // "[object Date]"
+
+function typeOf(value) {
+  return Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
+}
+typeOf([]);    // "array"
+typeOf(null);  // "null"
+```
+
+<Callout variant="interview">
+"`typeof` is cheap and it is the only safe way to check a variable that may not be declared. But it calls every object 'object', and it calls `null` 'object' because of an old tagging bug. `instanceof` checks the prototype chain, so it breaks on primitives and across realms. For arrays I use `Array.isArray`, and for an exact type I use `Object.prototype.toString.call`."
+</Callout>
+
+## Destructuring
+
+Instead of pulling values out one line at a time, you write the **shape** you expect on the left side. JavaScript matches it and hands you the pieces. Objects match **by key name**. Arrays match **by position**.
+
+```js
+const user = { id: 1, name: "Subham", address: { city: "Bengaluru" } };
+
+const { name } = user;               // "Subham"
+const { name: fullName } = user;     // rename it to fullName
+const { role = "dev" } = user;       // default when the key is missing
+const { address: { city } } = user;  // reach inside
+const { id, ...rest } = user;        // rest = everything else
+
+const nums = [10, 20, 30, 40];
+const [first, second] = nums;        // 10, 20
+const [, , third] = nums;            // skip positions -> 30
+const [head, ...tail] = nums;        // 10, [20, 30, 40]
+
+let p = 1, q = 2;
+[p, q] = [q, p];                     // swap, no temp variable
+```
+
+### Where you already use it
+
+```js
+// Express -- you write this every day
+const { email, password } = req.body;
+
+// React
+function Card({ title, onClick, size = "md" }) {}
+
+// looping an object
+for (const [key, value] of Object.entries(user)) {}
+
+// options object with a safe default
+function request(url, { method = "GET", retries = 3 } = {}) {}
+// the trailing = {} is what makes request(url) work with one argument
+```
+
+<Callout variant="careful">
+A default only fires on `undefined`. Never on `null`, `0` or `""`. So `const { count = 10 } = { count: null }` gives you `null`, not `10`.
+
+Destructuring `null` also throws. Write `const { a } = obj ?? {}` to stay safe.
+</Callout>
+
+## Spread, rest and copying
+
+Same three dots, two opposite jobs. Look at **where** it sits to know which one it is.
+
+- **Rest** collects many things into one. It sits on the **left**, or in a function's parameters.
+- **Spread** opens one thing out into many. It sits on the **right**, or in a function call.
+
+```js
+// REST -- collecting
+function sum(...numbers) { return numbers.reduce((a, b) => a + b, 0); }
+const [head, ...tail] = [1, 2, 3];
+const { id, ...others } = user;
+
+// SPREAD -- opening out
+const merged = [...arr1, ...arr2];
+const copy = { ...original, status: "active" };   // later keys win
+Math.max(...[3, 7, 2]);                           // 7
+```
+
+### Spread copies only one level
+
+This is the most important thing in this whole note. Spread makes a **shallow** copy. The top level is new. Anything nested inside is still the same object as the original.
+
+<Figure caption="Spread rebuilds only the outer object, so the nested object stays shared and writing through the copy also changes the original. A deep clone rebuilds every level.">
+  <svg viewBox="0 0 660 268" role="img" aria-label="A shallow copy has its own top level but its nested arrow points at the same object as the original, so editing through the copy changes the original. A deep clone gives the copy its own nested object." className="w-full">
+    <defs>
+      <marker id="copy-hot" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="rgb(217 119 6)" />
+      </marker>
+      <marker id="copy-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="currentColor" />
+      </marker>
+    </defs>
+    <text x="14" y="18" fontSize="10.5" letterSpacing="1.2" fill="currentColor" opacity="0.75">SHALLOW COPY — spread</text>
+    <rect x="14" y="28" width="150" height="62" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="89" y="49" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">original</text>
+    <text x="89" y="70" fontSize="12" fill="currentColor" textAnchor="middle" opacity="0.8">name, meta</text>
+    <rect x="352" y="28" width="150" height="62" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="427" y="49" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">copy</text>
+    <text x="427" y="70" fontSize="12" fill="currentColor" textAnchor="middle" opacity="0.8">name, meta</text>
+    <rect x="196" y="118" width="126" height="42" rx="4" fill="rgb(251 191 36 / 0.14)" stroke="rgb(217 119 6)" strokeWidth="1.3" />
+    <text x="259" y="144" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">active</text>
+    <path d="M100 92 L 216 116" fill="none" stroke="rgb(217 119 6)" strokeWidth="1.6" markerEnd="url(#copy-hot)" />
+    <path d="M416 92 L 302 116" fill="none" stroke="rgb(217 119 6)" strokeWidth="1.6" markerEnd="url(#copy-hot)" />
+    <text x="520" y="140" fontSize="12" fontFamily="ui-monospace, monospace" fill="rgb(180 83 9)">shared</text>
+    <text x="520" y="158" fontSize="12" fontFamily="ui-monospace, monospace" fill="rgb(180 83 9)">one object</text>
+    <text x="14" y="196" fontSize="10.5" letterSpacing="1.2" fill="currentColor" opacity="0.75">DEEP CLONE — structuredClone</text>
+    <rect x="14" y="206" width="150" height="46" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="89" y="234" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">original</text>
+    <rect x="196" y="206" width="112" height="46" rx="4" fill="rgb(16 185 129 / 0.12)" stroke="rgb(4 120 87)" strokeWidth="1.3" />
+    <text x="252" y="234" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">active</text>
+    <path d="M164 229 L 192 229" fill="none" stroke="currentColor" strokeWidth="1.2" markerEnd="url(#copy-ok)" />
+    <rect x="352" y="206" width="150" height="46" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="427" y="234" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">clone</text>
+    <rect x="534" y="206" width="112" height="46" rx="4" fill="rgb(16 185 129 / 0.12)" stroke="rgb(4 120 87)" strokeWidth="1.3" />
+    <text x="590" y="234" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">active</text>
+    <path d="M502 229 L 530 229" fill="none" stroke="currentColor" strokeWidth="1.2" markerEnd="url(#copy-ok)" />
+  </svg>
+</Figure>
+
+```js
+const original = { name: "Subham", tags: ["node"], meta: { active: true } };
+const copy = { ...original };
+
+copy.name = "Kumar";
+console.log(original.name);         // "Subham"  -- safe, it was a primitive
+
+copy.meta.active = false;
+console.log(original.meta.active);  // false     -- leaked!
+
+copy.tags.push("react");
+console.log(original.tags);         // ["node", "react"]  -- leaked too
+```
+
+<Callout variant="analogy">
+You photocopy a file folder. The papers get copied. But the folder also had a locker key inside, and the photocopy has that same key. Both folders open the same locker.
+</Callout>
+
+| Way to deep copy | Handles | Breaks on |
+| --- | --- | --- |
+| `structuredClone(obj)` | nested objects, arrays, Date, Map, Set, RegExp, circular links | functions, DOM nodes |
+| `JSON.parse(JSON.stringify(obj))` | plain data only | Date turns into text, undefined and functions disappear, Map and Set become empty objects |
+| lodash `cloneDeep` | almost everything | needs the package |
+
+<Callout variant="work">
+This is the reason behind "I updated state but React did not re-render" and "my Redux state got mutated". Both are the same mistake: you spread the outer object and then edited something nested.
+
+The fix is to spread every level you touch: `{ ...state, user: { ...state.user, name: "new" } }`
+</Callout>
+
+<Callout variant="interview">
+"Rest gathers values, spread opens them out — same syntax, opposite direction. Spread gives a shallow copy, so nested objects are still shared with the source. For a real deep copy I use `structuredClone`. I avoid the JSON trick because it quietly destroys Dates, undefined values, Maps and Sets."
+</Callout>
+
+## Optional chaining and nullish coalescing
+
+Three small operators. Together they remove most of the defensive `if` checks you used to write.
+
+### Stop instead of crashing
+
+If the thing on the left is `null` or `undefined`, the whole expression stops and gives you `undefined`. No crash.
+
+```js
+const city = user?.address?.city;   // undefined instead of a crash
+const first = list?.[0];            // safe index
+callback?.();                       // only runs if callback exists
+
+// what people used to write
+const city2 = user && user.address && user.address.city;
+```
+
+### Only replace missing values
+
+This is the important one. `||` replaces **every falsy value**. `??` replaces **only null and undefined**.
+
+```js
+const count = 0;
+count || 10;    // 10  -- wrong, 0 was a real answer
+count ?? 10;    // 0   -- correct
+
+const name = "";
+name || "Guest";  // "Guest"
+name ?? "Guest";  // ""   -- the empty string was a real answer
+```
+
+<Callout variant="work" label="A real bug from this">
+A user sets their page size to `0`, or turns a setting to `false`, or clears a text field. Your code says `settings.limit || 20`. Their choice is silently thrown away and they get 20.
+
+For anything coming from a user, an API or a config file, `??` is almost always the correct one.
+</Callout>
+
+```js
+a ??= 5;   // set a only if it is null or undefined
+b ||= 5;   // set b only if it is falsy
+c &&= 5;   // set c only if it is truthy
+
+cache.users ??= await fetchUsers();  // the fetch runs only if cache is empty
+```
+
+<Callout variant="careful">
+You cannot write `a ?? b || c`. It is a syntax error on purpose, because the order would be unclear to a reader. Add brackets instead.
+</Callout>
+
+## Template literals
+
+Strings written with backticks. You can drop values inside them, and they can span multiple lines. Any expression works inside the placeholder, not just a variable.
+
+### Tagged templates
+
+Put a function name right before the backticks. That function gets called with two things: the text pieces, and the values you injected — kept separate. Keeping them separate is the whole point. The function can trust the text and treat the injected values as unsafe.
+
+```js
+function highlight(strings, ...values) {
+  // strings = ["Hello ", ", you are ", " years old"]
+  // values  = ["Subham", 26]
+  return strings.reduce(
+    (out, str, i) => out + str + (values[i] !== undefined ? "[" + values[i] + "]" : ""),
+    ""
+  );
+}
+```
+
+<Callout variant="work" label="You already use this">
+`styled.div` in styled-components, `gql` in Apollo, and the `sql` tag in database libraries are all tagged templates.
+
+The `sql` one shows why they exist. It can send your values as safe query parameters instead of pasting them into the query text. That is SQL injection protection built into the syntax.
+</Callout>
+
+## Strict mode
+
+A switch that turns JavaScript's silent mistakes into loud errors. You turn it on by putting `"use strict";` as the first line of a file or a function. You rarely write it now, because **ES modules and class bodies are always strict**. But interviewers still ask what it changes.
+
+| Without strict mode | With strict mode |
+| --- | --- |
+| Assigning to an undeclared name quietly creates a global | throws an error |
+| `this` in a plain function is `window` | `this` is `undefined` |
+| Writing to a frozen property fails silently | throws an error |
+| Two parameters with the same name is allowed | syntax error |
+| Numbers written like `0755` are allowed | syntax error |
+
+The `this` change is the one that matters most. Without strict mode, a broken method call quietly writes onto `window`. With it, you get an error and find the bug.
+
+## Floating point precision
+
+Every number in JavaScript is stored as a decimal in **base 2**. Some numbers cannot be written exactly in base 2, so the computer stores the closest value it can. Adding two of those makes the small error visible.
+
+### Why 0.1 + 0.2 is not 0.3
+
+```js
+0.1 + 0.2;              // 0.30000000000000004
+0.1 + 0.2 === 0.3;      // false
+```
+
+<Callout variant="analogy">
+Write 1/3 as a decimal. You get 0.3333... and you have to stop somewhere. Now add three of them and you get 0.9999, not 1. Base 2 has the same problem with 0.1, which is why every language does this — Java, Python and C included.
+</Callout>
+
+```js
+const nearlyEqual = (a, b) => Math.abs(a - b) < Number.EPSILON;
+nearlyEqual(0.1 + 0.2, 0.3);   // true
+
+// Number.EPSILON is the smallest gap between 1 and the next number
+// JavaScript can store. Roughly 0.0000000000000002.
+```
+
+<Callout variant="work" label="The money rule">
+Never store or calculate money as a decimal number. Store the smallest unit as a whole number — paise, or cents — and only divide when you display it.
+
+In Postgres that means a `numeric` or `integer` column, never `float8`. This comes up in almost every payments or billing interview.
+</Callout>
+
+```js
+Number.MAX_SAFE_INTEGER;                 // 9007199254740991
+9007199254740992 === 9007199254740993;   // true (!) -- both round to the same value
+
+const big = 9007199254740993n;   // the n makes it a BigInt
+big + 1n;                        // exact
+big + 1;                         // TypeError -- you cannot mix BigInt and Number
+```
+
+**Where this hits you for real:** if your backend sends a 64-bit database ID as a JSON number, `JSON.parse` in the browser will silently change the last digits. The fix is to send IDs as strings.
+
+## JSON stringify and parse
+
+JSON is a small text format that only understands six kinds of things: objects, arrays, strings, numbers, booleans and null. Anything else in your object gets dropped, changed, or throws an error.
+
+<Callout variant="analogy">
+A small suitcase with fixed compartments. Your clothes fit. Your bicycle does not. It gets left at home, and nobody tells you.
+</Callout>
+
+| What you had | What stringify does with it |
+| --- | --- |
+| `undefined` | the key disappears, or becomes `null` inside an array |
+| a function | same, it disappears |
+| `Date` | becomes a text string, and never turns back into a Date |
+| `Map`, `Set` | become empty objects, contents gone |
+| `NaN`, `Infinity` | become `null` |
+| an object that links back to itself | throws an error |
+
+```js
+JSON.stringify({ a: undefined, b: () => {}, c: new Date(), d: new Set([1]) });
+// '{"c":"2026-08-28T10:00:00.000Z","d":{}}'
+// a and b vanished. c became text. d lost its contents.
+```
+
+```js
+JSON.stringify(obj, null, 2);          // pretty print with 2 spaces
+
+JSON.stringify(obj, (key, value) =>    // hide fields before logging
+  key === "password" ? undefined : value);
+
+JSON.parse(text, (key, value) =>       // fix values on the way back in
+  key === "createdAt" ? new Date(value) : value);
+```
+
+An object can also define its own `toJSON()` method. Stringify calls that instead of reading the object directly. That is exactly how `Date` turns itself into text, and it is a clean way to control what your model looks like in an API response.
+
+<Callout variant="careful">
+Do not compare two objects with `JSON.stringify(a) === JSON.stringify(b)`. It depends on key order, so two objects that are equal in every real sense can be reported as different.
+</Callout>
+
+## Symbols
+
+A value whose only job is to be unique. Two symbols are never equal, even with the same description. That makes them safe keys that can never clash with anyone else's key.
+
+```js
+const a = Symbol("id");
+const b = Symbol("id");
+a === b;                  // false -- the text is only a label for debugging
+
+const user = { name: "Subham", [a]: 123 };
+user[a];                  // 123
+Object.keys(user);        // ["name"]  -- symbol keys are skipped
+JSON.stringify(user);     // '{"name":"Subham"}'  -- skipped here too
+```
+
+<Callout variant="analogy">
+A key that no locksmith can duplicate. You can hang it on someone else's keyring with no chance of it opening the wrong door.
+</Callout>
+
+**Why you would use one:** to attach your own data to an object you do not own, with zero risk that someone later adds a normal key with the same name.
+
+### Built-in symbols
+
+JavaScript has special symbols that act as hooks. Add one to your object and it starts working with syntax it could not use before.
+
+```js
+// Symbol.iterator makes an object work with for...of and with spread
+const range = {
+  from: 1,
+  to: 4,
+  [Symbol.iterator]() {
+    let current = this.from;
+    const last = this.to;
+    return {
+      next: () =>
+        current <= last
+          ? { value: current++, done: false }
+          : { value: undefined, done: true },
+    };
+  },
+};
+
+[...range];                 // [1, 2, 3, 4]
+for (const n of range) {}   // 1 2 3 4
+```
+
+Others worth recognising: `Symbol.asyncIterator` makes `for await...of` work, and `Symbol.toPrimitive` controls how your object converts in `==` and `+`.
+
+## Labels and switch
+
+Three small corners of the syntax. You will rarely write them, but two cause real bugs and one shows up in puzzle questions.
+
+### Labels
+
+Normally `break` only exits the loop it is directly inside. A label lets you name an outer loop and break out of that one instead.
+
+```js
+outer:
+for (const row of grid) {
+  for (const cell of row) {
+    if (cell === target) break outer;   // exits BOTH loops
+  }
+}
+```
+
+### switch fallthrough
+
+Two things to know. First, `switch` compares with `===`, so `"1"` never matches `case 1`. Second, without a `break`, the code keeps running into the next case.
+
+```js
+switch (role) {
+  case "admin":
+  case "owner":            // on purpose -- both run the same code
+    grantFullAccess();
+    break;
+  case "editor":
+    grantWriteAccess();
+    // no break -- so an editor also gets read access below. Usually a bug.
+  case "viewer":
+    grantReadAccess();
+    break;
+  default:
+    deny();
+}
+```
+
+<Callout variant="careful">
+All the cases share one scope. Declaring `let x` in two different cases is a syntax error. Wrap a case body in braces when you need to declare something inside it.
+</Callout>
+
+### The comma operator
+
+It runs every expression from left to right and gives you the **last** one. You will basically never write it, but you will see it in minified code and in interview puzzles.
+
+```js
+const x = (1, 2, 3);         // 3
+for (; i < 5; i++, j++) {}   // the one normal use
+```
+
+## Ten questions
+
+Say your answer out loud before you reveal it. If your spoken answer was fuzzy, that topic is not finished. Read it again instead of moving on.
+
+<Quiz>
+  <QuizItem number={1} question={<>What does this print? <code>console.log(a)</code> then <code>console.log(b)</code>, with <code>var a = 1</code> and <code>let b = 2</code> declared below them.</>}>
+    <p>First line prints <strong>undefined</strong>. Second line throws a <strong>ReferenceError</strong>.</p>
+    <p><code>var a</code> is registered with a starting value of undefined, so reading it is allowed. <code>let b</code> is registered but locked until its own line runs. Reading it inside that locked period throws.</p>
+  </QuizItem>
+
+  <QuizItem number={2} question={<>Is <code>config.retries = 5</code> allowed when config was declared with <code>const</code>? What does const actually stop you from doing?</>}>
+    <p>Allowed. <code>const</code> only stops you from pointing the variable at a different value. It does not lock the contents.</p>
+    <p>Reassigning the whole object would throw. If you want the contents locked, use <code>Object.freeze</code> — and that is only one level deep.</p>
+  </QuizItem>
+
+  <QuizItem number={3} question={<>Name all eight falsy values. Is an empty array one of them?</>}>
+    <p><code>false</code>, <code>0</code>, <code>-0</code>, <code>0n</code>, <code>""</code>, <code>null</code>, <code>undefined</code>, <code>NaN</code>.</p>
+    <p>No. Both <code>[]</code> and an empty object are truthy. That is why <code>if (arr)</code> never tells you whether an array has items — you need <code>arr.length</code>.</p>
+  </QuizItem>
+
+  <QuizItem number={4} question={<>Why is <code>[] == false</code> true, but <code>[] === false</code> false?</>}>
+    <p><code>===</code> checks the type first. An object is not a boolean, so it is false straight away.</p>
+    <p><code>==</code> converts. <code>false</code> becomes the number 0. The empty array becomes an empty string. Then the empty string becomes 0. Finally 0 equals 0, which is true.</p>
+  </QuizItem>
+
+  <QuizItem number={5} question={<>A function sets <code>obj.x = 99</code>, reassigns its <code>arr</code> parameter to a new array, and reassigns its <code>num</code> parameter. Which changes are visible to the caller?</>}>
+    <p>Only the first one. The caller sees <code>o.x</code> as 99, but the array and the number are unchanged.</p>
+    <p>Setting a property changes the same object the caller is holding. Reassigning a parameter only points the local copy somewhere new. This single question covers the whole pass-by-value story.</p>
+  </QuizItem>
+
+  <QuizItem number={6} question={<>A user sets their limit to <code>0</code>. Why does <code>settings.limit || 20</code> ignore them, and what is the fix?</>}>
+    <p><code>0</code> is falsy, so <code>||</code> throws it away and uses 20. The user&apos;s real choice is lost.</p>
+    <p>Fix: <code>settings.limit ?? 20</code>. The <code>??</code> operator only steps in for null and undefined, so a real 0 survives. The same bug happens with empty strings and with false.</p>
+  </QuizItem>
+
+  <QuizItem number={7} question={<>What is wrong with taking <code>const copy = {"{...state}"}</code> and then setting <code>copy.user.name</code>?</>}>
+    <p>Spread only copies one level. <code>copy.user</code> is the exact same object as <code>state.user</code>, so this changes the original state too.</p>
+    <p>Either spread every level you touch, or take a real deep copy with <code>structuredClone</code>.</p>
+  </QuizItem>
+
+  <QuizItem number={8} question={<>Why is <code>typeof null</code> equal to <code>"object"</code>? What should you use instead?</>}>
+    <p>An old bug. Values used to carry a small type tag in their bits, and the null pointer was all zeroes, which was the same tag used for objects. Fixing it would break too much existing code.</p>
+    <p>Use <code>value === null</code> for null, <code>Array.isArray</code> for arrays, and <code>Object.prototype.toString.call</code> when you need the exact type of anything.</p>
+  </QuizItem>
+
+  <QuizItem number={9} question={<>An object holds a Date, a Set, a function and an undefined key. What survives a <code>JSON.parse(JSON.stringify(...))</code> round trip?</>}>
+    <p>Only the Date and the Set key survive, and both are damaged.</p>
+    <p>The Date became text and will not turn back. The Set became an empty object with its contents gone. The function and the undefined key disappeared completely. This is exactly why the JSON trick is a bad deep clone.</p>
+  </QuizItem>
+
+  <QuizItem number={10} question={<>Calling a hoisted <code>var</code> function expression before its line throws one kind of error. Using a class before its line throws another. Which is which, and why?</>}>
+    <p>The function expression throws a <strong>TypeError</strong>. The variable exists, it just holds undefined right now, and you cannot call undefined.</p>
+    <p>The class throws a <strong>ReferenceError</strong>. Classes are locked until their line runs, so the name cannot be touched at all yet.</p>
+    <p>Short version: exists but wrong type, versus cannot be touched yet.</p>
+  </QuizItem>
+</Quiz>
+
+## Six exercises
+
+Do these in a plain file with autocomplete off and no searching.
+
+<ol className="mt-8 list-none space-y-0 p-0">
+  <Exercise number={1} title="Write deepClone(value)">
+    No <code>structuredClone</code> and no JSON. Handle nested objects, arrays, Date, Map, Set and primitives. Then make it survive an object that points back at itself. Hint: keep a <code>WeakMap</code> of things you have already cloned.
+  </Exercise>
+  <Exercise number={2} title="Write typeOf(value)">
+    Return a lowercase word that is correct for every input: array, null, date, map, regexp, number, nan, function. <code>NaN</code> needs its own check, because <code>typeof NaN</code> is <code>"number"</code>.
+  </Exercise>
+  <Exercise number={3} title="Write get(object, path, fallback)">
+    Rebuild lodash&apos;s <code>get</code>, so that a dotted path walks safely and returns the fallback if any step is missing. Then write the one-line version using optional chaining and <code>??</code>, and decide which one you would ship.
+  </Exercise>
+  <Exercise number={4} title="Predict, then run">
+    Write your answer down before running: <code>&quot;5&quot; - 3</code>, <code>&quot;5&quot; + 3</code>, <code>1 &lt; 2 &lt; 3</code>, <code>3 &gt; 2 &gt; 1</code>, <code>null &gt;= 0</code>, <code>null &gt; 0</code>, <code>null == 0</code>. Then explain each result using the coercion rules above. The explanation matters more than the answer.
+  </Exercise>
+  <Exercise number={5} title="A safe money helper">
+    Write a small module that stores amounts as whole paise and exposes add, subtract, multiply and format. Write one test that proves your version handles <code>0.1 + 0.2</code> correctly where plain numbers do not.
+  </Exercise>
+  <Exercise number={6} title="Make something iterable">
+    Build an object with a <code>Symbol.iterator</code> that yields fixed-size chunks of an array, so that spreading it gives you groups of two. Then write the same thing as a generator function and decide which reads better.
+  </Exercise>
+</ol>
