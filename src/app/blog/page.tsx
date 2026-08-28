@@ -2,6 +2,9 @@ import { ArrowRight, ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getPortfolioData } from "@/lib/db";
+import { toPageNavItems } from "@/lib/nav";
+import Navbar from "@/components/common/Navbar";
+import Footer from "@/components/common/Footer";
 import { notes } from "@/lib/notes";
 import { coreTopics, syllabus, totalTopics } from "@/lib/syllabus";
 
@@ -51,7 +54,7 @@ const formatDate = (value: string) =>
   });
 
 export default async function BlogPage() {
-  const { blogPosts: posts, site } = await getPortfolioData();
+  const { blogPosts: posts, site, navItems, socials } = await getPortfolioData();
   const url = `${site.siteUrl}/blog`;
 
   const blogJsonLd = {
@@ -74,7 +77,9 @@ export default async function BlogPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#f7f7f5] px-4 py-16 text-gray-900 sm:px-6 lg:px-8 dark:bg-gray-950 dark:text-gray-100">
+    <div className="min-h-screen bg-[#f7f7f5] text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+      <Navbar site={site} navItems={toPageNavItems(navItems)} />
+      <main className="px-4 pb-20 pt-28 sm:px-6 lg:px-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}
@@ -196,6 +201,8 @@ export default async function BlogPage() {
           </section>
         )}
       </div>
-    </main>
+      </main>
+      <Footer site={site} socials={socials} />
+    </div>
   );
 }
