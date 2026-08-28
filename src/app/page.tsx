@@ -3,6 +3,7 @@ import About from "@/components/portfolio/About";
 import Projects from "@/components/portfolio/Projects";
 import Skills from "@/components/portfolio/Skills";
 import Blogs from "@/components/portfolio/Blogs";
+import Notes from "@/components/portfolio/Notes";
 import Certificates from "@/components/portfolio/Certificates";
 import Contact from "@/components/portfolio/Contact";
 import Navbar from "@/components/common/Navbar";
@@ -35,6 +36,7 @@ export default async function Home() {
 
       <Projects projects={data.projects} />
       <Skills groups={data.skillGroups} delivery={data.deliveryStrengths} />
+      <Notes />
       <Blogs posts={data.blogPosts} />
       <Certificates certificates={data.certificates} />
       <Contact channels={data.contactChannels} />

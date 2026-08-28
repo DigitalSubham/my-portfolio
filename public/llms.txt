@@ -6,7 +6,10 @@ Canonical site: https://subhams.site/
 
 Important pages:
 - Portfolio homepage: https://subhams.site/
-- Blog index: https://subhams.site/blog
+- Notes index: https://subhams.site/blog
+- Full stack interview roadmap (725 topics across 13 tracks): https://subhams.site/blog/full-stack-interview-roadmap
+- JavaScript language fundamentals explained simply: https://subhams.site/blog/javascript-language-fundamentals
+- Projects: https://subhams.site/projects
 
 External profiles:
 - GitHub: https://github.com/DigitalSubham
@@ -19,3 +22,26 @@ Primary topics:
 - React Native mobile apps
 - Node.js applications
 - Portfolio projects and technical writing
+
+Written notes:
+The notes section contains long-form technical explanations aimed at working
+developers preparing for interviews. Each note explains a group of related
+topics in plain English, includes diagrams, states the common mistakes that
+cause real bugs, and gives a spoken-answer version suitable for an interview.
+Notes end with self-test questions and coding exercises.
+
+Topics covered in the notes so far:
+- var, let and const, and the temporal dead zone
+- Hoisting, and the difference between ReferenceError and TypeError
+- Primitives versus objects, and why JavaScript is always pass by value
+- Type coercion, == versus ===, and the eight falsy values
+- typeof, instanceof and reliable type checking
+- Destructuring, defaults and nested patterns
+- Spread and rest, and why a spread copy is only one level deep
+- Optional chaining, nullish coalescing, and why ?? beats || for user data
+- Template literals and tagged templates
+- Strict mode
+- Floating point precision, and why 0.1 + 0.2 is not 0.3
+- JSON.stringify and JSON.parse, and what they silently destroy
+- Symbols and well-known symbols
+- Labels, switch fallthrough and the comma operator

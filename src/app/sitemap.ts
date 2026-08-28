@@ -1,8 +1,16 @@
 import type { MetadataRoute } from "next";
 import { getPortfolioData } from "@/lib/db";
+import { notes } from "@/lib/notes";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { site } = await getPortfolioData();
+
+  const notePages: MetadataRoute.Sitemap = notes.map((note) => ({
+    url: `${site.siteUrl}/blog/${note.slug}`,
+    lastModified: new Date(note.updatedAt),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
 
   return [
     {
@@ -14,9 +22,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${site.siteUrl}/blog`,
       lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
+      changeFrequency: "weekly",
+      priority: 0.9,
     },
+    {
+      url: `${site.siteUrl}/blog/full-stack-interview-roadmap`,
+      lastModified: new Date("2026-08-28"),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    ...notePages,
     {
       url: `${site.siteUrl}/projects`,
       lastModified: new Date(),
