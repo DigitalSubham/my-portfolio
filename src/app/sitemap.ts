@@ -2,6 +2,12 @@ import type { MetadataRoute } from "next";
 import { getPortfolioData } from "@/lib/db";
 import { notes } from "@/lib/notes";
 
+/**
+ * Regenerate daily. Without this the route is generated once at build time
+ * and the CDN can keep serving a stale copy long after a deploy.
+ */
+export const revalidate = 86400;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { site } = await getPortfolioData();
 

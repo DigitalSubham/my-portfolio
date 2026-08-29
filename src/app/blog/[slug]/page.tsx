@@ -4,6 +4,10 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Clock, CalendarDays, Layers } from "lucide-react";
 import { getAdjacentNotes, getNote, notes } from "@/lib/notes";
 import { getPortfolioData } from "@/lib/db";
+import { toPageNavItems } from "@/lib/nav";
+import Navbar from "@/components/common/Navbar";
+import Footer from "@/components/common/Footer";
+import ContentsNav from "@/components/notes/ContentsNav";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -60,7 +64,7 @@ export default async function NotePage({ params }: Params) {
   const note = getNote(slug);
   if (!note) notFound();
 
-  const { site } = await getPortfolioData();
+  const { site, navItems, socials } = await getPortfolioData();
   const { previous, next } = getAdjacentNotes(note.slug);
   const url = `${site.siteUrl}/blog/${note.slug}`;
 
@@ -106,7 +110,9 @@ export default async function NotePage({ params }: Params) {
   };
 
   return (
-    <main className="min-h-screen bg-[#f7f7f5] px-4 py-16 text-gray-900 sm:px-6 lg:px-8 dark:bg-gray-950 dark:text-gray-100">
+    <div className="min-h-screen bg-[#f7f7f5] text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+      <Navbar site={site} navItems={toPageNavItems(navItems)} />
+      <main className="px-4 pb-20 pt-28 sm:px-6 lg:px-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
@@ -174,28 +180,14 @@ export default async function NotePage({ params }: Params) {
           </article>
 
           <aside className="order-first lg:order-last">
-            <div className="lg:sticky lg:top-8">
-              <p className="border-b border-gray-200 pb-2 text-xs font-semibold uppercase tracking-[0.16em] text-gray-500 dark:border-gray-800 dark:text-gray-400">
-                On this page
-              </p>
-              <nav aria-label="Table of contents">
-                <ol className="mt-1">
-                  {note.outline.map((item, index) => (
-                    <li key={item.id} className="border-b border-gray-200 dark:border-gray-800">
-                      <a
-                        href={`#${item.id}`}
-                        className="grid grid-cols-[1.5rem_minmax(0,1fr)] gap-2 py-2 text-[13px] leading-snug text-gray-600 transition-colors hover:text-gray-950 dark:text-gray-400 dark:hover:text-white"
-                      >
-                        <span className="font-mono text-[11px] text-gray-400 dark:text-gray-500">
-                          {index < note.topicCount ? String(index + 1).padStart(2, "0") : "—"}
-                        </span>
-                        <span>{item.label}</span>
-                      </a>
-                    </li>
-                  ))}
-                </ol>
-              </nav>
-            </div>
+            <ContentsNav
+              label="On this page"
+              items={note.outline.map((item, index) => ({
+                id: item.id,
+                label: item.label,
+                marker: index < note.topicCount ? String(index + 1).padStart(2, "0") : "—",
+              }))}
+            />
           </aside>
         </div>
 
@@ -273,6 +265,8 @@ export default async function NotePage({ params }: Params) {
           )}
         </nav>
       </div>
-    </main>
+      </main>
+      <Footer site={site} socials={socials} />
+    </div>
   );
 }
