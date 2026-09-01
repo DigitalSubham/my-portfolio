@@ -1,0 +1,706 @@
+Eighteen topics, and the largest group in the whole JavaScript track. Async is where interviews go when they want to find the bottom of your knowledge, because there is always one more layer: promises, then the event loop, then microtask ordering, then "now implement it yourself".
+
+Work through it in order. Each part explains the next.
+
+## Synchronous and asynchronous
+
+**In simple words:** JavaScript runs one thing at a time on one thread. Synchronous code blocks that thread until it finishes. Asynchronous code hands the slow work to something else and carries on.
+
+The thing to be precise about: JavaScript is single-threaded, but the **environment around it is not**. Timers, network requests and file reads are handled by the browser or by libuv in Node. Your code only gets involved again when the result comes back.
+
+```js
+console.log("first");
+
+setTimeout(() => console.log("third"), 0);   // handed to the environment
+
+console.log("second");
+
+// first, second, third
+```
+
+<Callout variant="careful">
+&quot;Non-blocking&quot; only applies to work you hand off. A slow <code>for</code> loop, a huge <code>JSON.parse</code>, or a synchronous <code>readFileSync</code> blocks the one thread completely. In a Node server that means every other request waits — not just the current one.
+</Callout>
+
+## Callbacks
+
+**In simple words:** the original approach. Pass a function to be called later, when the work is done.
+
+Node standardised the **error-first** shape: the first argument is the error, and it is `null` when everything went well.
+
+```js
+fs.readFile("data.json", "utf8", (err, data) => {
+  if (err) return handleError(err);   // always check first
+  console.log(data);
+});
+```
+
+Callback hell is what happens when each step depends on the previous one:
+
+```js
+getUser(id, (err, user) => {
+  if (err) return done(err);
+  getOrders(user.id, (err, orders) => {
+    if (err) return done(err);
+    getPayments(orders[0].id, (err, payments) => {
+      if (err) return done(err);
+      done(null, payments);            // three levels deep, error handling repeated
+    });
+  });
+});
+```
+
+The real problem is not the indentation. It is that **errors do not propagate on their own** — you have to check and forward at every level, and forgetting once swallows the failure silently.
+
+## Promises
+
+**In simple words:** an object representing a value you do not have yet. It is in one of three states, and once it leaves pending it can never change again.
+
+- **pending** — still working
+- **fulfilled** — finished with a value
+- **rejected** — failed with a reason
+
+```js
+const promise = new Promise((resolve, reject) => {
+  if (ok) resolve(value);
+  else reject(new Error("failed"));
+});
+
+promise
+  .then((value) => value * 2)          // returns a NEW promise
+  .then((doubled) => console.log(doubled))
+  .catch((err) => console.error(err))  // catches anything above it
+  .finally(() => cleanup());           // runs either way, receives nothing
+```
+
+### The chaining rules that actually matter
+
+```js
+// Returning a plain value passes it to the next then
+.then(() => 42).then((v) => console.log(v));          // 42
+
+// Returning a promise waits for it before continuing
+.then(() => fetch(url)).then((res) => res.json());    // res is the response
+
+// Throwing skips to the nearest catch
+.then(() => { throw new Error("x"); }).catch((e) => {});
+
+// A catch that returns normally puts the chain back on the success path
+.catch(() => "fallback").then((v) => console.log(v)); // "fallback"
+```
+
+<Callout variant="careful">
+Forgetting to <code>return</code> inside a <code>then</code> is one of the most common async bugs. Without the return, the next <code>then</code> runs immediately with <code>undefined</code> instead of waiting.
+</Callout>
+
+## all, allSettled, race and any
+
+**In simple words:** four ways to run several promises together. Choosing the wrong one is a real production bug, not a trivia question.
+
+| | Resolves when | Rejects when | Gives you |
+| --- | --- | --- | --- |
+| `all` | every one succeeds | **any one** fails, immediately | array of values |
+| `allSettled` | every one settles | never | array of status objects |
+| `race` | the **first** one settles | if the first to settle rejects | that one result |
+| `any` | the **first** one succeeds | only if all fail | that one value |
+
+```js
+// all -- one failure loses every other result
+const [user, orders] = await Promise.all([getUser(), getOrders()]);
+
+// allSettled -- when partial success is acceptable
+const results = await Promise.allSettled([getUser(), getOrders(), getStats()]);
+results.forEach((r) => {
+  if (r.status === "fulfilled") use(r.value);
+  else log(r.reason);
+});
+
+// race -- classic timeout wrapper
+const withTimeout = (promise, ms) =>
+  Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Timed out")), ms)
+    ),
+  ]);
+
+// any -- first mirror that responds wins
+const fastest = await Promise.any([fetch(mirror1), fetch(mirror2)]);
+```
+
+<Callout variant="work" label="The question they actually ask">
+&quot;You fire five API calls and one might fail. Which do you use?&quot;
+
+If the page cannot render without all five, <code>all</code> is right — failing fast is the correct behaviour. If the page can render with four, <code>all</code> is a bug: it throws away four successful responses because of one failure. Use <code>allSettled</code> and degrade gracefully.
+</Callout>
+
+<Callout variant="careful">
+None of these cancel anything. When <code>Promise.all</code> rejects, the other requests are still in flight and will still complete — you have simply stopped listening. If cancelling matters, you need <code>AbortController</code>.
+</Callout>
+
+## async and await
+
+**In simple words:** the same promises, written to look synchronous. `async` makes a function return a promise. `await` pauses inside that function until a promise settles.
+
+```js
+async function loadDashboard(userId) {
+  try {
+    const user = await getUser(userId);
+    const orders = await getOrders(user.id);
+    return { user, orders };
+  } catch (err) {
+    logger.error({ err, userId }, "dashboard load failed");
+    throw err;                      // rethrow, or the caller sees success
+  } finally {
+    stopSpinner();
+  }
+}
+```
+
+An `async` function **always** returns a promise. `return 42` inside one gives the caller a promise resolving to 42, never the number itself.
+
+## Sequential versus parallel awaits
+
+**In simple words:** the single most common performance bug in modern JavaScript, and one interviewers deliberately plant.
+
+```js
+// SLOW -- three round trips, one after another. 300ms.
+const user = await getUser();        // 100ms
+const orders = await getOrders();    // 100ms, did not need user
+const stats = await getStats();      // 100ms, did not need either
+
+// FAST -- all three start together. 100ms.
+const [user, orders, stats] = await Promise.all([
+  getUser(),
+  getOrders(),
+  getStats(),
+]);
+```
+
+The rule: **`await` sequentially only when the next call genuinely needs the previous result.** Everything else should start together.
+
+```js
+// The subtle version: this is still sequential
+for (const id of ids) {
+  await processItem(id);             // one at a time
+}
+
+// Parallel, but unbounded -- 5,000 ids means 5,000 simultaneous requests
+await Promise.all(ids.map((id) => processItem(id)));
+```
+
+Neither is right for a large list. That is what the concurrency pool further down solves.
+
+## The event loop
+
+**In simple words:** the rule that decides what runs next. Everything about async ordering comes from this one picture.
+
+<Figure caption="The loop repeats forever: empty the call stack, then drain every microtask, then take one macrotask. Rendering happens between iterations, never in the middle of one.">
+  <svg viewBox="0 0 660 300" role="img" aria-label="The call stack runs synchronous code. Web APIs handle timers and requests, then push callbacks into either the microtask queue for promises or the macrotask queue for timers. The event loop drains all microtasks before taking a single macrotask." className="w-full">
+    <defs>
+      <marker id="el-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="currentColor" />
+      </marker>
+      <marker id="el-hot" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="rgb(217 119 6)" />
+      </marker>
+    </defs>
+    <rect x="14" y="30" width="170" height="96" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="99" y="52" fontSize="11" letterSpacing="1.2" fill="currentColor" opacity="0.7" textAnchor="middle">CALL STACK</text>
+    <text x="99" y="76" fontSize="12.5" fill="currentColor" textAnchor="middle">your synchronous</text>
+    <text x="99" y="94" fontSize="12.5" fill="currentColor" textAnchor="middle">code runs here,</text>
+    <text x="99" y="112" fontSize="12.5" fill="currentColor" textAnchor="middle">one frame at a time</text>
+
+    <rect x="238" y="30" width="170" height="96" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="323" y="52" fontSize="11" letterSpacing="1.2" fill="currentColor" opacity="0.7" textAnchor="middle">ENVIRONMENT</text>
+    <text x="323" y="76" fontSize="12.5" fill="currentColor" textAnchor="middle">timers, fetch, I/O</text>
+    <text x="323" y="94" fontSize="12.5" fill="currentColor" textAnchor="middle">handled outside</text>
+    <text x="323" y="112" fontSize="12.5" fill="currentColor" textAnchor="middle">the JS thread</text>
+    <path d="M188 78 L 232 78" fill="none" stroke="currentColor" strokeWidth="1.2" markerEnd="url(#el-arrow)" />
+
+    <rect x="238" y="168" width="170" height="52" rx="6" fill="rgb(251 191 36 / 0.14)" stroke="rgb(217 119 6)" strokeWidth="1.3" />
+    <text x="323" y="188" fontSize="11" letterSpacing="1.2" fill="rgb(180 83 9)" textAnchor="middle">MICROTASKS</text>
+    <text x="323" y="208" fontSize="12" fill="currentColor" textAnchor="middle">promises, queueMicrotask</text>
+
+    <rect x="238" y="234" width="170" height="52" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="323" y="254" fontSize="11" letterSpacing="1.2" fill="currentColor" opacity="0.7" textAnchor="middle">MACROTASKS</text>
+    <text x="323" y="274" fontSize="12" fill="currentColor" textAnchor="middle">setTimeout, I/O, events</text>
+
+    <path d="M323 130 L 323 164" fill="none" stroke="currentColor" strokeWidth="1.2" markerEnd="url(#el-arrow)" />
+    <path d="M323 130 L 323 148 L 440 148 L 440 260 L 412 260" fill="none" stroke="currentColor" strokeWidth="1.2" markerEnd="url(#el-arrow)" />
+
+    <path d="M234 194 L 120 194 L 120 132" fill="none" stroke="rgb(217 119 6)" strokeWidth="1.7" markerEnd="url(#el-hot)" />
+    <text x="150" y="214" fontSize="11.5" fill="rgb(180 83 9)">drain ALL</text>
+
+    <path d="M234 260 L 78 260 L 78 132" fill="none" stroke="currentColor" strokeWidth="1.2" strokeDasharray="5 4" markerEnd="url(#el-arrow)" />
+    <text x="96" y="280" fontSize="11.5" fill="currentColor" opacity="0.8">then ONE</text>
+
+    <rect x="470" y="168" width="176" height="118" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="558" y="190" fontSize="11" letterSpacing="1.2" fill="currentColor" opacity="0.7" textAnchor="middle">EACH TURN</text>
+    <text x="486" y="214" fontSize="12" fill="currentColor">1. run stack to empty</text>
+    <text x="486" y="234" fontSize="12" fill="rgb(180 83 9)">2. drain all microtasks</text>
+    <text x="486" y="254" fontSize="12" fill="currentColor">3. render if needed</text>
+    <text x="486" y="274" fontSize="12" fill="currentColor">4. take one macrotask</text>
+  </svg>
+</Figure>
+
+**The rule in one line:** the entire microtask queue is emptied before a single macrotask runs.
+
+## Microtasks versus macrotasks
+
+**In simple words:** promises jump the queue. Timers wait their turn.
+
+| Microtasks (high priority) | Macrotasks (normal) |
+| --- | --- |
+| `.then`, `.catch`, `.finally` | `setTimeout`, `setInterval` |
+| `await` continuations | `setImmediate` (Node) |
+| `queueMicrotask` | I/O callbacks, DOM events |
+| `MutationObserver` | `requestAnimationFrame` (before paint) |
+
+Now predict this. It is asked constantly:
+
+```js
+console.log("1");
+
+setTimeout(() => console.log("2"), 0);
+
+Promise.resolve().then(() => console.log("3"));
+
+queueMicrotask(() => console.log("4"));
+
+console.log("5");
+
+// 1, 5, 3, 4, 2
+```
+
+**Why:** `1` and `5` are synchronous, so they run first. The stack empties. Then every microtask runs in order — `3`, then `4`. Only then does the loop take one macrotask, `2`.
+
+A harder one:
+
+```js
+async function run() {
+  console.log("A");
+  await null;              // await always yields, even on a non-promise
+  console.log("B");
+}
+
+console.log("C");
+run();
+console.log("D");
+
+// C, A, D, B
+```
+
+Everything up to the first `await` runs synchronously. The rest of the function becomes a microtask.
+
+<Callout variant="careful">
+An infinite chain of microtasks starves the loop completely. A <code>.then</code> that schedules another <code>.then</code> forever means timers never fire and the page never repaints. This is one of the few ways to hang a browser tab with promises.
+</Callout>
+
+## Node's event loop phases
+
+**In simple words:** Node's loop has named phases that run in a fixed order. Two extra queues sit above them.
+
+Order per iteration: **timers** → pending callbacks → poll (I/O) → **check** (`setImmediate`) → close callbacks.
+
+Between every phase, Node drains `process.nextTick` first, then the promise microtask queue.
+
+```js
+setTimeout(() => console.log("timeout"), 0);
+setImmediate(() => console.log("immediate"));
+process.nextTick(() => console.log("nextTick"));
+Promise.resolve().then(() => console.log("promise"));
+
+// nextTick, promise, then timeout / immediate in a non-deterministic order
+```
+
+<Callout variant="careful">
+From the main module, <code>setTimeout(fn, 0)</code> and <code>setImmediate(fn)</code> have <strong>no guaranteed order</strong> — it depends on how long the process took to start. Inside an I/O callback, <code>setImmediate</code> always wins, because the check phase comes immediately after poll. Saying this precisely is a strong signal in a Node interview.
+</Callout>
+
+## Debounce and throttle
+
+**In simple words:** both limit how often a function runs, but they are not interchangeable.
+
+- **Debounce** — wait until the activity stops, then run once. Search-as-you-type.
+- **Throttle** — run at most once per interval, no matter how much activity. Scroll handlers.
+
+```js
+function debounce(fn, delay = 300, { leading = false } = {}) {
+  let timer = null;
+
+  return function (...args) {
+    const callNow = leading && timer === null;
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+      timer = null;
+      if (!leading) fn.apply(this, args);
+    }, delay);
+
+    if (callNow) fn.apply(this, args);
+  };
+}
+
+function throttle(fn, interval = 300) {
+  let lastRun = 0;
+  let trailing = null;
+
+  return function (...args) {
+    const now = Date.now();
+    const remaining = interval - (now - lastRun);
+
+    if (remaining <= 0) {
+      clearTimeout(trailing);
+      trailing = null;
+      lastRun = now;
+      fn.apply(this, args);
+    } else if (!trailing) {
+      // guarantee the final call is not lost
+      trailing = setTimeout(() => {
+        lastRun = Date.now();
+        trailing = null;
+        fn.apply(this, args);
+      }, remaining);
+    }
+  };
+}
+```
+
+<Callout variant="work" label="The follow-up">
+&quot;Which would you use for an autocomplete, and which for infinite scroll?&quot;
+
+Autocomplete is debounce — you only want a request once the user pauses. Infinite scroll is throttle — you need regular checks while scrolling continues, not one at the end.
+</Callout>
+
+## Implement your own Promise
+
+**In simple words:** a senior-round favourite. You need state, stored handlers, and the microtask scheduling that makes `then` asynchronous.
+
+```js
+class MyPromise {
+  #state = "pending";
+  #value = undefined;
+  #callbacks = [];
+
+  constructor(executor) {
+    const resolve = (value) => this.#settle("fulfilled", value);
+    const reject = (reason) => this.#settle("rejected", reason);
+
+    try {
+      executor(resolve, reject);
+    } catch (err) {
+      reject(err);
+    }
+  }
+
+  #settle(state, value) {
+    if (this.#state !== "pending") return;   // can only settle once
+
+    // adopting a thenable: wait for it instead of resolving with it
+    if (state === "fulfilled" && value && typeof value.then === "function") {
+      value.then(
+        (v) => this.#settle("fulfilled", v),
+        (e) => this.#settle("rejected", e)
+      );
+      return;
+    }
+
+    this.#state = state;
+    this.#value = value;
+    this.#callbacks.forEach((cb) => queueMicrotask(cb));
+    this.#callbacks = [];
+  }
+
+  then(onFulfilled, onRejected) {
+    return new MyPromise((resolve, reject) => {
+      const run = () => {
+        try {
+          if (this.#state === "fulfilled") {
+            resolve(typeof onFulfilled === "function" ? onFulfilled(this.#value) : this.#value);
+          } else {
+            if (typeof onRejected === "function") resolve(onRejected(this.#value));
+            else reject(this.#value);
+          }
+        } catch (err) {
+          reject(err);
+        }
+      };
+
+      if (this.#state === "pending") this.#callbacks.push(run);
+      else queueMicrotask(run);
+    });
+  }
+
+  catch(onRejected) {
+    return this.then(undefined, onRejected);
+  }
+
+  finally(onFinally) {
+    return this.then(
+      (v) => { onFinally(); return v; },
+      (e) => { onFinally(); throw e; }
+    );
+  }
+
+  static resolve(value) { return new MyPromise((res) => res(value)); }
+  static reject(reason) { return new MyPromise((_, rej) => rej(reason)); }
+}
+```
+
+The three details interviewers look for: **settle only once**, **`then` handlers run as microtasks even if the promise is already settled**, and **resolving with a thenable waits for it**.
+
+## Implement Promise.all
+
+```js
+function promiseAll(promises) {
+  return new Promise((resolve, reject) => {
+    const items = Array.from(promises);
+    const results = new Array(items.length);
+    let remaining = items.length;
+
+    if (remaining === 0) return resolve([]);       // the empty case
+
+    items.forEach((item, index) => {
+      // wrap so non-promise values work too
+      Promise.resolve(item).then((value) => {
+        results[index] = value;                    // index preserves order
+        remaining -= 1;
+        if (remaining === 0) resolve(results);
+      }, reject);                                  // first rejection wins
+    });
+  });
+}
+```
+
+Two things people miss: an empty array must resolve immediately, and results must be stored **by index** rather than pushed, or the order comes back scrambled.
+
+## Retry with exponential backoff
+
+**In simple words:** retry a failing call, waiting longer each time, with a bit of randomness so a thousand clients do not all retry at the same instant.
+
+```js
+const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+
+async function retry(fn, { attempts = 3, baseDelay = 300, factor = 2 } = {}) {
+  let lastError;
+
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    try {
+      return await fn(attempt);
+    } catch (err) {
+      lastError = err;
+      if (attempt === attempts - 1) break;
+
+      const backoff = baseDelay * factor ** attempt;
+      const jitter = Math.random() * backoff * 0.3;   // spread the herd
+      await sleep(backoff + jitter);
+    }
+  }
+
+  throw lastError;
+}
+```
+
+<Callout variant="careful">
+Never retry blindly. A 400 or 422 will fail identically every time, and retrying a non-idempotent POST can charge a customer twice. Retry only on network errors, timeouts, 429 and 5xx — and only when the operation is safe to repeat.
+</Callout>
+
+## Limiting concurrency
+
+**In simple words:** run many tasks, but only N at a time. This is the answer to "you have 5,000 URLs to fetch — how?".
+
+```js
+async function pool(items, worker, limit = 5) {
+  const results = new Array(items.length);
+  let cursor = 0;
+
+  async function runner() {
+    while (cursor < items.length) {
+      const index = cursor++;            // claim an index, then await
+      results[index] = await worker(items[index], index);
+    }
+  }
+
+  const runners = Array.from({ length: Math.min(limit, items.length) }, runner);
+  await Promise.all(runners);
+  return results;
+}
+
+const pages = await pool(urls, (url) => fetch(url).then((r) => r.text()), 5);
+```
+
+Five workers pull from a shared cursor until the list is empty. No batching, so a slow item never stalls the others.
+
+## promisify, AbortController and timers
+
+```js
+// Turning an error-first callback API into a promise
+function promisify(fn) {
+  return (...args) =>
+    new Promise((resolve, reject) => {
+      fn(...args, (err, result) => (err ? reject(err) : resolve(result)));
+    });
+}
+```
+
+```js
+// Cancelling work that is genuinely in flight
+const controller = new AbortController();
+
+fetch(url, { signal: controller.signal })
+  .then((r) => r.json())
+  .catch((err) => {
+    if (err.name === "AbortError") return;   // expected, not a failure
+    throw err;
+  });
+
+controller.abort();                          // actually stops the request
+```
+
+Timer details worth knowing:
+
+- `setTimeout(fn, 0)` does not mean immediately. It means "after the stack empties and all microtasks are done", and browsers clamp nested timers to about 4ms.
+- `setInterval` **drifts**. If the callback takes longer than the interval, calls stack up. A self-scheduling `setTimeout` is safer.
+- `requestAnimationFrame` runs before the next paint — the right place for animation.
+- `requestIdleCallback` runs when the browser is doing nothing — the right place for analytics.
+
+## Race conditions
+
+**In simple words:** two async operations finish out of order and the stale one overwrites the fresh one. Extremely common in search boxes.
+
+```js
+// BROKEN -- a slow request for "ab" can land after a fast one for "abc"
+async function search(term) {
+  const results = await api.search(term);
+  setResults(results);
+}
+
+// FIX 1 -- ignore anything that is not the latest
+let latestRequest = 0;
+async function search(term) {
+  const id = ++latestRequest;
+  const results = await api.search(term);
+  if (id !== latestRequest) return;      // a newer request has started
+  setResults(results);
+}
+
+// FIX 2 -- cancel the previous request outright
+let controller;
+async function search(term) {
+  controller?.abort();
+  controller = new AbortController();
+  try {
+    const results = await api.search(term, { signal: controller.signal });
+    setResults(results);
+  } catch (err) {
+    if (err.name !== "AbortError") throw err;
+  }
+}
+```
+
+<Callout variant="work" label="In React">
+The same bug in a <code>useEffect</code> is fixed with the cleanup function — set an <code>ignore</code> flag or abort the controller on unmount. Interviewers ask this as &quot;what is wrong with this data fetching effect?&quot;, and the race condition is the answer they want.
+</Callout>
+
+## Async iterators and generators
+
+**In simple words:** `for await...of` lets you loop over values that arrive over time — paginated APIs, streams, queues.
+
+```js
+async function* paginate(url) {
+  let next = url;
+  while (next) {
+    const res = await fetch(next);
+    const page = await res.json();
+    yield* page.items;              // yield each item individually
+    next = page.nextUrl;
+  }
+}
+
+for await (const item of paginate("/api/orders")) {
+  process(item);                    // pages fetched lazily, as needed
+}
+```
+
+The win is memory: you never hold all pages at once, and you can `break` early and stop fetching.
+
+## Ten questions
+
+<Quiz>
+  <QuizItem number={1} question={<>Predict the output: a sync log, a <code>setTimeout</code> zero, a <code>Promise.resolve().then</code>, a <code>queueMicrotask</code>, then another sync log.</>}>
+    <p>Both sync logs first, in source order. Then the promise callback, then the queueMicrotask callback. The timeout is last.</p>
+    <p>Because: the stack runs to empty, then the <strong>entire</strong> microtask queue drains, and only then does the loop take one macrotask. Promises are microtasks, timers are macrotasks.</p>
+  </QuizItem>
+
+  <QuizItem number={2} question={<>You have three independent API calls and this code takes 300ms. What is wrong?</>}>
+    <p>They are awaited one after another, so each waits for the previous to finish even though none of them needs the earlier result.</p>
+    <p>Wrap them in <code>Promise.all</code> so all three start together — total time becomes the slowest one, roughly 100ms. Only await sequentially when the next call genuinely needs the previous result.</p>
+  </QuizItem>
+
+  <QuizItem number={3} question={<>Five API calls, one may fail, and the page can still render without it. <code>all</code> or <code>allSettled</code>?</>}>
+    <p><code>allSettled</code>. With <code>all</code>, a single rejection discards four perfectly good responses.</p>
+    <p><code>all</code> is correct only when the result is worthless without every part — then failing fast is the right behaviour.</p>
+  </QuizItem>
+
+  <QuizItem number={4} question={<>Does <code>Promise.all</code> cancel the other requests when one rejects?</>}>
+    <p>No. Promises have no cancellation. The other requests are still in flight and will still complete — you have just stopped listening to them.</p>
+    <p>If you need real cancellation, pass an <code>AbortController</code> signal to each request and call <code>abort</code>.</p>
+  </QuizItem>
+
+  <QuizItem number={5} question={<>What is the difference between debounce and throttle, with a use case for each?</>}>
+    <p>Debounce waits for activity to stop, then runs once — right for search-as-you-type, where you only want a request when the user pauses.</p>
+    <p>Throttle runs at most once per interval regardless of how much activity there is — right for scroll and resize handlers, where you need regular updates during the activity, not one at the end.</p>
+  </QuizItem>
+
+  <QuizItem number={6} question={<>In your own Promise implementation, why must <code>then</code> callbacks be scheduled as microtasks even when the promise is already settled?</>}>
+    <p>Because the spec guarantees <code>then</code> is always asynchronous. If an already-settled promise ran its callback synchronously, ordering would depend on timing — sometimes before the following synchronous line, sometimes after.</p>
+    <p>That unpredictability is exactly what promises were designed to remove, so the callback is queued with <code>queueMicrotask</code> either way.</p>
+  </QuizItem>
+
+  <QuizItem number={7} question={<>When implementing <code>Promise.all</code>, why store results by index instead of pushing?</>}>
+    <p>Because promises settle in completion order, not in the order you passed them. Pushing would return results scrambled relative to the input.</p>
+    <p>The other detail people miss is that an empty input array must resolve immediately with an empty array, rather than hanging forever.</p>
+  </QuizItem>
+
+  <QuizItem number={8} question={<>You have 5,000 URLs to fetch. What is wrong with <code>Promise.all(urls.map(fetch))</code>, and what do you do instead?</>}>
+    <p>It starts 5,000 requests at once. You will exhaust sockets, get rate limited, and possibly run out of memory.</p>
+    <p>Use a concurrency pool: N workers pulling from a shared cursor until the list is empty. That keeps exactly N requests in flight, and a slow item never blocks the rest.</p>
+  </QuizItem>
+
+  <QuizItem number={9} question={<>A user types quickly in a search box and sees results for an earlier query. What is happening and how do you fix it?</>}>
+    <p>A race condition. A slower request for an earlier term resolves after a faster request for the current term, and overwrites it.</p>
+    <p>Fix by tracking a request id and discarding any response that is not the latest, or by aborting the previous request with an <code>AbortController</code> before starting a new one. In React, do it in the effect cleanup.</p>
+  </QuizItem>
+
+  <QuizItem number={10} question={<>In Node, what is the difference between <code>process.nextTick</code>, a promise callback, and <code>setImmediate</code>?</>}>
+    <p><code>process.nextTick</code> runs first, before the promise microtask queue, between every phase of the loop. Promise callbacks run next. <code>setImmediate</code> runs in the check phase of the loop.</p>
+    <p>Worth adding: from the main module, <code>setTimeout(fn, 0)</code> and <code>setImmediate</code> have no guaranteed order, but inside an I/O callback <code>setImmediate</code> always runs first because check comes straight after poll.</p>
+  </QuizItem>
+</Quiz>
+
+## Seven exercises
+
+<ol className="mt-8 list-none space-y-0 p-0">
+  <Exercise number={1} title="Implement MyPromise">
+    Support <code>then</code>, <code>catch</code>, <code>finally</code> and the static <code>resolve</code> and <code>reject</code>. It must settle only once, schedule callbacks as microtasks, and wait when resolved with another thenable. Test it by chaining four steps with a throw in the middle.
+  </Exercise>
+  <Exercise number={2} title="Implement promiseAll and promiseAllSettled">
+    Preserve input order, handle an empty array, and accept plain values mixed in with promises. Then write <code>promiseAny</code> and decide what it should do when every input rejects.
+  </Exercise>
+  <Exercise number={3} title="Write debounce with leading and trailing options">
+    Support both edges, add a <code>cancel</code> method, and make sure <code>this</code> and the arguments are forwarded correctly. Then write <code>throttle</code> and prove with logs that they behave differently under a burst of 20 rapid calls.
+  </Exercise>
+  <Exercise number={4} title="Build a concurrency pool">
+    Write <code>pool(items, worker, limit)</code> that keeps exactly <code>limit</code> tasks in flight. Prove it with 20 tasks of random duration and a limit of 3, logging start and finish times.
+  </Exercise>
+  <Exercise number={5} title="Retry with backoff and jitter">
+    Retry only on the failures that deserve it — network errors, timeouts, 429 and 5xx — and never on a 400. Add a maximum total wait so it cannot retry forever.
+  </Exercise>
+  <Exercise number={6} title="Fix a race condition twice">
+    Write a search function with the stale-response bug, confirm it by making the first request artificially slow, then fix it once with a request id and once with <code>AbortController</code>. Say which you would ship.
+  </Exercise>
+  <Exercise number={7} title="Paginate with an async generator">
+    Write <code>async function*</code> that walks a paginated API and yields items one at a time. Consume it with <code>for await...of</code>, <code>break</code> after 10 items, and confirm that no further pages were requested.
+  </Exercise>
+</ol>

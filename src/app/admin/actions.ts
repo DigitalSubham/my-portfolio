@@ -101,7 +101,7 @@ export async function updateRecord(tableKey: string, id: number, formData: FormD
   const values = config.fields.map((field) => fieldValue(field, formData));
   const sql = getSql();
   await sql.query(
-    `UPDATE ${config.table} SET ${assignmentSql(config.fields)}, updated_at = now() WHERE id = $1`,
+    `UPDATE ${config.table} SET ${assignmentSql(config.fields, 2)}, updated_at = now() WHERE id = $1`,
     [id, ...values],
   );
   revalidatePath("/");

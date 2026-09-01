@@ -33,18 +33,26 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </p>
     ),
-    ul: ({ children, ...props }) => (
+    // An explicit className from MDX wins, so a hand-styled list (the exercise
+    // list, for example) is not overwritten by the default bullet styling.
+    ul: ({ children, className, ...props }) => (
       <ul
         {...props}
-        className="mt-5 list-disc space-y-2 pl-5 text-[17px] leading-[1.7] text-gray-700 marker:text-gray-400 dark:text-gray-300"
+        className={
+          className ??
+          "mt-5 list-disc space-y-2 pl-5 text-[17px] leading-[1.7] text-gray-700 marker:text-gray-400 dark:text-gray-300"
+        }
       >
         {children}
       </ul>
     ),
-    ol: ({ children, ...props }) => (
+    ol: ({ children, className, ...props }) => (
       <ol
         {...props}
-        className="mt-5 list-decimal space-y-2 pl-5 text-[17px] leading-[1.7] text-gray-700 marker:text-gray-400 dark:text-gray-300"
+        className={
+          className ??
+          "mt-5 list-decimal space-y-2 pl-5 text-[17px] leading-[1.7] text-gray-700 marker:text-gray-400 dark:text-gray-300"
+        }
       >
         {children}
       </ol>

@@ -1,0 +1,452 @@
+JavaScript has no classes underneath. It has objects that point at other objects. `class` is a nicer way to write that arrangement, not a different one.
+
+Interviewers ask about this constantly, because understanding the prototype chain is what separates someone who has used `class` from someone who knows what it does.
+
+## The prototype chain
+
+**In simple words:** every object has a hidden link to another object. When you ask for a property that is not there, JavaScript follows that link and asks the next one. It keeps going until it finds the property or runs out of links.
+
+That hidden link is the object's **prototype**.
+
+<Figure caption="Property lookup walks the chain one link at a time and stops at the first match. Reaching null without a match gives undefined.">
+  <svg viewBox="0 0 660 250" role="img" aria-label="A dog instance links to Dog.prototype, which links to Animal.prototype, which links to Object.prototype, which links to null. Looking up toString walks all the way to Object.prototype." className="w-full">
+    <defs>
+      <marker id="proto-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="currentColor" />
+      </marker>
+      <marker id="proto-hit" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="rgb(217 119 6)" />
+      </marker>
+    </defs>
+    <rect x="14" y="34" width="150" height="56" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="89" y="56" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">rex</text>
+    <text x="89" y="76" fontSize="11.5" fill="currentColor" textAnchor="middle" opacity="0.75">name: &quot;Rex&quot;</text>
+    <rect x="184" y="34" width="150" height="56" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="259" y="56" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">Dog.prototype</text>
+    <text x="259" y="76" fontSize="11.5" fill="currentColor" textAnchor="middle" opacity="0.75">bark()</text>
+    <rect x="354" y="34" width="150" height="56" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="429" y="56" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">Animal.prototype</text>
+    <text x="429" y="76" fontSize="11.5" fill="currentColor" textAnchor="middle" opacity="0.75">eat()</text>
+    <rect x="524" y="34" width="122" height="56" rx="6" fill="rgb(251 191 36 / 0.14)" stroke="rgb(217 119 6)" strokeWidth="1.3" />
+    <text x="585" y="56" fontSize="12" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">Object</text>
+    <text x="585" y="74" fontSize="11.5" fill="rgb(180 83 9)" textAnchor="middle">toString()</text>
+    <path d="M168 62 L 180 62" fill="none" stroke="currentColor" strokeWidth="1.2" markerEnd="url(#proto-arrow)" />
+    <path d="M338 62 L 350 62" fill="none" stroke="currentColor" strokeWidth="1.2" markerEnd="url(#proto-arrow)" />
+    <path d="M508 62 L 520 62" fill="none" stroke="currentColor" strokeWidth="1.2" markerEnd="url(#proto-arrow)" />
+    <text x="14" y="122" fontSize="10.5" letterSpacing="1.2" fill="currentColor" opacity="0.7">LOOKING UP rex.toString()</text>
+    <path d="M89 132 L 89 150 L 585 150 L 585 96" fill="none" stroke="rgb(217 119 6)" strokeWidth="1.6" strokeDasharray="5 4" markerEnd="url(#proto-hit)" />
+    <text x="337" y="170" fontSize="12" fill="rgb(180 83 9)" textAnchor="middle">not on rex, not on Dog, not on Animal, found on Object.prototype</text>
+    <text x="14" y="206" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor">Object.prototype.__proto__ === null</text>
+    <text x="14" y="228" fontSize="12" fill="currentColor" opacity="0.8">The chain ends there. A miss returns undefined rather than throwing.</text>
+  </svg>
+</Figure>
+
+### `prototype` versus `__proto__`
+
+These two names cause most of the confusion, and they are not the same thing.
+
+| | What it is | Lives on |
+| --- | --- | --- |
+| `prototype` | the object that will become the prototype of instances made with `new` | **functions** only |
+| `__proto__` | the actual link to this object's prototype | **every object** |
+
+```js
+function Dog(name) { this.name = name; }
+Dog.prototype.bark = function () { return `${this.name} says woof`; };
+
+const rex = new Dog("Rex");
+
+rex.__proto__ === Dog.prototype;                  // true
+Object.getPrototypeOf(rex) === Dog.prototype;     // true, and this is the modern way
+rex.prototype;                                    // undefined -- instances have no `prototype`
+Dog.prototype.constructor === Dog;                // true
+```
+
+<Callout variant="analogy">
+`prototype` is the blueprint a factory keeps on the shelf. `__proto__` is the label on each product saying which blueprint it came from. Only factories have a shelf; every product has a label.
+</Callout>
+
+<Callout variant="careful">
+`__proto__` is legacy and only standardised for web compatibility. Use `Object.getPrototypeOf` to read and `Object.setPrototypeOf` to write. Changing an object&apos;s prototype after creation also destroys engine optimisations, so avoid it in hot paths entirely.
+</Callout>
+
+## new, and how to implement it
+
+**In simple words:** `new` does four things. Knowing them is how you answer "what does `new` actually do?".
+
+1. Create an empty object.
+2. Set that object's prototype to the constructor function's `prototype`.
+3. Run the constructor with `this` bound to the new object.
+4. Return the new object — unless the constructor explicitly returned an object of its own.
+
+```js
+function myNew(Constructor, ...args) {
+  // 1 and 2
+  const instance = Object.create(Constructor.prototype);
+
+  // 3
+  const result = Constructor.apply(instance, args);
+
+  // 4 -- an explicitly returned object wins, anything else is ignored
+  return result !== null && typeof result === "object" ? result : instance;
+}
+
+function Dog(name) { this.name = name; }
+Dog.prototype.bark = function () { return `${this.name} says woof`; };
+
+const rex = myNew(Dog, "Rex");
+rex.bark();                  // "Rex says woof"
+rex instanceof Dog;          // true
+```
+
+<Callout variant="careful">
+Step 4 is the part people forget. If a constructor returns an object, that object replaces the instance. If it returns a primitive, the return value is ignored and you still get the instance. This is exactly why forgetting <code>new</code> on an old-style constructor used to silently pollute the global object in sloppy mode.
+</Callout>
+
+## Classes
+
+**In simple words:** `class` is syntax over the same prototype machinery. Methods you write in a class body land on `Ferrari.prototype`, exactly as if you had assigned them by hand.
+
+```js
+class Animal {
+  static kingdom = "Animalia";     // on the class, not on instances
+  #secret = "hidden";              // truly private, not just a convention
+
+  constructor(name) {
+    this.name = name;              // own property, on each instance
+  }
+
+  eat() {                          // goes on Animal.prototype
+    return `${this.name} is eating`;
+  }
+
+  get label() {                    // getter, accessed without parentheses
+    return `Animal: ${this.name}`;
+  }
+
+  reveal() { return this.#secret; }
+}
+
+class Dog extends Animal {
+  constructor(name, breed) {
+    super(name);                   // must run before touching `this`
+    this.breed = breed;
+  }
+
+  eat() {
+    return `${super.eat()}, noisily`;
+  }
+}
+
+const rex = new Dog("Rex", "Lab");
+rex.eat();                         // "Rex is eating, noisily"
+Object.getPrototypeOf(Dog.prototype) === Animal.prototype;  // true
+rex.secret;                        // undefined
+rex.#secret;                       // SyntaxError -- not accessible at all
+```
+
+### What is genuinely new, not just sugar
+
+Interviewers like the question "are classes just syntactic sugar?". The honest answer is *mostly, but not entirely*:
+
+- Class bodies always run in **strict mode**.
+- Class declarations are **not hoisted usably** — they sit in the temporal dead zone.
+- Calling a class **without `new` throws**. A constructor function would silently misbehave.
+- Methods are **non-enumerable**, so they do not appear in `for...in`.
+- `#private` fields have **no equivalent** in the old syntax. They are enforced by the engine.
+- `super` works through a hidden link that hand-written prototypes cannot reproduce exactly.
+
+<Callout variant="interview">
+"Classes are mostly syntactic sugar over prototypes — methods still live on the prototype object and inheritance is still a prototype link. But a few things are genuinely new: class bodies are always strict, the binding is in the temporal dead zone, calling one without `new` throws, methods are non-enumerable, and `#private` fields are enforced by the engine rather than being a naming convention."
+</Callout>
+
+## Prototypal versus classical inheritance
+
+**In simple words:** in a classical language a class is a blueprint and objects are stamped from it. In JavaScript an object simply *delegates* to another object at runtime.
+
+| Classical | Prototypal |
+| --- | --- |
+| Classes are templates, separate from instances | Prototypes are ordinary objects |
+| Copying happens at instantiation | Nothing is copied — lookup delegates at runtime |
+| The hierarchy is fixed at compile time | The chain can be changed while running |
+| Method resolution decided ahead of time | Method resolution walks the chain on each miss |
+
+The practical consequence: **adding a method to a prototype affects every existing instance immediately**, because nothing was ever copied.
+
+```js
+const rex = new Dog("Rex");
+Dog.prototype.sit = function () { return `${this.name} sits`; };
+rex.sit();   // "Rex sits" -- rex was created before sit existed
+```
+
+<Callout variant="careful">
+This is also why extending built-ins is dangerous. <code>Array.prototype.last = ...</code> instantly changes every array in the process, including ones inside libraries you did not write, and it shows up in <code>for...in</code> loops. Do not do it in shared code.
+</Callout>
+
+## Object.create and friends
+
+**In simple words:** `Object.create` makes a new object and lets you choose its prototype directly, with no constructor involved.
+
+```js
+const animal = {
+  eat() { return `${this.name} is eating`; },
+};
+
+const dog = Object.create(animal);   // dog.__proto__ === animal
+dog.name = "Rex";
+dog.eat();                           // "Rex is eating"
+
+Object.getPrototypeOf(dog) === animal;  // true
+
+// A dictionary with no inherited keys at all
+const lookup = Object.create(null);
+lookup.toString;                     // undefined -- no Object.prototype
+```
+
+<Callout variant="work" label="Why Object.create(null) matters">
+A plain object inherits keys like <code>constructor</code>, <code>toString</code> and <code>__proto__</code>. If you use one as a lookup table keyed by user input, a key called <code>__proto__</code> or <code>constructor</code> behaves in surprising ways — this is the root of prototype pollution bugs.
+
+For a pure key-value map, use <code>Object.create(null)</code> or, better, a real <code>Map</code>.
+</Callout>
+
+## Property descriptors
+
+**In simple words:** every property has three hidden switches besides its value. Normally they are all on. `Object.defineProperty` lets you turn them off.
+
+| Switch | What it controls |
+| --- | --- |
+| `writable` | can the value be changed |
+| `enumerable` | does it show up in `Object.keys` and `for...in` |
+| `configurable` | can it be deleted or have its descriptor changed |
+
+```js
+const user = {};
+
+Object.defineProperty(user, "id", {
+  value: 42,
+  writable: false,
+  enumerable: false,
+  configurable: false,
+});
+
+user.id = 99;              // silently ignored in sloppy mode, throws in strict
+Object.keys(user);         // []  -- hidden from enumeration
+JSON.stringify(user);      // "{}"
+user.id;                   // 42
+
+Object.getOwnPropertyDescriptor(user, "id");
+// { value: 42, writable: false, enumerable: false, configurable: false }
+```
+
+<Callout variant="careful">
+Properties created with <code>defineProperty</code> default every switch to <code>false</code>. Properties created normally with <code>obj.x = 1</code> default them all to <code>true</code>. That asymmetry catches people out.
+</Callout>
+
+## freeze, seal and preventExtensions
+
+**In simple words:** three levels of locking an object, from loosest to tightest.
+
+| | Add new properties | Delete properties | Change existing values |
+| --- | --- | --- | --- |
+| `preventExtensions` | no | yes | yes |
+| `seal` | no | no | yes |
+| `freeze` | no | no | no |
+
+```js
+const config = Object.freeze({ retries: 3, nested: { timeout: 5000 } });
+
+config.retries = 5;          // ignored, or throws in strict mode
+config.nested.timeout = 1;   // WORKS -- freeze is only one level deep
+
+Object.isFrozen(config);         // true
+Object.isFrozen(config.nested);  // false
+```
+
+### Deep freeze
+
+```js
+function deepFreeze(obj) {
+  for (const value of Object.values(obj)) {
+    if (value && typeof value === "object" && !Object.isFrozen(value)) {
+      deepFreeze(value);
+    }
+  }
+  return Object.freeze(obj);
+}
+```
+
+## Getters, setters and the Object statics
+
+**In simple words:** a getter looks like a property but runs a function. Useful for derived values that should not be stored.
+
+```js
+const order = {
+  items: [{ price: 100 }, { price: 250 }],
+
+  get total() {
+    return this.items.reduce((sum, item) => sum + item.price, 0);
+  },
+
+  set discount(percent) {
+    if (percent < 0 || percent > 100) throw new RangeError("0 to 100 only");
+    this._discount = percent;
+  },
+};
+
+order.total;          // 350 -- no parentheses, recalculated every read
+order.discount = 10;  // runs the setter, with validation
+```
+
+The statics worth knowing cold:
+
+```js
+Object.keys(obj);        // own enumerable string keys
+Object.values(obj);      // their values
+Object.entries(obj);     // [key, value] pairs -- the one you use most
+Object.fromEntries(arr); // the reverse, great after a filter or map
+Object.assign(a, b);     // shallow merge into a, mutating it
+Object.hasOwn(obj, k);   // modern replacement for hasOwnProperty
+
+// A common real pattern: filter an object by its values
+const cleaned = Object.fromEntries(
+  Object.entries(params).filter(([, value]) => value !== undefined)
+);
+```
+
+<Callout variant="careful">
+<code>Object.keys</code> and friends only list **own** properties, never inherited ones. <code>for...in</code> does the opposite and walks the whole chain, which is why <code>for...in</code> over an array or an object with a modified prototype can surprise you. Prefer <code>Object.entries</code>.
+</Callout>
+
+## Mixins and composition
+
+**In simple words:** JavaScript has single inheritance — one prototype link per object. When you need behaviour from two places, you compose instead of inherit.
+
+```js
+const canFly = {
+  fly() { return `${this.name} takes off`; },
+};
+
+const canSwim = {
+  swim() { return `${this.name} dives in`; },
+};
+
+class Duck {
+  constructor(name) { this.name = name; }
+}
+
+Object.assign(Duck.prototype, canFly, canSwim);
+
+new Duck("Donald").fly();   // "Donald takes off"
+```
+
+<Callout variant="work" label="The interview follow-up">
+Expect &quot;composition over inheritance — what does that mean and why?&quot;.
+
+Deep inheritance chains bind unrelated things together: a change near the top ripples down to every subclass, and you cannot reuse a single behaviour without dragging its ancestors along. Composition attaches capabilities independently, so each one can be tested, reused and removed on its own. Say it with a real example from your work, not as a slogan.
+</Callout>
+
+## Proxy and Reflect
+
+**In simple words:** a Proxy wraps an object and lets you intercept the basic operations on it — reading, writing, deleting, checking existence.
+
+```js
+const target = { name: "Subham" };
+
+const safe = new Proxy(target, {
+  get(obj, prop, receiver) {
+    if (!(prop in obj)) throw new ReferenceError(`No property "${String(prop)}"`);
+    return Reflect.get(obj, prop, receiver);
+  },
+  set(obj, prop, value, receiver) {
+    if (prop === "name" && typeof value !== "string") {
+      throw new TypeError("name must be a string");
+    }
+    return Reflect.set(obj, prop, value, receiver);
+  },
+});
+
+safe.name;        // "Subham"
+safe.missing;     // ReferenceError instead of undefined
+safe.name = 42;   // TypeError
+```
+
+`Reflect` provides the default behaviour for each trap, so you can add a check and then hand off. Writing `obj[prop] = value` directly inside a `set` trap loses the correct `receiver` and breaks inheritance — `Reflect.set` does not.
+
+This is not everyday code, but it powers real tools: Vue 3 reactivity, Immer, and most mocking libraries are built on Proxy.
+
+## Ten questions
+
+<Quiz>
+  <QuizItem number={1} question={<>What is the difference between <code>prototype</code> and <code>__proto__</code>?</>}>
+    <p><code>prototype</code> is a property on <strong>functions</strong>. It holds the object that will become the prototype of any instance created with <code>new</code>.</p>
+    <p><code>__proto__</code> exists on <strong>every object</strong> and is the actual link to that object&apos;s prototype. So <code>rex.__proto__ === Dog.prototype</code>. Use <code>Object.getPrototypeOf</code> instead of <code>__proto__</code> in real code.</p>
+  </QuizItem>
+
+  <QuizItem number={2} question={<>Describe exactly what <code>new</code> does, in four steps.</>}>
+    <p>Creates an empty object. Sets its prototype to the constructor&apos;s <code>prototype</code> property. Calls the constructor with <code>this</code> bound to that object. Returns the object, unless the constructor explicitly returned an object of its own, in which case that one wins.</p>
+    <p>A returned primitive is ignored — you still get the instance.</p>
+  </QuizItem>
+
+  <QuizItem number={3} question={<>Are ES6 classes just syntactic sugar over prototypes?</>}>
+    <p>Mostly, but not entirely. Methods still live on the prototype and inheritance is still a prototype link.</p>
+    <p>What is genuinely new: class bodies are always strict mode, the binding sits in the temporal dead zone, calling a class without <code>new</code> throws, methods are non-enumerable, and <code>#private</code> fields are enforced by the engine rather than being a naming convention.</p>
+  </QuizItem>
+
+  <QuizItem number={4} question={<>You add a method to <code>Dog.prototype</code> after creating an instance. Can that instance use it? Why?</>}>
+    <p>Yes, immediately. Nothing was ever copied into the instance — the instance holds a live link to the prototype object, and lookup happens at the moment you access the property.</p>
+    <p>This is the core difference from classical inheritance, where the shape is fixed when the object is created.</p>
+  </QuizItem>
+
+  <QuizItem number={5} question={<>Why would you use <code>Object.create(null)</code> instead of <code>{}</code>?</>}>
+    <p>To get an object with no prototype at all, so it inherits nothing — no <code>toString</code>, no <code>constructor</code>, no <code>__proto__</code>.</p>
+    <p>It matters for lookup tables keyed by user input, where a key named <code>__proto__</code> or <code>constructor</code> would otherwise collide with inherited members. That collision is the basis of prototype pollution attacks. A <code>Map</code> is usually the better answer.</p>
+  </QuizItem>
+
+  <QuizItem number={6} question={<>What do <code>writable</code>, <code>enumerable</code> and <code>configurable</code> control?</>}>
+    <p><code>writable</code> — whether the value can be reassigned. <code>enumerable</code> — whether it appears in <code>Object.keys</code>, <code>for...in</code> and <code>JSON.stringify</code>. <code>configurable</code> — whether it can be deleted or have its descriptor changed.</p>
+    <p>They all default to <code>true</code> for a normal assignment and to <code>false</code> when you use <code>Object.defineProperty</code>.</p>
+  </QuizItem>
+
+  <QuizItem number={7} question={<>What is the difference between <code>freeze</code>, <code>seal</code> and <code>preventExtensions</code>?</>}>
+    <p><code>preventExtensions</code> blocks adding properties. <code>seal</code> also blocks deleting them. <code>freeze</code> also blocks changing their values.</p>
+    <p>All three are one level deep. A frozen object&apos;s nested objects are still fully mutable, which is why you need a recursive <code>deepFreeze</code> if you want real immutability.</p>
+  </QuizItem>
+
+  <QuizItem number={8} question={<>Why is extending <code>Array.prototype</code> considered dangerous?</>}>
+    <p>Because nothing is copied — the change is immediately visible to every array in the process, including arrays created inside third-party libraries.</p>
+    <p>An enumerable addition also appears in every <code>for...in</code> loop over an array, and if two libraries add the same method name with different behaviour, one silently overwrites the other.</p>
+  </QuizItem>
+
+  <QuizItem number={9} question={<>What does &quot;composition over inheritance&quot; mean here, concretely?</>}>
+    <p>JavaScript objects have a single prototype link, so multiple inheritance is not available. Instead you attach independent behaviours — often by assigning mixin objects onto a prototype, or by having an object hold collaborators rather than extend them.</p>
+    <p>The practical benefit is that each behaviour can be tested, reused and removed on its own, instead of being locked into a hierarchy where a change near the top affects every descendant.</p>
+  </QuizItem>
+
+  <QuizItem number={10} question={<>Why use <code>Reflect.set</code> inside a Proxy <code>set</code> trap rather than assigning directly?</>}>
+    <p><code>Reflect.set</code> performs the default operation while correctly forwarding the <code>receiver</code>, which matters when the property is accessed through an inheriting object or a setter further up the chain.</p>
+    <p>Assigning with <code>obj[prop] = value</code> inside the trap loses that receiver and can either break inheritance or trigger the trap again and recurse.</p>
+  </QuizItem>
+</Quiz>
+
+## Six exercises
+
+<ol className="mt-8 list-none space-y-0 p-0">
+  <Exercise number={1} title="Implement myNew(Constructor, ...args)">
+    Replicate all four steps of <code>new</code>. Prove it works by checking <code>instanceof</code> and by writing a constructor that explicitly returns an object, then one that returns a number — the behaviours must differ.
+  </Exercise>
+  <Exercise number={2} title="Build the same class twice">
+    Write an <code>Animal</code> with a <code>Dog</code> subclass using ES6 <code>class</code>. Then write the identical structure using only constructor functions, <code>Object.create</code> and explicit prototype assignment. Note every difference you had to work around.
+  </Exercise>
+  <Exercise number={3} title="Write deepFreeze">
+    Freeze every level. Then make it survive an object that contains a circular reference — you will need to track what you have already visited.
+  </Exercise>
+  <Exercise number={4} title="Hide a property completely">
+    Use <code>Object.defineProperty</code> to add an <code>id</code> that cannot be changed, does not appear in <code>Object.keys</code>, and is skipped by <code>JSON.stringify</code>. Then find the one method that still reveals it.
+  </Exercise>
+  <Exercise number={5} title="Compose instead of inherit">
+    Model a <code>Duck</code> that can both fly and swim, without any inheritance chain. Then add a <code>Penguin</code> that swims but does not fly, and show why an inheritance-based version would have been awkward.
+  </Exercise>
+  <Exercise number={6} title="Validating Proxy">
+    Wrap a plain object so that reading a missing property throws instead of returning undefined, and writing a wrong type throws. Use <code>Reflect</code> for the default behaviour, and explain in a comment why direct assignment would be wrong.
+  </Exercise>
+</ol>
