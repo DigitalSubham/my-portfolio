@@ -41,3 +41,13 @@ export async function getAdminStats() {
     unreadMessages: Number(unreadMessages[0].count),
   };
 }
+
+export async function getUnreadMessageCount() {
+  if (!hasDatabase) return 0;
+  const sql = getSql();
+  const rows = (await sql`
+    SELECT COUNT(*)::int AS count FROM contact_messages
+    WHERE is_read = false AND is_archived = false
+  `) as AdminRow[];
+  return Number(rows[0]?.count ?? 0);
+}

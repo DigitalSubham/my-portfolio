@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ExternalLink } from "lucide-react";
 import AdminShell from "../_components/AdminShell";
 import { CollectionEditor, SingletonForm } from "../_components/AdminForm";
 import { getAdminSection } from "@/lib/admin-config";
@@ -24,20 +26,18 @@ export default async function AdminSectionPage({ params }: Props) {
   );
 
   return (
-    <AdminShell>
-      <header>
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
-          Content
-        </p>
-        <h1 className="mt-2 text-4xl font-semibold tracking-tight text-gray-950">
-          {section.title}
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-600">
-          {section.description}
-        </p>
-      </header>
-
-      <div className="mt-8 grid gap-8">
+    <AdminShell
+      eyebrow="Content"
+      title={section.title}
+      description={section.description}
+      actions={
+        <Link href="/" target="_blank" className="adm-btn adm-btn-ghost">
+          <ExternalLink />
+          View site
+        </Link>
+      }
+    >
+      <div className="grid gap-6">
         {tableData.map(({ table, rows, singleton }) =>
           table.singleton ? (
             <SingletonForm key={table.key} config={table} row={singleton || {}} />

@@ -1,67 +1,96 @@
 import Link from "next/link";
-import { BarChart3, FileText, Inbox, ShieldCheck } from "lucide-react";
+import {
+  ArrowUpRight,
+  Award,
+  Briefcase,
+  ExternalLink,
+  FileText,
+  FolderKanban,
+  Inbox,
+  Mail,
+  PenLine,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  UserRound,
+  Wrench,
+  type LucideIcon,
+} from "lucide-react";
 import AdminShell from "./_components/AdminShell";
 import { adminSections } from "@/lib/admin-config";
 import { getAdminStats } from "@/lib/admin-data";
 import { requireAdmin } from "@/lib/auth";
 
+const sectionIcons: Record<string, LucideIcon> = {
+  profile: UserRound,
+  seo: Search,
+  hero: Sparkles,
+  about: PenLine,
+  experience: Briefcase,
+  projects: FolderKanban,
+  skills: Wrench,
+  blogs: FileText,
+  certificates: Award,
+  contact: Mail,
+};
+
 export default async function AdminDashboardPage() {
   await requireAdmin();
   const stats = await getAdminStats();
+
   const cards = [
-    { label: "Projects", value: stats.projects, icon: BarChart3 },
-    { label: "Blog posts", value: stats.blogs, icon: FileText },
-    { label: "Certificates", value: stats.certificates, icon: ShieldCheck },
-    { label: "Unread messages", value: stats.unreadMessages, icon: Inbox },
+    { label: "Projects", value: stats.projects, icon: FolderKanban, href: "/admin/projects" },
+    { label: "Blog posts", value: stats.blogs, icon: FileText, href: "/admin/blogs" },
+    { label: "Certificates", value: stats.certificates, icon: ShieldCheck, href: "/admin/certificates" },
+    { label: "Unread messages", value: stats.unreadMessages, icon: Inbox, href: "/admin/messages" },
   ];
 
   return (
-    <AdminShell>
-      <header>
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
-          Overview
-        </p>
-        <h1 className="mt-2 text-4xl font-semibold tracking-tight text-gray-950">
-          Dashboard
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-600">
-          Manage every public portfolio section, SEO fields, and contact submissions from one place.
-        </p>
-      </header>
-
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {cards.map((card) => {
-          const Icon = card.icon;
-          return (
-            <article
-              key={card.label}
-              className="border border-gray-200 bg-white p-5 shadow-sm"
-            >
-              <Icon className="h-5 w-5 text-gray-500" />
-              <p className="mt-5 text-3xl font-semibold text-gray-950">
-                {card.value}
-              </p>
-              <p className="mt-1 text-sm font-medium text-gray-500">{card.label}</p>
-            </article>
-          );
-        })}
-      </div>
-
-      <div className="mt-8 grid gap-4 md:grid-cols-2">
-        {adminSections.map((section) => (
-          <Link
-            key={section.slug}
-            href={`/admin/${section.slug}`}
-            className="border border-gray-200 bg-white p-5 shadow-sm transition-colors hover:border-gray-950"
-          >
-            <h2 className="text-xl font-semibold text-gray-950">
-              {section.title}
-            </h2>
-            <p className="mt-2 text-sm leading-6 text-gray-600">
-              {section.description}
-            </p>
+    <AdminShell
+      eyebrow="Overview"
+      title="Dashboard"
+      description="Manage every public portfolio section, SEO field, and contact submission from one place."
+      actions={
+        <Link href="/" target="_blank" className="adm-btn adm-btn-ghost">
+          <ExternalLink />
+          View site
+        </Link>
+      }
+    >
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+        {cards.map(({ label, value, icon: Icon, href }) => (
+          <Link key={label} href={href} className="adm-stat transition-transform hover:-translate-y-px">
+            <span className="adm-stat-icon">
+              <Icon className="h-[18px] w-[18px]" />
+            </span>
+            <p className="adm-stat-value">{value}</p>
+            <p className="adm-stat-label">{label}</p>
           </Link>
         ))}
+      </div>
+
+      <h2 className="mt-10 mb-4 text-sm font-bold uppercase tracking-[0.1em] text-[var(--adm-faint)]">
+        Content sections
+      </h2>
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {adminSections.map((section) => {
+          const Icon = sectionIcons[section.slug] ?? FolderKanban;
+          return (
+            <Link key={section.slug} href={`/admin/${section.slug}`} className="adm-tile">
+              <span className="adm-tile-icon">
+                <Icon className="h-[18px] w-[18px]" />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-[15px] font-semibold tracking-tight">{section.title}</span>
+                <span className="mt-1 block text-[13px] leading-6 text-[var(--adm-muted)]">
+                  {section.description}
+                </span>
+              </span>
+              <ArrowUpRight className="adm-tile-arrow h-4 w-4" />
+            </Link>
+          );
+        })}
       </div>
     </AdminShell>
   );

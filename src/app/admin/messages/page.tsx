@@ -1,86 +1,99 @@
-import { Archive, MailCheck, MailOpen, Trash2 } from "lucide-react";
+import { Archive, Inbox, Mail, MailCheck, MailOpen, Trash2 } from "lucide-react";
 import AdminShell from "../_components/AdminShell";
 import { markMessage } from "../actions";
 import { getContactMessages } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
 
+function initials(name: string) {
+  return (
+    name
+      .split(" ")
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join("") || "?"
+  );
+}
+
 export default async function AdminMessagesPage() {
   await requireAdmin();
   const messages = await getContactMessages();
+  const unread = messages.filter((message) => !message.isRead && !message.isArchived).length;
 
   return (
-    <AdminShell>
-      <header>
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
-          Inbox
-        </p>
-        <h1 className="mt-2 text-4xl font-semibold tracking-tight text-gray-950">
-          Contact messages
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-600">
-          Messages submitted from the public contact form.
-        </p>
-      </header>
-
-      <div className="mt-8 grid gap-4">
+    <AdminShell
+      eyebrow="Inbox"
+      title="Contact messages"
+      description="Messages submitted from the public contact form."
+      actions={
+        <span className="adm-chip">
+          <Inbox className="h-3.5 w-3.5" />
+          {unread} unread · {messages.length} total
+        </span>
+      }
+    >
+      <div className="grid gap-4">
         {messages.length === 0 && (
-          <div className="border border-gray-200 bg-white p-6 text-sm text-gray-500">
-            No messages yet.
+          <div className="adm-card adm-empty">
+            <Mail className="h-6 w-6 opacity-40" />
+            <p className="font-semibold">No messages yet</p>
+            <p>Submissions from the contact form will land here.</p>
           </div>
         )}
 
         {messages.map((message) => (
           <article
             key={message.id}
-            className={`border bg-white p-5 shadow-sm ${
-              message.isArchived
-                ? "border-gray-200 opacity-60"
-                : "border-gray-200"
-            }`}
+            className="adm-msg"
+            data-unread={!message.isRead && !message.isArchived}
+            data-archived={message.isArchived}
           >
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-              <div>
-                <div className="flex flex-wrap items-center gap-3">
-                  <h2 className="text-xl font-semibold text-gray-950">
-                    {message.subject || "Portfolio message"}
-                  </h2>
-                  {!message.isRead && (
-                    <span className="bg-gray-950 px-2 py-1 text-xs font-semibold text-white">
-                      New
-                    </span>
-                  )}
-                  {message.isArchived && (
-                    <span className="border border-gray-200 px-2 py-1 text-xs font-semibold text-gray-500">
-                      Archived
-                    </span>
-                  )}
+              <div className="flex min-w-0 gap-3">
+                <span className="adm-avatar">{initials(message.name)}</span>
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="text-[15px] font-semibold tracking-tight">
+                      {message.subject || "Portfolio message"}
+                    </h2>
+                    {!message.isRead && <span className="adm-chip adm-chip-new">New</span>}
+                    {message.isArchived && <span className="adm-chip">Archived</span>}
+                  </div>
+                  <p className="mt-1 text-[13px] text-[var(--adm-muted)]">
+                    {message.name} ·{" "}
+                    <a href={`mailto:${message.email}`} className="underline underline-offset-2">
+                      {message.email}
+                    </a>{" "}
+                    · {new Date(message.createdAt).toLocaleString()}
+                  </p>
                 </div>
-                <p className="mt-2 text-sm text-gray-500">
-                  {message.name} · {message.email} · {new Date(message.createdAt).toLocaleString()}
-                </p>
               </div>
-              <div className="flex flex-wrap gap-2">
+
+              <div className="flex flex-wrap gap-2 md:shrink-0">
                 <form action={markMessage.bind(null, message.id, message.isRead ? "unread" : "read")}>
-                  <button className="inline-flex min-h-10 items-center gap-2 border border-gray-200 px-3 text-sm font-semibold transition-colors hover:border-gray-950">
-                    {message.isRead ? <MailOpen className="h-4 w-4" /> : <MailCheck className="h-4 w-4" />}
-                    {message.isRead ? "Unread" : "Read"}
+                  <button className="adm-btn adm-btn-ghost">
+                    {message.isRead ? <MailOpen /> : <MailCheck />}
+                    Mark {message.isRead ? "unread" : "read"}
                   </button>
                 </form>
-                <form action={markMessage.bind(null, message.id, "archive")}>
-                  <button className="inline-flex min-h-10 items-center gap-2 border border-gray-200 px-3 text-sm font-semibold transition-colors hover:border-gray-950">
-                    <Archive className="h-4 w-4" />
-                    Archive
-                  </button>
-                </form>
+                {!message.isArchived && (
+                  <form action={markMessage.bind(null, message.id, "archive")}>
+                    <button className="adm-btn adm-btn-ghost">
+                      <Archive />
+                      Archive
+                    </button>
+                  </form>
+                )}
                 <form action={markMessage.bind(null, message.id, "delete")}>
-                  <button className="inline-flex min-h-10 items-center gap-2 border border-red-200 px-3 text-sm font-semibold text-red-700 transition-colors hover:bg-red-50">
-                    <Trash2 className="h-4 w-4" />
+                  <button className="adm-btn adm-btn-danger">
+                    <Trash2 />
                     Delete
                   </button>
                 </form>
               </div>
             </div>
-            <p className="mt-5 whitespace-pre-wrap text-sm leading-7 text-gray-700">
+
+            <p className="mt-4 whitespace-pre-wrap border-t border-[var(--adm-border)] pt-4 text-[14px] leading-7 text-[var(--adm-muted)]">
               {message.message}
             </p>
           </article>
