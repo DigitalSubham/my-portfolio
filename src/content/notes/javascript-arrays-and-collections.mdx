@@ -1,0 +1,533 @@
+You use array methods every day. The interview does not ask whether you can call `map` — it asks which methods mutate, what `reduce` can actually do, why `sort` breaks on numbers, and whether you can rebuild these methods from scratch.
+
+## Every array method, and what it gives back
+
+**In simple words:** the first thing to know about any array method is whether it changes the original array or returns a new one. Getting this wrong causes bugs that are very hard to trace.
+
+### Methods that change the original
+
+| Method | What it does | Returns |
+| --- | --- | --- |
+| `push` / `pop` | add / remove at the end | new length / removed item |
+| `shift` / `unshift` | remove / add at the start | removed item / new length |
+| `splice` | remove and insert anywhere | array of removed items |
+| `sort` | reorders in place | the same array |
+| `reverse` | flips in place | the same array |
+| `fill` | overwrites a range | the same array |
+
+### Methods that return something new
+
+| Method | Returns | Notes |
+| --- | --- | --- |
+| `map` | new array, same length | always same length — that is the point |
+| `filter` | new array, shorter or equal | |
+| `slice` | shallow copy of a range | negative indexes allowed |
+| `concat` | new joined array | |
+| `flat` / `flatMap` | new flattened array | |
+| `toSorted` / `toReversed` / `toSpliced` / `with` | new array | the modern non-mutating versions |
+| `find` / `findLast` | the element, or `undefined` | |
+| `findIndex` | the index, or `-1` | |
+| `some` / `every` | boolean | both stop early |
+| `includes` / `indexOf` | boolean / index | `includes` finds `NaN`, `indexOf` does not |
+| `join` | string | |
+| `reduce` | anything you want | |
+| `forEach` | `undefined` | cannot be chained, cannot break |
+
+<Callout variant="careful">
+`sort` and `reverse` mutate. `array.sort()` does not give you a sorted copy — it sorts the original and hands the same array back. If the original came from props or state, you have just mutated something you do not own.
+
+Use `toSorted()` where it is available, or `[...array].sort()` everywhere else.
+</Callout>
+
+<Callout variant="work" label="The one that catches people">
+`forEach` returns `undefined` and cannot be stopped early. There is no `break`, and `return` only exits the current callback. If you need to stop, use `for...of`, `some` or `find`. If you need a result, you wanted `map` or `reduce`.
+</Callout>
+
+## Rebuild map, filter, reduce and forEach
+
+**In simple words:** a standard interview task. It proves you understand callbacks, the `thisArg` parameter, and how sparse arrays behave.
+
+```js
+Array.prototype.myMap = function (callback, thisArg) {
+  if (typeof callback !== "function") throw new TypeError(callback + " is not a function");
+
+  const source = Object(this);
+  const length = source.length >>> 0;      // coerce to a 32-bit unsigned int
+  const output = new Array(length);        // preserve length, including holes
+
+  for (let i = 0; i < length; i++) {
+    if (i in source) {                     // skip holes in sparse arrays
+      output[i] = callback.call(thisArg, source[i], i, source);
+    }
+  }
+
+  return output;
+};
+
+Array.prototype.myFilter = function (callback, thisArg) {
+  const source = Object(this);
+  const length = source.length >>> 0;
+  const output = [];
+
+  for (let i = 0; i < length; i++) {
+    if (i in source && callback.call(thisArg, source[i], i, source)) {
+      output.push(source[i]);
+    }
+  }
+
+  return output;
+};
+```
+
+`reduce` is the one they actually care about, because of the no-initial-value case:
+
+```js
+Array.prototype.myReduce = function (callback, initialValue) {
+  const source = Object(this);
+  const length = source.length >>> 0;
+
+  let index = 0;
+  let accumulator;
+
+  if (arguments.length >= 2) {
+    accumulator = initialValue;
+  } else {
+    // no initial value: find the first real element and start there
+    while (index < length && !(index in source)) index++;
+    if (index >= length) {
+      throw new TypeError("Reduce of empty array with no initial value");
+    }
+    accumulator = source[index++];
+  }
+
+  for (; index < length; index++) {
+    if (index in source) {
+      accumulator = callback(accumulator, source[index], index, source);
+    }
+  }
+
+  return accumulator;
+};
+```
+
+<Callout variant="interview">
+"The details that matter are: coerce `length` with `&gt;&gt;&gt; 0`, skip holes by checking `i in array`, pass value, index and the array to the callback, and support `thisArg`. For `reduce` specifically, when no initial value is given you start from the first element and throw a TypeError on an empty array — checking `arguments.length` rather than `initialValue === undefined`, because `undefined` is a legitimate initial value."
+</Callout>
+
+## reduce, properly
+
+**In simple words:** `reduce` is not just for adding numbers. It turns a list into *anything* — an object, a string, a nested structure, even another function.
+
+```js
+const orders = [
+  { id: 1, status: "paid", total: 250 },
+  { id: 2, status: "pending", total: 100 },
+  { id: 3, status: "paid", total: 400 },
+];
+
+// sum
+orders.reduce((sum, o) => sum + o.total, 0);              // 750
+
+// group by a key
+const byStatus = orders.reduce((groups, order) => {
+  (groups[order.status] ||= []).push(order);
+  return groups;
+}, {});
+// { paid: [...], pending: [...] }
+
+// index by id, for O(1) lookup later
+const byId = orders.reduce((map, order) => {
+  map[order.id] = order;
+  return map;
+}, {});
+
+// frequency count
+const words = ["a", "b", "a", "c", "a"];
+words.reduce((counts, w) => {
+  counts[w] = (counts[w] || 0) + 1;
+  return counts;
+}, {});
+// { a: 3, b: 1, c: 1 }
+
+// flatten one level
+[[1, 2], [3], [4, 5]].reduce((flat, part) => flat.concat(part), []);
+
+// pipe — reduce over functions instead of data
+const pipe = (...fns) => (x) => fns.reduce((acc, fn) => fn(acc), x);
+```
+
+Modern JavaScript has `Object.groupBy`, which does the grouping case natively. Know both — interviewers usually want the `reduce` version.
+
+<Callout variant="careful">
+Do not use `reduce` with a spread inside: `reduce((acc, x) =&gt; ({ ...acc, [x.id]: x }), {})` copies the whole accumulator on every iteration. That turns an O(n) loop into O(n²). On a list of 10,000 items it is genuinely slow. Mutate the accumulator instead — it is a local object you created, so mutating it is safe.
+</Callout>
+
+## sort
+
+**In simple words:** with no comparator, `sort` converts everything to strings and sorts alphabetically. That is why numbers come out wrong.
+
+```js
+[10, 9, 1, 100].sort();               // [1, 10, 100, 9]  -- string order
+[10, 9, 1, 100].sort((a, b) => a - b); // [1, 9, 10, 100]  -- correct
+```
+
+The comparator returns a number, and the sign is all that matters:
+
+- **negative** — `a` comes before `b`
+- **zero** — leave their relative order alone
+- **positive** — `b` comes before `a`
+
+```js
+// numbers
+list.sort((a, b) => a - b);                       // ascending
+list.sort((a, b) => b - a);                       // descending
+
+// strings, correctly for non-English text
+names.sort((a, b) => a.localeCompare(b));
+
+// by a field, then by another as a tie-breaker
+users.sort((a, b) => a.age - b.age || a.name.localeCompare(b.name));
+
+// dates
+events.sort((a, b) => new Date(a.at) - new Date(b.at));
+```
+
+**Stability** means equal elements keep their original relative order. Since ES2019 `sort` is guaranteed stable in every engine, which is what makes the "sort by age, then by name" trick above work reliably.
+
+<Callout variant="careful">
+A comparator that returns a boolean is a bug. `(a, b) =&gt; a &gt; b` returns `true` or `false`, which coerce to 1 and 0 — the "a before b" case never happens, so the result is subtly wrong rather than obviously broken.
+</Callout>
+
+## Map and Set
+
+**In simple words:** a `Map` is a dictionary that accepts any key type and remembers insertion order. A `Set` is a list that automatically rejects duplicates.
+
+| | Plain object | `Map` |
+| --- | --- | --- |
+| Key types | strings and symbols only | **anything**, including objects and functions |
+| Size | `Object.keys(o).length` | `map.size` |
+| Order | mostly insertion, but integer-like keys jump to the front | strict insertion order |
+| Inherited keys | yes, from `Object.prototype` | none |
+| Iterating | `Object.entries` | directly iterable |
+| Frequent add and delete | slower | optimised for it |
+
+```js
+const cache = new Map();
+const userKey = { id: 1 };
+
+cache.set(userKey, "some value");   // an object as a key
+cache.get(userKey);                 // "some value"
+cache.get({ id: 1 });               // undefined -- different object, different key
+
+cache.has(userKey);   // true
+cache.delete(userKey);
+cache.size;
+
+for (const [key, value] of cache) { /* insertion order */ }
+
+// Set: deduplicate in one line
+const unique = [...new Set([1, 2, 2, 3, 3, 3])];   // [1, 2, 3]
+
+// Set operations
+const a = new Set([1, 2, 3]);
+const b = new Set([2, 3, 4]);
+const intersection = [...a].filter((x) => b.has(x));   // [2, 3]
+const difference = [...a].filter((x) => !b.has(x));    // [1]
+```
+
+<Callout variant="careful">
+The integer-key ordering surprise: `{ 2: "b", 1: "a" }` iterates as `1` then `2`, because integer-like keys are sorted numerically and placed before string keys. If insertion order matters, use a `Map`.
+</Callout>
+
+<Callout variant="interview">
+"I use a Map when keys are not strings, when I add and remove entries often, when I need a reliable size, or when insertion order matters. I use a plain object for fixed, string-keyed, JSON-shaped data — Maps do not serialise with `JSON.stringify`, which is often the deciding factor at an API boundary."
+</Callout>
+
+## WeakMap and WeakSet
+
+**In simple words:** the same idea, except they do not stop the garbage collector. If the only remaining reference to an object is the one inside a WeakMap, the object is collected and the entry disappears with it.
+
+Keys must be objects, and you cannot iterate or read `size` — because the contents can vanish at any moment.
+
+```js
+const metadata = new WeakMap();
+
+function attach(element) {
+  metadata.set(element, { clicks: 0 });   // does not keep the element alive
+}
+
+// When the DOM node is removed and no other reference exists, both the node
+// and its metadata entry are collected. With a regular Map, the node would
+// stay in memory forever -- a classic detached-DOM leak.
+```
+
+The two real uses: **caches and metadata keyed by object**, and **private data for class instances** before `#` fields existed.
+
+## flat, flatMap, and your own flatten
+
+```js
+[1, [2, [3, [4]]]].flat();          // [1, 2, [3, [4]]]  -- depth 1 by default
+[1, [2, [3, [4]]]].flat(2);         // [1, 2, 3, [4]]
+[1, [2, [3, [4]]]].flat(Infinity);  // [1, 2, 3, 4]
+
+// flatMap = map then flatten one level. Useful for one-to-many.
+["a b", "c d"].flatMap((s) => s.split(" "));   // ["a", "b", "c", "d"]
+
+// It also filters: return an empty array to drop an item
+users.flatMap((u) => (u.active ? [u.name] : []));
+```
+
+```js
+function flatten(array, depth = 1) {
+  if (depth < 1) return array.slice();
+
+  return array.reduce(
+    (out, item) =>
+      out.concat(Array.isArray(item) ? flatten(item, depth - 1) : item),
+    []
+  );
+}
+
+// Iterative, so it cannot blow the call stack on deeply nested input
+function flattenDeep(array) {
+  const stack = [...array];
+  const out = [];
+
+  while (stack.length) {
+    const item = stack.pop();
+    if (Array.isArray(item)) stack.push(...item);
+    else out.push(item);
+  }
+
+  return out.reverse();
+}
+```
+
+## Array-likes and iterables
+
+**In simple words:** two different things people confuse. An **array-like** has a `length` and numeric keys but no array methods. An **iterable** has a `Symbol.iterator` and works with `for...of` and spread.
+
+```js
+// array-like but NOT iterable
+function old() {
+  arguments.length;          // works
+  arguments.map;             // undefined
+  Array.from(arguments);     // now a real array
+}
+
+// iterable but NOT an array
+const set = new Set([1, 2]);
+[...set];                    // works
+set.map;                     // undefined
+
+// NodeList is both array-like and iterable
+const nodes = document.querySelectorAll("li");
+[...nodes].filter((n) => n.dataset.active);
+```
+
+`Array.from` handles both, and takes a mapping function as a second argument:
+
+```js
+Array.from({ length: 5 }, (_, i) => i * 2);    // [0, 2, 4, 6, 8]
+Array.from("hello");                           // ["h","e","l","l","o"]
+```
+
+<Callout variant="careful">
+`new Array(5)` creates five **holes**, not five undefined values. `map` skips holes entirely, so `new Array(5).map((_, i) =&gt; i)` gives you five holes back. Use `Array.from({ length: 5 }, ...)` or `Array(5).fill(0)` instead.
+</Callout>
+
+## The iterator protocol
+
+**In simple words:** `for...of` and spread work by calling one method. Implement that method and your object joins in.
+
+An object is **iterable** if it has a `[Symbol.iterator]` method that returns an **iterator** — an object with a `next()` method returning `{ value, done }`.
+
+<Figure caption="for...of calls the iterator method once, then calls next() repeatedly until done is true. Nothing else is required.">
+  <svg viewBox="0 0 660 200" role="img" aria-label="A for-of loop calls Symbol.iterator to get an iterator, then calls next repeatedly, receiving value and done pairs until done is true." className="w-full">
+    <defs>
+      <marker id="iter-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="currentColor" />
+      </marker>
+    </defs>
+    <rect x="14" y="30" width="150" height="52" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="89" y="52" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">for...of</text>
+    <text x="89" y="70" fontSize="11.5" fill="currentColor" textAnchor="middle" opacity="0.75">or spread</text>
+
+    <rect x="256" y="30" width="170" height="52" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="341" y="52" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">your object</text>
+    <text x="341" y="70" fontSize="11.5" fill="currentColor" textAnchor="middle" opacity="0.75">has Symbol.iterator</text>
+
+    <rect x="490" y="30" width="156" height="52" rx="6" fill="rgb(251 191 36 / 0.14)" stroke="rgb(217 119 6)" strokeWidth="1.3" />
+    <text x="568" y="52" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">iterator</text>
+    <text x="568" y="70" fontSize="11.5" fill="rgb(180 83 9)" textAnchor="middle">has next()</text>
+
+    <path d="M168 56 L 250 56" fill="none" stroke="currentColor" strokeWidth="1.2" markerEnd="url(#iter-a)" />
+    <text x="209" y="46" fontSize="11" fill="currentColor" textAnchor="middle" opacity="0.75">1. ask</text>
+    <path d="M430 56 L 484 56" fill="none" stroke="currentColor" strokeWidth="1.2" markerEnd="url(#iter-a)" />
+    <text x="457" y="46" fontSize="11" fill="currentColor" textAnchor="middle" opacity="0.75">2. get</text>
+
+    <path d="M568 88 L 568 118 L 89 118 L 89 88" fill="none" stroke="currentColor" strokeWidth="1.2" strokeDasharray="5 4" markerEnd="url(#iter-a)" />
+    <text x="330" y="136" fontSize="12" fill="currentColor" textAnchor="middle">3. call next() over and over</text>
+    <text x="330" y="162" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">&#123; value: 1, done: false &#125;  &#8230;  &#123; value: undefined, done: true &#125;</text>
+    <text x="330" y="186" fontSize="12" fill="currentColor" textAnchor="middle" opacity="0.8">The loop stops the first time done is true.</text>
+  </svg>
+</Figure>
+
+```js
+class Playlist {
+  constructor(tracks) { this.tracks = tracks; }
+
+  [Symbol.iterator]() {
+    let index = 0;
+    const tracks = this.tracks;
+    return {
+      next: () =>
+        index < tracks.length
+          ? { value: tracks[index++], done: false }
+          : { value: undefined, done: true },
+    };
+  }
+}
+
+const list = new Playlist(["one", "two"]);
+[...list];                      // ["one", "two"]
+for (const t of list) { }       // works
+const [first] = list;           // destructuring works too
+```
+
+## Generators
+
+**In simple words:** a function that can pause and resume. Writing the iterator above by hand is tedious; a generator does it for you.
+
+`function*` marks a generator. `yield` produces a value and pauses until the next `next()` call.
+
+```js
+class Playlist {
+  constructor(tracks) { this.tracks = tracks; }
+
+  *[Symbol.iterator]() {          // the whole iterator, in three lines
+    for (const track of this.tracks) yield track;
+  }
+}
+```
+
+Generators are **lazy**, which is what makes infinite sequences possible:
+
+```js
+function* naturals() {
+  let n = 1;
+  while (true) yield n++;         // never ends, but only computes on demand
+}
+
+function* take(iterable, count) {
+  let taken = 0;
+  for (const value of iterable) {
+    if (taken++ >= count) return;
+    yield value;
+  }
+}
+
+[...take(naturals(), 5)];         // [1, 2, 3, 4, 5]
+```
+
+They are also **two-way** — `yield` evaluates to whatever you pass into the next `next()`:
+
+```js
+function* conversation() {
+  const name = yield "What is your name?";
+  yield `Hello ${name}`;
+}
+
+const chat = conversation();
+chat.next().value;            // "What is your name?"
+chat.next("Subham").value;    // "Hello Subham"
+```
+
+That two-way channel is exactly how redux-saga works, and how async/await was originally polyfilled.
+
+<Callout variant="work" label="Where you would actually reach for one">
+Paginating an API without holding every page in memory. Streaming a large file line by line. Generating ids. Any time the full list is expensive or infinite, and the consumer may stop early.
+</Callout>
+
+## Typed arrays, briefly
+
+`Uint8Array`, `Float32Array` and friends are fixed-length views over raw binary memory, backed by an `ArrayBuffer`. You meet them when handling file uploads, canvas pixel data, WebSockets with binary frames, or crypto APIs.
+
+You do not need depth here. Recognise them, know they are fixed-size and typed, and know that `Buffer` in Node is a `Uint8Array` subclass.
+
+## Ten questions
+
+<Quiz>
+  <QuizItem number={1} question={<>Which common array methods change the original array?</>}>
+    <p><code>push</code>, <code>pop</code>, <code>shift</code>, <code>unshift</code>, <code>splice</code>, <code>sort</code>, <code>reverse</code> and <code>fill</code>.</p>
+    <p><code>sort</code> and <code>reverse</code> are the dangerous pair, because they look like they return a new array. They return the same array, already reordered. Use <code>toSorted</code> and <code>toReversed</code>, or spread first.</p>
+  </QuizItem>
+
+  <QuizItem number={2} question={<>Why does <code>[10, 9, 1].sort()</code> give <code>[1, 10, 9]</code>?</>}>
+    <p>With no comparator, <code>sort</code> converts every element to a string and sorts alphabetically. As strings, &quot;1&quot; sorts before &quot;10&quot;, which sorts before &quot;9&quot;.</p>
+    <p>Pass <code>(a, b) =&gt; a - b</code> for numbers. And never return a boolean from a comparator — it collapses three possible outcomes into two.</p>
+  </QuizItem>
+
+  <QuizItem number={3} question={<>In your own <code>reduce</code>, how do you handle a missing initial value?</>}>
+    <p>Check <code>arguments.length</code> rather than testing whether the value is <code>undefined</code>, because <code>undefined</code> is a valid initial value.</p>
+    <p>With no initial value, start the accumulator at the first real element and begin iterating from the next one. An empty array with no initial value must throw a TypeError.</p>
+  </QuizItem>
+
+  <QuizItem number={4} question={<>What is wrong with <code>items.reduce((acc, x) =&gt; (&#123; ...acc, [x.id]: x &#125;), &#123;&#125;)</code>?</>}>
+    <p>The spread copies the entire accumulator on every single iteration, making it O(n²) instead of O(n).</p>
+    <p>The accumulator is a local object you created, so mutating it is safe. Assign the key and return the same object.</p>
+  </QuizItem>
+
+  <QuizItem number={5} question={<>When would you choose a <code>Map</code> over a plain object?</>}>
+    <p>When keys are not strings, when entries are added and removed frequently, when you need a reliable <code>size</code>, when strict insertion order matters, or when you want no inherited keys.</p>
+    <p>Objects still win for fixed, string-keyed, JSON-shaped data, because Maps do not survive <code>JSON.stringify</code>.</p>
+  </QuizItem>
+
+  <QuizItem number={6} question={<>What does a <code>WeakMap</code> do that a <code>Map</code> cannot?</>}>
+    <p>It holds its keys weakly, so an entry does not prevent its key object from being garbage collected. When the key is collected, the entry disappears.</p>
+    <p>That is why you cannot iterate a WeakMap or read its size — the contents can change at any moment without you doing anything. It is the right tool for metadata or caches keyed by DOM nodes or instances.</p>
+  </QuizItem>
+
+  <QuizItem number={7} question={<>Why does <code>new Array(5).map((_, i) =&gt; i)</code> not produce <code>[0,1,2,3,4]</code>?</>}>
+    <p><code>new Array(5)</code> creates five holes, not five undefined values. <code>map</code> skips holes and passes them through untouched, so you get five holes back.</p>
+    <p>Use <code>Array.from(&#123; length: 5 &#125;, (_, i) =&gt; i)</code>, which visits every index.</p>
+  </QuizItem>
+
+  <QuizItem number={8} question={<>What is the difference between an array-like and an iterable?</>}>
+    <p>An array-like has a numeric <code>length</code> and index keys but no array methods — the old <code>arguments</code> object is the classic example. An iterable has a <code>Symbol.iterator</code> method and works with <code>for...of</code> and spread, but need not have indexes at all — a <code>Set</code> is one.</p>
+    <p><code>Array.from</code> converts either into a real array; spread only works on iterables.</p>
+  </QuizItem>
+
+  <QuizItem number={9} question={<>What exactly makes an object work with <code>for...of</code>?</>}>
+    <p>A method at the key <code>Symbol.iterator</code> that returns an iterator — an object with a <code>next()</code> method returning <code>&#123; value, done &#125;</code>. The loop calls <code>next</code> repeatedly and stops when <code>done</code> is true.</p>
+    <p>A generator method is the shortest way to provide it, since generators already implement the protocol.</p>
+  </QuizItem>
+
+  <QuizItem number={10} question={<>What can a generator do that a plain function cannot, and where is that useful?</>}>
+    <p>It can pause at a <code>yield</code> and resume later, producing values lazily rather than all at once. It is also two-way: <code>yield</code> evaluates to whatever is passed into the next <code>next()</code> call.</p>
+    <p>Useful for infinite sequences, paginated APIs where you should not hold every page in memory, and any consumer that may stop early. The two-way channel is what redux-saga is built on.</p>
+  </QuizItem>
+</Quiz>
+
+## Six exercises
+
+<ol className="mt-8 list-none space-y-0 p-0">
+  <Exercise number={1} title="Implement map, filter, reduce and forEach">
+    On <code>Array.prototype</code>, matching the spec: coerce <code>length</code>, skip holes, pass value, index and array, support <code>thisArg</code>. Prove <code>myReduce</code> throws on an empty array with no initial value, and works when the initial value is explicitly <code>undefined</code>.
+  </Exercise>
+  <Exercise number={2} title="Write groupBy with reduce, then compare">
+    Group an array of objects by a key selector that can be a string or a function. Then rewrite it using <code>Object.groupBy</code> and say which you would ship and why.
+  </Exercise>
+  <Exercise number={3} title="Sort by several fields">
+    Write <code>sortBy(array, ...comparators)</code> so that <code>sortBy(users, byAge, byName)</code> sorts by age and breaks ties by name. Prove the sort is stable by feeding it equal keys.
+  </Exercise>
+  <Exercise number={4} title="Flatten twice">
+    Write a recursive <code>flatten(array, depth)</code>, then an iterative version using an explicit stack. Test both on an array nested 10,000 levels deep and explain what happens to each.
+  </Exercise>
+  <Exercise number={5} title="Build an LRU cache on Map">
+    Use the fact that a Map keeps insertion order. On a read, delete and re-set the key to move it to the end; on write, evict the first key when over capacity. Both operations must be O(1).
+  </Exercise>
+  <Exercise number={6} title="Lazy sequence tools">
+    Write generators <code>range(start, end, step)</code>, <code>take(iterable, n)</code>, <code>mapIter(iterable, fn)</code> and <code>filterIter(iterable, fn)</code>. Chain them over an infinite sequence and confirm with a counter that only the values you consumed were ever computed.
+  </Exercise>
+</ol>
