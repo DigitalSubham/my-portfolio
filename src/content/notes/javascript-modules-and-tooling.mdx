@@ -1,0 +1,372 @@
+This is the group people skip, and then get caught by. Nobody fails an interview on `map`. Plenty of people stall on "what actually happens when you run `npm install`?" or "why does this package break when you import it?".
+
+It is also the most practical group here. Everything below is something you will debug in a real job.
+
+## CommonJS and ES modules
+
+**In simple words:** two different systems for splitting code into files. CommonJS came from Node and loads files **while the program runs**. ES modules are the standard and are analysed **before anything runs**.
+
+That one difference explains everything else.
+
+```js
+// CommonJS -- Node's original system
+const express = require("express");
+module.exports = { createServer };
+
+// ES modules -- the standard
+import express from "express";
+export { createServer };
+```
+
+<Figure caption="CommonJS resolves imports while executing, so a require can be conditional. ES modules are resolved before execution, which is what makes tree shaking and top-level await possible.">
+  <svg viewBox="0 0 660 216" role="img" aria-label="CommonJS runs the file top to bottom, resolving each require at the moment it is reached. ES modules parse all imports first, build the full graph, then execute." className="w-full">
+    <defs>
+      <marker id="mod-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="currentColor" />
+      </marker>
+      <marker id="mod-h" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="rgb(217 119 6)" />
+      </marker>
+    </defs>
+    <text x="14" y="18" fontSize="10.5" letterSpacing="1.2" fill="currentColor" opacity="0.75">COMMONJS — RESOLVED WHILE RUNNING</text>
+    <rect x="14" y="28" width="632" height="62" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="34" y="52" fontSize="12" fontFamily="ui-monospace, monospace" fill="currentColor">run line 1</text>
+    <text x="170" y="52" fontSize="12" fontFamily="ui-monospace, monospace" fill="rgb(180 83 9)">hit require</text>
+    <text x="310" y="52" fontSize="12" fontFamily="ui-monospace, monospace" fill="currentColor">load + run that file</text>
+    <text x="500" y="52" fontSize="12" fontFamily="ui-monospace, monospace" fill="currentColor">carry on</text>
+    <path d="M120 66 L 162 66" fill="none" stroke="rgb(217 119 6)" strokeWidth="1.4" markerEnd="url(#mod-h)" />
+    <path d="M262 66 L 302 66" fill="none" stroke="rgb(217 119 6)" strokeWidth="1.4" markerEnd="url(#mod-h)" />
+    <path d="M452 66 L 492 66" fill="none" stroke="rgb(217 119 6)" strokeWidth="1.4" markerEnd="url(#mod-h)" />
+    <text x="330" y="80" fontSize="11" fill="currentColor" textAnchor="middle" opacity="0.7">the graph is only known once execution reaches each require</text>
+
+    <text x="14" y="122" fontSize="10.5" letterSpacing="1.2" fill="currentColor" opacity="0.75">ES MODULES — RESOLVED BEFORE RUNNING</text>
+    <rect x="14" y="132" width="632" height="62" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="46" y="156" fontSize="12" fontFamily="ui-monospace, monospace" fill="currentColor">parse all imports</text>
+    <text x="232" y="156" fontSize="12" fontFamily="ui-monospace, monospace" fill="currentColor">build whole graph</text>
+    <text x="420" y="156" fontSize="12" fontFamily="ui-monospace, monospace" fill="currentColor">link</text>
+    <text x="516" y="156" fontSize="12" fontFamily="ui-monospace, monospace" fill="currentColor">then execute</text>
+    <path d="M170 170 L 224 170" fill="none" stroke="currentColor" strokeWidth="1.2" markerEnd="url(#mod-a)" />
+    <path d="M356 170 L 412 170" fill="none" stroke="currentColor" strokeWidth="1.2" markerEnd="url(#mod-a)" />
+    <path d="M446 170 L 508 170" fill="none" stroke="currentColor" strokeWidth="1.2" markerEnd="url(#mod-a)" />
+    <text x="330" y="186" fontSize="11" fill="currentColor" textAnchor="middle" opacity="0.7">the full graph is known before any code runs — this is what enables tree shaking</text>
+  </svg>
+</Figure>
+
+| | CommonJS | ES modules |
+| --- | --- | --- |
+| Resolved | while running | before running |
+| Can be conditional | yes, `require` inside an `if` | no, `import` must be top level |
+| What you get | a **copy** of the value at that moment | a **live binding** to the original |
+| `this` at top level | `module.exports` | `undefined` |
+| Filename helpers | `__dirname`, `__filename` | `import.meta.url` |
+| Top-level await | no | yes |
+| Tree shakeable | no | yes |
+
+**Live bindings** is the difference people cannot explain. With ESM, the importer sees updates to an exported variable. With CommonJS it got a copy and never sees the change.
+
+```js
+// counter.mjs
+export let count = 0;
+export function increment() { count++; }
+
+// main.mjs
+import { count, increment } from "./counter.mjs";
+console.log(count);   // 0
+increment();
+console.log(count);   // 1  -- live binding, updated
+
+// the same thing in CommonJS would still print 0
+```
+
+### Circular dependencies
+
+Both handle cycles, badly, in different ways.
+
+- **CommonJS** gives you a **partially filled** `module.exports` — whatever had been assigned before the cycle closed. You get `undefined` for anything not yet set, with no error.
+- **ESM** hoists function declarations, so functions usually work, but a `const` accessed too early throws a ReferenceError from the temporal dead zone.
+
+The ESM failure is louder, which is better. Either way the real fix is to break the cycle — usually by extracting the shared piece into a third module.
+
+<Callout variant="careful">
+Mixing the two is where real projects break. You can <code>import</code> a CommonJS package from ESM, but named exports may not be detected — you often get the default and have to destructure. You cannot <code>require</code> an ESM package at all; you need dynamic <code>import()</code>, which is async. This is the whole reason so many packages ship both formats.
+</Callout>
+
+## Dynamic import and top-level await
+
+**In simple words:** `import()` as a function loads a module on demand and returns a promise. This is how code splitting works.
+
+```js
+// only downloads the chart library when the user actually opens the chart
+button.addEventListener("click", async () => {
+  const { renderChart } = await import("./heavy-chart.js");
+  renderChart(data);
+});
+
+// conditional loading, which a static import cannot do
+const locale = navigator.language.startsWith("hi") ? "hi" : "en";
+const messages = await import(`./locales/${locale}.js`);
+```
+
+`React.lazy` is a thin wrapper over exactly this.
+
+**Top-level await** lets a module await before it finishes loading. Anything importing it waits.
+
+```js
+// config.mjs
+const response = await fetch("/config.json");
+export const config = await response.json();
+```
+
+Useful, but it blocks every importer. Do not put a slow call at the top level of a widely imported module.
+
+## npm, lockfiles, and the ecosystem
+
+**In simple words:** `package.json` says what you want. `package-lock.json` records exactly what you got. Without the lock, two machines can install different code from the same file.
+
+| Field | Meaning |
+| --- | --- |
+| `dependencies` | needed at runtime, shipped to production |
+| `devDependencies` | only needed to build and test |
+| `peerDependencies` | "you must provide this yourself" — how plugins avoid duplicate React |
+| `optionalDependencies` | install failure is not fatal — platform-specific binaries |
+
+### install versus ci
+
+```bash
+npm install     # may update the lockfile, resolves ranges again
+npm ci          # installs exactly the lockfile, deletes node_modules first, fails if
+                # package.json and the lock disagree
+```
+
+**Use `npm ci` in CI and Docker builds, always.** It is faster and it guarantees the same tree every time. `npm install` in a pipeline can silently pull a new patch version and change your build.
+
+### The three package managers
+
+- **npm** — bundled with Node, nested-then-flattened `node_modules`
+- **yarn** — arrived first with lockfiles and workspaces; Yarn 2+ can skip `node_modules` entirely with Plug'n'Play
+- **pnpm** — one global content-addressed store, hard-linked into each project. Much less disk, much faster, and **strict**: a package you did not declare is not importable
+
+That strictness is pnpm's real selling point. With npm's flat `node_modules`, you can accidentally import a transitive dependency and it works — until it is removed upstream and your build breaks for no visible reason.
+
+<Callout variant="work" label="Commit your lockfile">
+Always commit the lockfile for an application. It is the difference between &quot;works on my machine&quot; and a reproducible build.
+
+For a published <strong>library</strong> the convention is different — consumers resolve their own versions, so the lockfile only governs your own development.
+</Callout>
+
+## Semver
+
+**In simple words:** `MAJOR.MINOR.PATCH`. Major means breaking, minor means new features that do not break, patch means fixes.
+
+| Range | Means | Example: from `1.2.3` |
+| --- | --- | --- |
+| `^1.2.3` | patch and minor updates | up to but not including `2.0.0` |
+| `~1.2.3` | patch updates only | up to but not including `1.3.0` |
+| `1.2.3` | exactly this | only `1.2.3` |
+| `>=1.2.3 <2` | explicit range | |
+| `*` | anything | never do this |
+
+`^` is npm's default and is the right choice most of the time. The catch: it trusts every maintainer to follow semver correctly, and plenty do not. That is exactly what the lockfile protects you from.
+
+<Callout variant="careful">
+Below <code>1.0.0</code> the rules change. For <code>^0.2.3</code>, npm only allows patch updates — because in 0.x, the minor number is treated as breaking. A dependency sitting on 0.x is telling you its API is not stable yet.
+</Callout>
+
+## Bundlers
+
+**In simple words:** a bundler follows your imports, produces a dependency graph, and outputs files a browser can load efficiently.
+
+| | What it is | Where it fits |
+| --- | --- | --- |
+| **Webpack** | the mature, configurable one | large legacy apps, unusual requirements |
+| **Vite** | dev server on native ESM, Rollup for production | the default for new projects |
+| **Rollup** | library-focused, cleanest output | publishing packages |
+| **esbuild** | written in Go, extremely fast | powers other tools' transform step |
+| **Turbopack / Rspack** | Rust rewrites of the Webpack idea | large apps wanting Webpack semantics, faster |
+
+**Why Vite feels instant in development:** it does not bundle. Your browser requests modules over native ESM, and Vite transforms each file on demand. Adding files barely changes startup time. For production it *does* bundle with Rollup, because hundreds of separate requests would be slow over a network.
+
+## Tree shaking
+
+**In simple words:** removing code you imported but never used. It only works because ESM imports are statically analysable.
+
+```js
+import { formatDate } from "./utils.js";   // shakeable -- only this is kept
+const { formatDate } = require("./utils"); // not shakeable -- dynamic
+```
+
+Three things break it:
+
+1. **CommonJS.** The bundler cannot know what is used.
+2. **Side effects.** If importing a file *does something* — registers a polyfill, mutates a global — the bundler must keep it.
+3. **Barrel files.** A big `index.js` re-exporting everything can pull in far more than you asked for.
+
+Declare that your package is side-effect free so bundlers can be aggressive:
+
+```json
+{
+  "sideEffects": false,
+  "sideEffects": ["*.css", "./src/polyfills.js"]
+}
+```
+
+### The exports field
+
+Modern packages declare their entry points explicitly:
+
+```json
+{
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./dist/styles.css"
+  }
+}
+```
+
+`exports` also **seals** the package: anything not listed cannot be imported. That is why deep imports like `some-lib/dist/internal/thing` suddenly stop working after an upgrade.
+
+## Babel, transpiling and polyfilling
+
+**In simple words:** two different problems that people conflate.
+
+- **Transpiling** rewrites new **syntax** into older syntax. Arrow functions become `function`. Optional chaining becomes an `if`.
+- **Polyfilling** adds missing **functions** at runtime. `Array.prototype.flat` or `Promise` are added if absent.
+
+Syntax cannot be polyfilled — old parsers throw on it before any code runs. Functions cannot be transpiled — there is nothing to rewrite, the method simply does not exist.
+
+```json
+// .browserslistrc drives both. Tools read it and only include what is needed.
+{
+  "browserslist": ["> 0.5%", "last 2 versions", "not dead"]
+}
+```
+
+With `@babel/preset-env` and `useBuiltIns: "usage"`, Babel inspects your code and injects only the polyfills your targets actually lack. Widening your browser support list makes the bundle bigger — that is the trade.
+
+## Source maps
+
+**In simple words:** a file mapping your minified output back to the original source, so a stack trace points at real line numbers.
+
+```
+//# sourceMappingURL=app.js.map
+```
+
+| Setting | Trade-off |
+| --- | --- |
+| `eval-cheap-module-source-map` | fast rebuilds, good enough for development |
+| `source-map` | full accuracy, slow — production |
+| `hidden-source-map` | generated, but not referenced in the bundle |
+| none | fastest, unreadable stack traces |
+
+For production, the usual approach is to generate full source maps and **upload them to your error tracker** (Sentry, Bugsnag) rather than serve them publicly — you get readable traces without publishing your source.
+
+## Monorepos
+
+**In simple words:** several packages in one repository, sharing dependencies and tooling.
+
+```json
+{ "workspaces": ["packages/*", "apps/*"] }
+```
+
+Workspaces symlink local packages into each other's `node_modules`, so `apps/web` can `import { Button } from "@acme/ui"` and get your local source with no publishing step.
+
+**Turborepo** and **Nx** add the part that matters at scale: a task graph with caching. Change one package and only its dependents rebuild; unchanged results come from cache, locally or shared with the team.
+
+You do not need deep knowledge here. Know what a workspace is, why symlinking beats copying, and that the caching layer is what makes a large monorepo bearable.
+
+## Publishing a package
+
+If asked how you would ship a library:
+
+1. Build both formats — ESM for bundlers, CommonJS for older Node
+2. Emit type declarations with `tsc --emitDeclarationOnly`
+3. Wire up `exports`, `main`, `module` and `types`
+4. Set `"sideEffects": false` if true
+5. Restrict what ships with the `files` field
+6. `npm publish --access public`
+
+The single most common mistake is shipping only ESM. Any consumer still on CommonJS then cannot `require` your package at all.
+
+## Ten questions
+
+<Quiz>
+  <QuizItem number={1} question={<>What is the fundamental difference between CommonJS and ES modules?</>}>
+    <p>CommonJS resolves imports while the program runs, so a <code>require</code> can be conditional or inside a function. ES modules are parsed and linked before any code executes.</p>
+    <p>Everything else follows from that: ESM enables tree shaking and top-level await, gives live bindings instead of copies, and requires imports to be at the top level.</p>
+  </QuizItem>
+
+  <QuizItem number={2} question={<>What is a live binding, and how does it differ from what CommonJS gives you?</>}>
+    <p>With ESM, an import is a live reference to the exported variable. If the exporting module reassigns it, the importer sees the new value.</p>
+    <p>CommonJS copies the value at the moment of require, so a later reassignment in the exporting module is invisible to the importer.</p>
+  </QuizItem>
+
+  <QuizItem number={3} question={<>What is the difference between <code>npm install</code> and <code>npm ci</code>, and which belongs in CI?</>}>
+    <p><code>npm install</code> re-resolves version ranges and may update the lockfile. <code>npm ci</code> deletes <code>node_modules</code>, installs exactly what the lockfile says, and fails if the lockfile and <code>package.json</code> disagree.</p>
+    <p>Always <code>npm ci</code> in CI and Docker — it is faster and guarantees the same dependency tree every run.</p>
+  </QuizItem>
+
+  <QuizItem number={4} question={<>What does <code>^1.2.3</code> allow, and how does it change below version 1.0.0?</>}>
+    <p>It allows any patch and minor update below the next major, so anything from 1.2.3 up to but excluding 2.0.0.</p>
+    <p>Below 1.0.0 the rule tightens: <code>^0.2.3</code> only allows patch updates, because in 0.x the minor number is treated as potentially breaking.</p>
+  </QuizItem>
+
+  <QuizItem number={5} question={<>Why are peerDependencies used, and what problem do they solve?</>}>
+    <p>They say &quot;the host application must provide this&quot; rather than installing a private copy. A React plugin declares React as a peer so that only one copy of React exists.</p>
+    <p>Without it you can end up with two React instances, which breaks hooks and context in ways that are very hard to diagnose.</p>
+  </QuizItem>
+
+  <QuizItem number={6} question={<>Why is Vite so much faster than Webpack in development?</>}>
+    <p>It does not bundle for development. It serves your source over native ES modules and transforms each file on demand as the browser requests it, so startup barely grows with project size.</p>
+    <p>For production it does bundle, using Rollup, because hundreds of separate network requests would be slower than a few optimised files.</p>
+  </QuizItem>
+
+  <QuizItem number={7} question={<>What three things stop tree shaking from working?</>}>
+    <p>Using CommonJS, because the bundler cannot statically determine what is used. Side effects at import time, which force the bundler to keep the module. And barrel files that re-export everything, pulling in far more than you imported.</p>
+    <p>The <code>sideEffects</code> field in <code>package.json</code> is how you tell bundlers it is safe to be aggressive.</p>
+  </QuizItem>
+
+  <QuizItem number={8} question={<>What is the difference between transpiling and polyfilling?</>}>
+    <p>Transpiling rewrites new syntax into older syntax — optional chaining becomes a conditional. Polyfilling adds missing runtime functions, like <code>Array.prototype.flat</code>.</p>
+    <p>They are not interchangeable: syntax cannot be polyfilled because old parsers fail before execution, and a missing method cannot be transpiled because there is nothing to rewrite.</p>
+  </QuizItem>
+
+  <QuizItem number={9} question={<>Should production source maps be served publicly?</>}>
+    <p>Usually not. Generate full source maps, upload them to your error tracker, and either do not deploy them or use hidden source maps so the bundle does not reference them.</p>
+    <p>You get readable stack traces in your monitoring without publishing your source code to anyone who opens devtools.</p>
+  </QuizItem>
+
+  <QuizItem number={10} question={<>You upgrade a package and a deep import like <code>lib/dist/internal/x</code> breaks. Why?</>}>
+    <p>The package added an <code>exports</code> field. As well as declaring entry points, <code>exports</code> seals the package — any path not listed becomes unimportable, even though the file is still physically there.</p>
+    <p>The fix is to use a documented entry point, or ask the maintainer to export the path you need.</p>
+  </QuizItem>
+</Quiz>
+
+## Six exercises
+
+<ol className="mt-8 list-none space-y-0 p-0">
+  <Exercise number={1} title="Prove live bindings exist">
+    Write two ESM files where one exports a mutable counter and a function that increments it. Import both and show the value changes for the importer. Then write the CommonJS equivalent and show it does not.
+  </Exercise>
+  <Exercise number={2} title="Break a circular dependency">
+    Create a genuine cycle in CommonJS and observe the partially filled exports. Recreate it in ESM and observe the temporal dead zone error instead. Then fix it by extracting the shared piece into a third module.
+  </Exercise>
+  <Exercise number={3} title="Read your own lockfile">
+    Pick a dependency in a real project and trace it through <code>package-lock.json</code>: which version resolved, why that one, and which packages depend on it. Then run <code>npm ls</code> for the same package and compare.
+  </Exercise>
+  <Exercise number={4} title="Measure code splitting">
+    Take any page that imports a heavy library. Build and note the bundle size. Convert the import to a dynamic <code>import()</code> behind a user action, rebuild, and record the difference in the initial bundle.
+  </Exercise>
+  <Exercise number={5} title="Publish a dual-format package">
+    Build a tiny utility to both ESM and CommonJS with type declarations, wire up the <code>exports</code> field, and verify with <code>npm pack</code> that only the files you intended are included. Test both <code>import</code> and <code>require</code>.
+  </Exercise>
+  <Exercise number={6} title="See browserslist change the output">
+    In a project using preset-env, build once targeting modern browsers only, then again including an old target. Diff the output size and find one specific transform or polyfill that the wider target added.
+  </Exercise>
+</ol>

@@ -1,0 +1,515 @@
+The topics that separate someone who writes JavaScript from someone who debugs it. Memory leaks, deep clone, deep equal, event delegation, and the output-prediction puzzles that open screening rounds.
+
+## Garbage collection
+
+**In simple words:** JavaScript frees memory for you, but only for values nothing can reach any more. Understanding "reachable" is the whole topic.
+
+The engine starts from a set of **roots** — the global object, the current call stack, and anything they hold. It follows every reference outward. Whatever it reaches is kept. Everything else is swept away. This is called **mark and sweep**.
+
+<Figure caption="Reachability, not reference counting, decides what survives. The two objects on the right reference each other but nothing reaches them, so both are collected.">
+  <svg viewBox="0 0 660 220" role="img" aria-label="From the roots, marking reaches objects A and B, which are kept. Objects C and D reference each other but are not reachable from any root, so both are collected." className="w-full">
+    <defs>
+      <marker id="gc-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="currentColor" />
+      </marker>
+      <marker id="gc-h" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="rgb(217 119 6)" />
+      </marker>
+    </defs>
+    <rect x="14" y="70" width="112" height="52" rx="6" fill="rgb(16 185 129 / 0.12)" stroke="rgb(4 120 87)" strokeWidth="1.3" />
+    <text x="70" y="93" fontSize="11" letterSpacing="1.2" fill="currentColor" textAnchor="middle" opacity="0.75">ROOTS</text>
+    <text x="70" y="111" fontSize="11.5" fill="currentColor" textAnchor="middle">globals, stack</text>
+
+    <rect x="186" y="34" width="104" height="46" rx="6" fill="rgb(16 185 129 / 0.12)" stroke="rgb(4 120 87)" strokeWidth="1.3" />
+    <text x="238" y="62" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">A</text>
+    <rect x="186" y="112" width="104" height="46" rx="6" fill="rgb(16 185 129 / 0.12)" stroke="rgb(4 120 87)" strokeWidth="1.3" />
+    <text x="238" y="140" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">B</text>
+    <path d="M130 88 L 180 62" fill="none" stroke="currentColor" strokeWidth="1.2" markerEnd="url(#gc-a)" />
+    <path d="M130 104 L 180 132" fill="none" stroke="currentColor" strokeWidth="1.2" markerEnd="url(#gc-a)" />
+    <text x="238" y="180" fontSize="11.5" fill="rgb(4 120 87)" textAnchor="middle">reachable — kept</text>
+
+    <rect x="420" y="34" width="104" height="46" rx="6" fill="rgb(251 191 36 / 0.14)" stroke="rgb(217 119 6)" strokeWidth="1.3" strokeDasharray="5 4" />
+    <text x="472" y="62" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">C</text>
+    <rect x="420" y="112" width="104" height="46" rx="6" fill="rgb(251 191 36 / 0.14)" stroke="rgb(217 119 6)" strokeWidth="1.3" strokeDasharray="5 4" />
+    <text x="472" y="140" fontSize="12.5" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">D</text>
+    <path d="M446 82 L 446 108" fill="none" stroke="rgb(217 119 6)" strokeWidth="1.4" markerEnd="url(#gc-h)" />
+    <path d="M498 108 L 498 82" fill="none" stroke="rgb(217 119 6)" strokeWidth="1.4" markerEnd="url(#gc-h)" />
+    <text x="472" y="180" fontSize="11.5" fill="rgb(180 83 9)" textAnchor="middle">unreachable — collected</text>
+    <text x="472" y="200" fontSize="11" fill="currentColor" textAnchor="middle" opacity="0.7">even though they point at each other</text>
+
+    <text x="14" y="30" fontSize="10.5" letterSpacing="1.2" fill="currentColor" opacity="0.75">MARK FROM THE ROOTS, THEN SWEEP THE REST</text>
+  </svg>
+</Figure>
+
+This is why **circular references are not a leak in JavaScript**. Two objects pointing at each other are collected together as long as no root reaches either. Old reference-counting systems could not do that.
+
+Modern engines add **generational** collection: most objects die young, so V8 keeps a small "young" space it scans often and cheaply, and promotes survivors to an "old" space it scans rarely.
+
+<Callout variant="interview">
+"V8 uses mark and sweep with a generational split. It marks everything reachable from the roots — globals and the call stack — and sweeps the rest. Because it is reachability-based rather than reference-counted, circular references are collected fine. A leak in JavaScript is therefore never 'forgot to free' — it is always 'something is still holding a reference I did not expect'."
+</Callout>
+
+## The four real memory leaks
+
+**In simple words:** a leak in JavaScript means something still points at data you thought was gone. There are four common causes.
+
+### 1. Accidental globals
+
+```js
+function process() {
+  results = [];        // no declaration -- becomes a global, never collected
+}
+```
+Strict mode turns this into an error. This is one of the main reasons strict mode exists.
+
+### 2. Forgotten timers
+
+```js
+// Leaks: the interval holds `hugeData` for the life of the page
+const hugeData = await loadEverything();
+setInterval(() => sync(hugeData), 1000);
+
+// Fixed
+const id = setInterval(() => sync(hugeData), 1000);
+// ...later
+clearInterval(id);
+```
+
+### 3. Detached DOM nodes
+
+```js
+const cache = {};
+
+function show(id) {
+  const element = document.getElementById(id);
+  cache[id] = element;                   // holds the node
+  element.remove();                      // removed from the page...
+  // ...but cache still points at it, so the node AND its whole subtree stay in memory
+}
+```
+
+The node is gone from the page but not from memory. A `WeakMap` fixes this — when the node becomes otherwise unreachable, the entry goes with it.
+
+### 4. Listeners that outlive their element
+
+```js
+function attach(element, data) {
+  const handler = () => use(data);       // closure holds `data`
+  element.addEventListener("click", handler);
+  return () => element.removeEventListener("click", handler);  // return the cleanup
+}
+```
+
+Note the pattern: **keep the exact function reference**, because `removeEventListener` matches by identity. A fresh arrow function or a new `bind` call never matches.
+
+<Callout variant="work" label="How to actually find one">
+Open Chrome devtools, Memory tab. Take a heap snapshot, use the app for a while, take a second snapshot, then choose &quot;Comparison&quot; to see what grew. Sort by delta.
+
+For detached nodes specifically, filter the snapshot for &quot;Detached&quot; — Chrome labels them. The retainers panel then shows you exactly what is still pointing at them, which is the answer.
+</Callout>
+
+## Deep clone
+
+**In simple words:** a copy where nothing is shared with the original, at any depth.
+
+```js
+// The modern answer, and the right one most of the time
+const copy = structuredClone(original);
+```
+
+It handles nested objects, arrays, `Date`, `Map`, `Set`, `RegExp`, typed arrays and **circular references**. It throws on functions, DOM nodes and symbols.
+
+Interviewers still want it by hand:
+
+```js
+function deepClone(value, seen = new WeakMap()) {
+  // primitives and functions are returned as-is
+  if (value === null || typeof value !== "object") return value;
+
+  // a circular reference we have already cloned
+  if (seen.has(value)) return seen.get(value);
+
+  if (value instanceof Date) return new Date(value.getTime());
+  if (value instanceof RegExp) return new RegExp(value.source, value.flags);
+
+  if (value instanceof Map) {
+    const out = new Map();
+    seen.set(value, out);                       // register BEFORE recursing
+    value.forEach((v, k) => out.set(deepClone(k, seen), deepClone(v, seen)));
+    return out;
+  }
+
+  if (value instanceof Set) {
+    const out = new Set();
+    seen.set(value, out);
+    value.forEach((v) => out.add(deepClone(v, seen)));
+    return out;
+  }
+
+  const out = Array.isArray(value) ? [] : Object.create(Object.getPrototypeOf(value));
+  seen.set(value, out);
+
+  for (const key of Reflect.ownKeys(value)) {   // includes symbol keys
+    out[key] = deepClone(value[key], seen);
+  }
+
+  return out;
+}
+```
+
+The two details that matter: **register the clone in the `WeakMap` before recursing** — otherwise a cycle recurses forever — and **use `Reflect.ownKeys`** so symbol-keyed properties survive.
+
+## Deep equal
+
+**In simple words:** are these two values the same all the way down? Harder than it looks, because of `NaN`, `-0`, Dates, Maps and cycles.
+
+```js
+function deepEqual(a, b, seen = new WeakMap()) {
+  // Object.is handles NaN === NaN as true and +0 === -0 as false
+  if (Object.is(a, b)) return true;
+
+  if (a === null || b === null) return false;
+  if (typeof a !== "object" || typeof b !== "object") return false;
+  if (Object.getPrototypeOf(a) !== Object.getPrototypeOf(b)) return false;
+
+  // already comparing this pair further up the stack -- assume equal
+  if (seen.get(a) === b) return true;
+  seen.set(a, b);
+
+  if (a instanceof Date) return a.getTime() === b.getTime();
+  if (a instanceof RegExp) return a.source === b.source && a.flags === b.flags;
+
+  if (a instanceof Map) {
+    if (a.size !== b.size) return false;
+    for (const [key, value] of a) {
+      if (!b.has(key) || !deepEqual(value, b.get(key), seen)) return false;
+    }
+    return true;
+  }
+
+  if (a instanceof Set) {
+    if (a.size !== b.size) return false;
+    for (const value of a) if (!b.has(value)) return false;
+    return true;
+  }
+
+  const keysA = Reflect.ownKeys(a);
+  const keysB = Reflect.ownKeys(b);
+  if (keysA.length !== keysB.length) return false;
+
+  return keysA.every(
+    (key) =>
+      Object.prototype.hasOwnProperty.call(b, key) && deepEqual(a[key], b[key], seen)
+  );
+}
+```
+
+<Callout variant="careful">
+Do not use <code>JSON.stringify(a) === JSON.stringify(b)</code>. It depends on key order, so two genuinely equal objects can compare as different. It also silently drops <code>undefined</code> and functions, turns Dates into strings, flattens Maps and Sets into empty objects, and throws on cycles.
+</Callout>
+
+## Events: bubbling, capturing and delegation
+
+**In simple words:** a click on a button does not just fire on the button. The event travels down from the root to the target, then back up again.
+
+<Figure caption="Capture travels down to the target, then bubble travels back up. A listener runs on whichever phase it registered for.">
+  <svg viewBox="0 0 660 208" role="img" aria-label="An event captures downward from document through body and div to the button, then bubbles back up through div, body and document." className="w-full">
+    <defs>
+      <marker id="ev-d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="currentColor" />
+      </marker>
+      <marker id="ev-u" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="rgb(217 119 6)" />
+      </marker>
+    </defs>
+    <text x="150" y="20" fontSize="10.5" letterSpacing="1.2" fill="currentColor" opacity="0.75">1. CAPTURE — DOWN</text>
+    <text x="470" y="20" fontSize="10.5" letterSpacing="1.2" fill="rgb(180 83 9)">3. BUBBLE — UP</text>
+    <rect x="150" y="32" width="360" height="152" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="166" y="50" fontSize="12" fontFamily="ui-monospace, monospace" fill="currentColor">document</text>
+    <rect x="184" y="60" width="292" height="112" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="200" y="78" fontSize="12" fontFamily="ui-monospace, monospace" fill="currentColor">body</text>
+    <rect x="218" y="88" width="224" height="72" rx="6" fill="none" stroke="currentColor" strokeWidth="1.2" />
+    <text x="234" y="106" fontSize="12" fontFamily="ui-monospace, monospace" fill="currentColor">ul</text>
+    <rect x="252" y="116" width="156" height="34" rx="6" fill="rgb(251 191 36 / 0.14)" stroke="rgb(217 119 6)" strokeWidth="1.3" />
+    <text x="330" y="138" fontSize="12" fontFamily="ui-monospace, monospace" fill="currentColor" textAnchor="middle">button — 2. TARGET</text>
+    <path d="M136 44 L 136 130 L 246 130" fill="none" stroke="currentColor" strokeWidth="1.3" markerEnd="url(#ev-d)" />
+    <path d="M414 130 L 524 130 L 524 44" fill="none" stroke="rgb(217 119 6)" strokeWidth="1.4" markerEnd="url(#ev-u)" />
+    <text x="330" y="200" fontSize="11.5" fill="currentColor" textAnchor="middle" opacity="0.8">addEventListener(type, fn) listens on bubble. Pass true or capture: true for the way down.</text>
+  </svg>
+</Figure>
+
+```js
+// Bubble phase (default) -- runs on the way back up
+element.addEventListener("click", handler);
+
+// Capture phase -- runs on the way down, before the target
+element.addEventListener("click", handler, { capture: true });
+
+// Runs once, then removes itself
+element.addEventListener("click", handler, { once: true });
+
+// Promises the browser you will not call preventDefault -- improves scroll performance
+element.addEventListener("touchstart", handler, { passive: true });
+```
+
+### The three stop methods
+
+| Method | What it does |
+| --- | --- |
+| `preventDefault()` | cancels the browser's default action (following a link, submitting a form). Does **not** stop propagation. |
+| `stopPropagation()` | stops the event travelling further up or down. Other listeners **on the same element** still run. |
+| `stopImmediatePropagation()` | stops propagation **and** skips remaining listeners on the same element. |
+
+### Delegation
+
+**In simple words:** instead of a listener on every item, put one on the parent and work out which child was clicked. Because events bubble, the parent sees them all.
+
+```js
+// One listener for the whole list, however many items -- including future ones
+list.addEventListener("click", (event) => {
+  const item = event.target.closest("[data-id]");
+  if (!item || !list.contains(item)) return;
+
+  handleClick(item.dataset.id);
+});
+```
+
+Three reasons this is the right default: it uses one listener instead of a thousand, it works for elements added later, and there is nothing to clean up when items are removed.
+
+<Callout variant="careful">
+`event.target` is what was actually clicked — possibly an icon inside the button. `event.currentTarget` is the element the listener is attached to. Delegation needs `target` plus `closest()`, because a click can land on a nested child.
+</Callout>
+
+## Output-prediction puzzles
+
+**In simple words:** these combine hoisting, closures, `this` and the event loop into one trap. Screening rounds love them. Work through each slowly.
+
+```js
+// 1
+var x = 1;
+function f() {
+  console.log(x);
+  var x = 2;
+}
+f();
+// undefined -- the inner `var x` is hoisted and shadows the outer one
+```
+
+```js
+// 2
+const obj = {
+  name: "outer",
+  regular() { return this.name; },
+  arrow: () => this?.name,
+};
+obj.regular();   // "outer"
+obj.arrow();     // undefined -- arrow took `this` from the module scope
+```
+
+```js
+// 3
+console.log("start");
+setTimeout(() => console.log("timeout"), 0);
+Promise.resolve().then(() => console.log("promise"));
+console.log("end");
+// start, end, promise, timeout
+```
+
+```js
+// 4
+for (var i = 0; i < 3; i++) setTimeout(() => console.log(i));
+// 3 3 3 -- one shared `i`, read after the loop finished
+```
+
+```js
+// 5
+console.log([1, 2, 3] + [4, 5]);
+// "1,2,34,5" -- + on two objects converts both to strings first
+```
+
+```js
+// 6
+const a = { x: 1 };
+const b = { x: 1 };
+console.log(a == b, JSON.stringify(a) === JSON.stringify(b));
+// false true -- == compares addresses, stringify compares text
+```
+
+```js
+// 7
+async function f() { return 1; }
+f().then(console.log);
+console.log(2);
+// 2 then 1 -- an async function always returns a promise, so `then` is a microtask
+```
+
+**How to answer these in a room:** say the rule before the answer. "This is hoisting, so the inner `var` shadows — undefined." Interviewers are grading the reasoning; a correct answer with no explanation scores lower than a slightly wrong one with the right rule named.
+
+## Regex
+
+**In simple words:** you do not need to be fluent. You need to read one, know the common pieces, and know the traps.
+
+| Piece | Meaning |
+| --- | --- |
+| `\d` `\w` `\s` | digit, word character, whitespace (capitals negate) |
+| `+` `*` `?` | one or more, zero or more, zero or one |
+| `{2,5}` | between 2 and 5 |
+| `^` `$` | start, end of string (or line with `m`) |
+| `[abc]` `[^abc]` | any of, none of |
+| `(...)` | capture group |
+| `(?:...)` | group without capturing |
+| `(?<name>...)` | named capture |
+| `(?=...)` `(?!...)` | lookahead: followed by, not followed by |
+| `(?<=...)` `(?<!...)` | lookbehind |
+| `\|` | or |
+
+Flags: `g` all matches, `i` ignore case, `m` multiline, `s` dot matches newlines, `u` unicode.
+
+```js
+// Greedy vs lazy -- the most common regex bug
+"<a><b>".match(/<.+>/)[0];    // "<a><b>"  -- greedy, takes as much as possible
+"<a><b>".match(/<.+?>/)[0];   // "<a>"     -- lazy, takes as little as possible
+
+// Named groups make results readable
+const m = "2026-09-01".match(/(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/);
+m.groups.year;    // "2026"
+
+// All matches with their positions
+[..."a1b2".matchAll(/([a-z])(\d)/g)].map((m) => m[1] + m[2]);
+```
+
+<Callout variant="careful">
+A regex with <code>g</code> keeps state in <code>lastIndex</code> between calls. Reusing one across <code>test()</code> calls gives alternating true and false on the same input. Either create it fresh, reset <code>lastIndex</code>, or drop the <code>g</code> flag when you only need a yes or no.
+
+Also beware catastrophic backtracking: nested quantifiers like <code>(a+)+b</code> can hang the thread on a crafted input. That is a real denial-of-service vector, known as ReDoS.
+</Callout>
+
+## Dates and time zones
+
+**In simple words:** the built-in `Date` is genuinely bad, and the mistakes it causes are subtle enough to reach production.
+
+```js
+new Date("2026-09-01");            // parsed as UTC midnight
+new Date("2026-09-01T00:00:00");   // parsed as LOCAL midnight -- different instant
+
+new Date(2026, 8, 1);              // September -- months are zero-based
+date.getMonth();                   // 0 to 11, forever a source of off-by-one bugs
+```
+
+**The rules that keep you out of trouble:**
+
+1. **Store UTC.** In Postgres that is `timestamptz`, and send ISO 8601 strings over the wire.
+2. **Convert at the edges.** Convert to the user's zone only when displaying, and back to UTC on input.
+3. **A date is not an instant.** A birthday is a calendar date with no time zone. A meeting start is an instant. Storing a birthday as a timestamp shifts it a day for some users.
+4. **Never do date maths with milliseconds.** Adding 24 hours across a daylight-saving boundary gives the wrong local time.
+
+```js
+// Formatting for a user, correctly, with no library
+new Intl.DateTimeFormat("en-IN", {
+  dateStyle: "medium",
+  timeStyle: "short",
+  timeZone: "Asia/Kolkata",
+}).format(date);
+```
+
+Libraries: **date-fns** for tree-shakeable functions, **Day.js** when you want a small Moment-like API, **Luxon** when time zones are central. Moment is in maintenance mode — do not start new work with it.
+
+**Temporal** is the coming replacement for `Date`, with separate types for instants, calendar dates, times and durations, and immutability throughout. Not everywhere yet, but worth naming — it shows you know why `Date` is a problem.
+
+## Intl
+
+**In simple words:** the browser already knows how to format numbers, currency and dates for every locale. Most projects reinvent it badly.
+
+```js
+new Intl.NumberFormat("en-IN", {
+  style: "currency", currency: "INR",
+}).format(1234567.891);              // "₹12,34,567.89"  -- lakh grouping, correct
+
+new Intl.NumberFormat("en", {
+  notation: "compact",
+}).format(1234567);                  // "1.2M"
+
+new Intl.RelativeTimeFormat("en", { numeric: "auto" }).format(-1, "day");  // "yesterday"
+
+new Intl.ListFormat("en", { type: "conjunction" }).format(["a", "b", "c"]); // "a, b, and c"
+
+["z", "ä", "a"].sort(new Intl.Collator("de").compare);   // correct German order
+```
+
+The Indian grouping example is the one to remember. `toLocaleString` with a naive implementation gives `1,234,567`; the correct Indian format is `12,34,567`. `Intl` gets it right for free.
+
+## Ten questions
+
+<Quiz>
+  <QuizItem number={1} question={<>How does JavaScript decide what to garbage collect, and why are circular references not a leak?</>}>
+    <p>It marks everything reachable from the roots — globals and the call stack — and sweeps the rest. Reachability, not reference counting, decides.</p>
+    <p>Two objects referencing each other are unreachable if nothing else points at them, so both are collected. Reference counting could not handle that; mark and sweep can.</p>
+  </QuizItem>
+
+  <QuizItem number={2} question={<>Name the four common memory leaks in a browser app.</>}>
+    <p>Accidental globals from undeclared assignment. Timers that are never cleared. Detached DOM nodes still referenced by a cache or closure. Event listeners never removed.</p>
+    <p>All four are the same thing underneath: something still holds a reference you forgot about.</p>
+  </QuizItem>
+
+  <QuizItem number={3} question={<>Why does <code>removeEventListener</code> sometimes fail to remove anything?</>}>
+    <p>It matches by function identity. Passing a fresh arrow function, or calling <code>.bind()</code> again, creates a different function object that never matches the one added.</p>
+    <p>Store the handler reference once and use that same reference for both add and remove.</p>
+  </QuizItem>
+
+  <QuizItem number={4} question={<>In a hand-written deep clone, why register the copy in the WeakMap before recursing?</>}>
+    <p>Because of circular references. If an object contains itself, recursing before registering means you clone it again, and again, until the stack overflows.</p>
+    <p>Registering first means the recursion finds the in-progress clone and returns it, which correctly reproduces the cycle.</p>
+  </QuizItem>
+
+  <QuizItem number={5} question={<>Why use <code>Object.is</code> rather than <code>===</code> at the start of a deep equal?</>}>
+    <p><code>Object.is</code> treats <code>NaN</code> as equal to itself, which <code>===</code> does not, and treats <code>+0</code> and <code>-0</code> as different, which <code>===</code> does not.</p>
+    <p>Both are cases a correct deep equal should handle, and both are what an interviewer is checking for.</p>
+  </QuizItem>
+
+  <QuizItem number={6} question={<>What is the difference between <code>preventDefault</code>, <code>stopPropagation</code> and <code>stopImmediatePropagation</code>?</>}>
+    <p><code>preventDefault</code> cancels the browser's default action but the event keeps travelling. <code>stopPropagation</code> stops the travel but other listeners on the same element still run. <code>stopImmediatePropagation</code> stops the travel and skips the remaining listeners on that element too.</p>
+  </QuizItem>
+
+  <QuizItem number={7} question={<>What is event delegation and why prefer it?</>}>
+    <p>Attaching one listener to a parent and using <code>event.target.closest()</code> to find which child was involved, relying on bubbling.</p>
+    <p>One listener instead of many, it automatically covers elements added later, and there is nothing to clean up when children are removed.</p>
+  </QuizItem>
+
+  <QuizItem number={8} question={<>What does this print, and why? <code>var x = 1; function f() &#123; console.log(x); var x = 2; &#125;</code></>}>
+    <p><code>undefined</code>. The inner <code>var x</code> is hoisted to the top of the function, so inside <code>f</code> the name <code>x</code> refers to the local variable, which is still uninitialised at that point.</p>
+    <p>The outer <code>x</code> is completely shadowed — it is never consulted.</p>
+  </QuizItem>
+
+  <QuizItem number={9} question={<>Why can reusing a regex with the <code>g</code> flag give alternating results?</>}>
+    <p>A global regex keeps a <code>lastIndex</code> between calls. The next <code>test</code> starts from there, misses, resets to zero, and matches again on the call after — so you get true, false, true, false on identical input.</p>
+    <p>Create the regex fresh each time, reset <code>lastIndex</code>, or drop <code>g</code> when you only need a boolean.</p>
+  </QuizItem>
+
+  <QuizItem number={10} question={<>How should dates and time zones be handled in a full stack app?</>}>
+    <p>Store UTC in the database — <code>timestamptz</code> in Postgres — and transmit ISO 8601. Convert to the user's zone only for display, and back to UTC on input.</p>
+    <p>Distinguish a calendar date, like a birthday, from an instant, like a meeting start; storing a birthday as a timestamp shifts it a day for some users. And never add 24 hours in milliseconds to mean &quot;tomorrow&quot;, because daylight saving breaks it.</p>
+  </QuizItem>
+</Quiz>
+
+## Six exercises
+
+<ol className="mt-8 list-none space-y-0 p-0">
+  <Exercise number={1} title="Create and then find a leak">
+    Build a page that adds DOM nodes to a plain object cache and removes them from the page. Take two heap snapshots in Chrome and find the detached nodes. Then switch the cache to a WeakMap and prove the nodes are collected.
+  </Exercise>
+  <Exercise number={2} title="deepClone with cycles">
+    Handle nested objects, arrays, Date, Map, Set, RegExp and symbol keys, and survive an object that contains itself. Compare your output with <code>structuredClone</code> on the same input and explain any difference.
+  </Exercise>
+  <Exercise number={3} title="deepEqual that passes the nasty cases">
+    Make it correct for <code>NaN</code>, <code>+0</code> versus <code>-0</code>, Dates, Maps, Sets, different prototypes, different key counts and circular references. Write a test for each case before writing the function.
+  </Exercise>
+  <Exercise number={4} title="Delegated list">
+    Render 1,000 rows with a delete button in each. Implement it with 1,000 listeners, then with one delegated listener. Measure the listener count and memory in devtools, and confirm the delegated version works for rows added afterwards.
+  </Exercise>
+  <Exercise number={5} title="Do the seven puzzles cold">
+    Write your predicted output for all seven above without running them. Then run them. For every one you got wrong, write down which rule you missed rather than just the right answer.
+  </Exercise>
+  <Exercise number={6} title="Format without a library">
+    Using only <code>Intl</code>, display a rupee amount with correct lakh grouping, a compact number, a relative time like &quot;3 days ago&quot;, and a date in Asia/Kolkata. Then show what the same amount looks like formatted for <code>en-US</code>.
+  </Exercise>
+</ol>

@@ -1,0 +1,664 @@
+Sixteen topics, ten of them core. Every product company now expects TypeScript, and the questions go well past "what is an interface". They want to know whether you understand what the type system is actually doing.
+
+The good news: you already write it. This note fills the gaps between using TypeScript and being able to explain it.
+
+## Why TypeScript, and structural typing
+
+**In simple words:** TypeScript checks your code before it runs and then disappears. There is no TypeScript at runtime — it all compiles to plain JavaScript with the types stripped out.
+
+The consequence people forget: **types cannot validate data from outside your program.** An API response typed as `User` is a promise you made to the compiler, not a check. If the server sends something else, nothing complains until it crashes.
+
+```ts
+// This is a lie the compiler happily believes
+const user: User = await fetch("/api/user").then((r) => r.json());
+```
+
+For anything crossing a boundary — an API, a form, a config file, a database row — validate at runtime with Zod or similar, and derive the type from the validator so the two can never drift apart.
+
+### Structural typing
+
+**In simple words:** TypeScript compares the **shape** of types, not their names. If it has the right properties, it fits.
+
+```ts
+type Point = { x: number; y: number };
+type Coordinate = { x: number; y: number };
+
+const p: Point = { x: 1, y: 2 };
+const c: Coordinate = p;          // fine -- identical shape, different name
+
+// A shape with extra properties is still assignable
+const labelled = { x: 1, y: 2, label: "origin" };
+const q: Point = labelled;        // fine
+```
+
+Java and C# use **nominal** typing, where the name must match. TypeScript is structural because JavaScript is structural — objects are just bags of properties.
+
+<Callout variant="careful">
+Object literals are the exception. Assigning a literal directly triggers **excess property checking**, so <code>const p: Point = &#123; x: 1, y: 2, label: &quot;a&quot; &#125;</code> errors, while assigning the same object through a variable does not. It is a deliberate safety net for typos, not a hole in the rules.
+</Callout>
+
+When you genuinely need nominal typing — so a `UserId` cannot be passed where an `OrderId` is expected — use a branded type:
+
+```ts
+type UserId = string & { readonly __brand: "UserId" };
+
+const toUserId = (id: string) => id as UserId;
+
+function getUser(id: UserId) { }
+getUser("123");            // Error
+getUser(toUserId("123"));  // fine
+```
+
+## any, unknown, never and void
+
+**In simple words:** four types people mix up, and the difference between `any` and `unknown` is asked constantly.
+
+| Type | Means | Can you use it directly? |
+| --- | --- | --- |
+| `any` | turn checking off | yes — and that is the problem |
+| `unknown` | could be anything, prove it first | no, you must narrow |
+| `never` | this can never happen | nothing is assignable to it |
+| `void` | the return value is not meaningful | you may return undefined |
+
+```ts
+let a: any = getData();
+a.foo.bar.baz();          // compiles. Crashes at runtime. No warning.
+
+let u: unknown = getData();
+u.foo;                    // Error: 'u' is of type 'unknown'
+
+if (typeof u === "object" && u !== null && "foo" in u) {
+  u.foo;                  // now allowed -- you proved it
+}
+```
+
+**`unknown` is the safe `any`.** Use it for anything you have not validated: `JSON.parse` results, request bodies, caught errors. It forces you to check before use, which is exactly what you should be doing anyway.
+
+```ts
+try {
+  risky();
+} catch (error) {         // typed `unknown` under modern settings
+  if (error instanceof Error) console.error(error.message);
+  else console.error(String(error));
+}
+```
+
+`never` shows up in three places: a function that never returns, an impossible type like `string & number`, and — most usefully — exhaustiveness checking.
+
+<Callout variant="interview">
+"`any` switches the type checker off for that value, so every operation on it is allowed and any mistake surfaces at runtime. `unknown` is the safe equivalent — it accepts anything but permits nothing until you narrow it. I use `unknown` for API responses, `JSON.parse` output and caught errors, and I treat any use of `any` as a to-do."
+</Callout>
+
+## Interfaces and type aliases
+
+**In simple words:** for describing an object they are almost interchangeable. The differences are real but narrow.
+
+| | `interface` | `type` |
+| --- | --- | --- |
+| Object shapes | yes | yes |
+| Unions | no | **yes** |
+| Primitives, tuples, mapped, conditional | no | **yes** |
+| Declaration merging | **yes** | no |
+| `extends` | yes | via `&` intersection |
+| Error messages | often clearer | can expand into a wall of text |
+
+```ts
+// Only `type` can do these
+type Status = "idle" | "loading" | "done";
+type Pair = [string, number];
+type Keys = keyof User;
+
+// Only `interface` can do this -- reopening to add members
+interface Window { myAnalytics: Analytics; }   // augments the global Window
+```
+
+**Declaration merging** is the one genuinely unique interface feature, and it is how you extend types you do not own — `Window`, `Express.Request`, a library's options object.
+
+The practical rule most teams settle on: **`interface` for public object shapes that may be extended, `type` for everything else.** Being consistent matters more than which you pick.
+
+## Unions, intersections and discriminated unions
+
+**In simple words:** a union is "one of these". An intersection is "all of these at once". A discriminated union is the pattern that makes unions actually usable.
+
+```ts
+type Status = "idle" | "loading" | "error";       // union of literals
+type Admin = User & { permissions: string[] };    // intersection
+```
+
+A **discriminated union** gives every member a shared literal field, so TypeScript can tell them apart:
+
+```ts
+type Result =
+  | { status: "loading" }
+  | { status: "success"; data: User[] }
+  | { status: "error"; message: string };
+
+function render(result: Result) {
+  switch (result.status) {
+    case "loading":
+      return spinner();
+    case "success":
+      return list(result.data);       // `data` is known to exist here
+    case "error":
+      return alert(result.message);   // and `message` only here
+  }
+}
+```
+
+This single pattern removes a whole class of bug. Compare it to the version everyone writes first:
+
+```ts
+// The bad version -- every field optional, every combination "possible"
+type Result = {
+  loading?: boolean;
+  data?: User[];
+  error?: string;
+};
+// Now `loading: true, error: "x", data: [...]` typechecks. It should not.
+```
+
+<Callout variant="work" label="Where you would use this today">
+Any React component with loading, error and success states. Any reducer action. Any API response that can succeed or fail. If you are reaching for optional fields plus a boolean flag, you probably want a discriminated union instead.
+</Callout>
+
+## Generics
+
+**In simple words:** a type you fill in later. It lets a function work with many types while keeping the connection between what goes in and what comes out.
+
+```ts
+// Without generics you lose the type
+function firstAny(items: any[]): any { return items[0]; }
+const a = firstAny(["x"]);       // any -- no help
+
+// With generics the relationship survives
+function first<T>(items: T[]): T | undefined { return items[0]; }
+const b = first(["x"]);          // string | undefined
+```
+
+### Constraints
+
+`extends` in a generic means "T must at least be this":
+
+```ts
+function longest<T extends { length: number }>(a: T, b: T): T {
+  return a.length >= b.length ? a : b;
+}
+
+longest("hello", "hi");        // works -- strings have length
+longest([1, 2], [3]);          // works -- arrays have length
+longest(1, 2);                 // Error -- numbers do not
+```
+
+The pattern you will use most, tying a key to its value type:
+
+```ts
+function pluck<T, K extends keyof T>(items: T[], key: K): T[K][] {
+  return items.map((item) => item[key]);
+}
+
+const users = [{ name: "Subham", age: 26 }];
+pluck(users, "name");   // string[]
+pluck(users, "age");    // number[]
+pluck(users, "email");  // Error -- "email" is not a key of the item type
+```
+
+Generics also take defaults, and can be used on interfaces and classes:
+
+```ts
+interface ApiResponse<T = unknown> {
+  data: T;
+  status: number;
+}
+
+class Cache<K, V> {
+  private store = new Map<K, V>();
+  get(key: K): V | undefined { return this.store.get(key); }
+}
+```
+
+## Utility types
+
+**In simple words:** built-in transformations over existing types. Learn these ten and you will rarely write a type by hand twice.
+
+```ts
+type User = { id: number; name: string; email: string; age?: number };
+
+Partial<User>            // every property optional
+Required<User>           // every property required
+Readonly<User>           // every property readonly
+Pick<User, "id" | "name">     // only those two
+Omit<User, "email">           // everything except email
+Record<string, User>          // { [key: string]: User }
+
+Exclude<"a" | "b" | "c", "a">      // "b" | "c"
+Extract<"a" | "b", "a" | "z">      // "a"
+NonNullable<string | null>         // string
+
+ReturnType<typeof getUser>         // whatever getUser returns
+Parameters<typeof getUser>         // its parameters as a tuple
+Awaited<Promise<User>>             // User -- unwraps nested promises too
+```
+
+Real combinations you will actually write:
+
+```ts
+// A form that starts empty and fills in
+type UserForm = Partial<Omit<User, "id">>;
+
+// A create payload -- no id yet, it comes from the database
+type CreateUser = Omit<User, "id">;
+
+// An update -- id required, everything else optional
+type UpdateUser = Pick<User, "id"> & Partial<Omit<User, "id">>;
+
+// The unwrapped type an async function resolves to
+type LoadedUser = Awaited<ReturnType<typeof fetchUser>>;
+```
+
+<Callout variant="careful">
+<code>Omit</code> does not check that the key exists. <code>Omit&lt;User, "emial"&gt;</code> silently returns the whole type, typo and all. <code>Pick</code> does check. If a refactor should have broken something and did not, a loose <code>Omit</code> is often why.
+</Callout>
+
+## Narrowing, type guards and predicates
+
+**In simple words:** TypeScript watches your control flow. Once you have checked something, it remembers inside that branch.
+
+```ts
+function handle(value: string | number | null) {
+  if (value === null) return;         // value: string | number below
+  if (typeof value === "string") {
+    value.toUpperCase();              // string
+  } else {
+    value.toFixed(2);                 // number
+  }
+}
+```
+
+Every way of narrowing:
+
+```ts
+typeof value === "string"        // primitives
+value instanceof Date            // classes
+"name" in value                  // property presence
+Array.isArray(value)             // arrays
+value.kind === "circle"          // discriminated union
+value !== null                   // truthiness and equality
+```
+
+### Custom type guards
+
+When the check is too complex for TypeScript to follow, write a function that returns a **type predicate**:
+
+```ts
+function isUser(value: unknown): value is User {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "id" in value &&
+    typeof (value as User).id === "number"
+  );
+}
+
+const data: unknown = await response.json();
+if (isUser(data)) {
+  data.name;      // narrowed to User
+}
+```
+
+`value is User` is the important part. Without it the function returns a plain boolean and TypeScript learns nothing.
+
+### Assertion functions
+
+```ts
+function assertDefined<T>(value: T | null | undefined, message: string): asserts value is T {
+  if (value == null) throw new Error(message);
+}
+
+const user = users.find((u) => u.id === id);
+assertDefined(user, "User not found");
+user.name;      // narrowed for the rest of the scope, no if needed
+```
+
+<Callout variant="careful">
+A type guard is a <strong>promise</strong>, not a check. If your <code>isUser</code> is wrong, TypeScript believes it anyway. This is why schema validators like Zod are better at real boundaries — they check the whole shape and derive the type from the same definition, so the two cannot disagree.
+</Callout>
+
+## Exhaustiveness with never
+
+**In simple words:** make the compiler fail when someone adds a new case and forgets to handle it. One of the highest-value patterns in the language.
+
+```ts
+type Shape =
+  | { kind: "circle"; radius: number }
+  | { kind: "square"; size: number };
+
+function area(shape: Shape): number {
+  switch (shape.kind) {
+    case "circle": return Math.PI * shape.radius ** 2;
+    case "square": return shape.size ** 2;
+    default: {
+      // If every case is handled, `shape` is `never` here and this compiles.
+      // Add a new kind to Shape and this line becomes a compile error.
+      const exhaustive: never = shape;
+      throw new Error(`Unhandled shape: ${exhaustive}`);
+    }
+  }
+}
+```
+
+Add `{ kind: "triangle"; base: number; height: number }` to `Shape` and the build breaks with a clear message, pointing straight at the switch. Without this, a triangle silently falls through to the default at runtime.
+
+## Typing React
+
+```tsx
+// Props -- a plain type, and children when needed
+type ButtonProps = {
+  label: string;
+  variant?: "primary" | "ghost";
+  onClick: () => void;
+  children?: React.ReactNode;
+};
+
+// Extending native element props -- very common and worth knowing
+type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+  label: string;
+  error?: string;
+};
+
+// Events
+const onChange = (e: React.ChangeEvent<HTMLInputElement>) => e.target.value;
+const onSubmit = (e: React.FormEvent<HTMLFormElement>) => e.preventDefault();
+
+// State -- inferred when there is an initial value, explicit when there is not
+const [count, setCount] = useState(0);              // number
+const [user, setUser] = useState<User | null>(null); // must be explicit
+
+// Refs
+const inputRef = useRef<HTMLInputElement>(null);
+const timerRef = useRef<number | undefined>(undefined);
+
+// A generic component
+function List<T>({ items, render }: { items: T[]; render: (item: T) => React.ReactNode }) {
+  return <ul>{items.map((item, i) => <li key={i}>{render(item)}</li>)}</ul>;
+}
+
+// A reducer with a discriminated union of actions
+type Action =
+  | { type: "increment"; by: number }
+  | { type: "reset" };
+
+function reducer(state: number, action: Action): number {
+  switch (action.type) {
+    case "increment": return state + action.by;
+    case "reset": return 0;
+  }
+}
+```
+
+<Callout variant="careful">
+Avoid <code>React.FC</code>. It adds an implicit <code>children</code> prop even for components that take none, and it makes generic components awkward. Type the props object directly and let the return type be inferred.
+</Callout>
+
+## Typing Express
+
+The question that comes up most: **how do you add `req.user` in a type-safe way?**
+
+```ts
+// types/express.d.ts -- declaration merging into the Express namespace
+import type { User } from "../models/user";
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User;
+    }
+  }
+}
+export {};
+```
+
+Now `req.user` exists everywhere, typed, with no casting.
+
+```ts
+import type { Request, Response, NextFunction, RequestHandler } from "express";
+
+// Generic parameters: params, response body, request body, query
+const createUser = async (
+  req: Request<{ orgId: string }, UserResponse, CreateUserBody>,
+  res: Response<UserResponse>,
+  next: NextFunction
+) => {
+  req.params.orgId;    // string
+  req.body.email;      // typed from CreateUserBody
+  res.json(result);    // must match UserResponse
+};
+
+// Typed error handler -- four parameters, error typed as unknown
+const errorHandler = (err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+  const status = err instanceof HttpError ? err.status : 500;
+  res.status(status).json({ message: "Something went wrong" });
+};
+```
+
+<Callout variant="work" label="Validate, then trust">
+Typing <code>req.body</code> does not check it. Parse with Zod in a middleware and infer the type from the schema — then the type and the runtime check can never drift.
+
+<code>const schema = z.object(&#123; email: z.string().email() &#125;)</code> and <code>type Body = z.infer&lt;typeof schema&gt;</code>. One source of truth.
+</Callout>
+
+## keyof, typeof, indexed access and as const
+
+**In simple words:** four small operators that let you derive types from things that already exist, instead of writing them twice.
+
+```ts
+type User = { id: number; name: string; address: { city: string } };
+
+type Keys = keyof User;              // "id" | "name" | "address"
+type Name = User["name"];            // string -- indexed access
+type City = User["address"]["city"]; // string -- nested
+
+const config = { retries: 3, url: "/api" };
+type Config = typeof config;         // { retries: number; url: string }
+
+// as const freezes literals into their narrowest types
+const ROLES = ["admin", "editor", "viewer"] as const;
+type Role = (typeof ROLES)[number];  // "admin" | "editor" | "viewer"
+```
+
+That last pattern is the one to remember: **one array, used both as runtime data and as a union type**, with no chance of them diverging.
+
+```ts
+// Without as const you would write the same list twice and hope they stay in sync
+const ROLES = ["admin", "editor", "viewer"];   // string[]
+type Role = "admin" | "editor" | "viewer";     // duplicated by hand
+```
+
+## Enums versus const objects
+
+**In simple words:** TypeScript enums are one of the few features that emit real JavaScript, and most teams now avoid them.
+
+```ts
+enum Status { Active = "active", Inactive = "inactive" }
+```
+
+The objections: numeric enums are not type-safe (any number is assignable), they generate extra runtime code, they do not tree shake well, they are nominal in a structural language, and `const enum` breaks with isolated modules.
+
+The modern replacement:
+
+```ts
+const Status = {
+  Active: "active",
+  Inactive: "inactive",
+} as const;
+
+type Status = (typeof Status)[keyof typeof Status];   // "active" | "inactive"
+
+// Or simply, when you do not need the runtime object:
+type Status = "active" | "inactive";
+```
+
+<Callout variant="interview">
+"Enums emit runtime code, numeric ones are not fully type safe because any number is assignable, and they behave nominally in a structurally typed language. I use a union of string literals, or a `const` object with `as const` when I also need to iterate the values at runtime."
+</Callout>
+
+## tsconfig, the settings that matter
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "paths": { "@/*": ["./src/*"] }
+  }
+}
+```
+
+- **`strict`** turns on the whole family, most importantly `strictNullChecks`. Without it, `null` is assignable to every type and TypeScript catches almost nothing worth catching.
+- **`noUncheckedIndexedAccess`** makes `array[0]` return `T | undefined`. Noisy, but it catches real bugs — index access genuinely can be undefined.
+- **`skipLibCheck`** skips checking `.d.ts` files in dependencies. Large speed win, essentially no downside.
+- **`paths`** gives you `@/components/Button` instead of `../../../components/Button`.
+
+If a codebase has `strict: false`, that is the first thing to fix. Turn it on, see the error count, and fix them file by file with a per-file `// @ts-nocheck` as a temporary bridge.
+
+## Conditional and mapped types
+
+**In simple words:** types that compute other types. Senior territory — recognise them and know roughly what they do.
+
+```ts
+// Conditional -- a ternary for types
+type IsString<T> = T extends string ? true : false;
+
+// infer extracts a type from a position
+type ElementOf<T> = T extends (infer U)[] ? U : never;
+type A = ElementOf<string[]>;        // string
+
+type Unwrap<T> = T extends Promise<infer U> ? U : T;
+type B = Unwrap<Promise<number>>;    // number
+```
+
+```ts
+// Mapped -- transform every key
+type Optional<T> = { [K in keyof T]?: T[K] };
+type Nullable<T> = { [K in keyof T]: T[K] | null };
+type Mutable<T> = { -readonly [K in keyof T]: T[K] };   // minus removes a modifier
+
+// Template literal types -- build strings at the type level
+type EventName<T extends string> = `on${Capitalize<T>}`;
+type Handlers<T> = { [K in keyof T & string as EventName<K>]: (value: T[K]) => void };
+
+type UserHandlers = Handlers<{ name: string; age: number }>;
+// { onName: (value: string) => void; onAge: (value: number) => void }
+```
+
+You will rarely write these. You will read them constantly in library types, and being able to say what `infer` does is a strong signal.
+
+## Declaration merging and .d.ts files
+
+Already used above for `Express.Request`. The same technique covers anything you do not own:
+
+```ts
+// Extending the global Window
+declare global {
+  interface Window {
+    dataLayer: unknown[];
+  }
+}
+
+// Telling TypeScript about a non-code import
+declare module "*.svg" {
+  const content: React.FC<React.SVGProps<SVGSVGElement>>;
+  export default content;
+}
+
+// Describing an untyped package
+declare module "legacy-lib" {
+  export function doThing(input: string): number;
+}
+```
+
+`export {}` at the end of a `.d.ts` file matters: without at least one import or export, the file is treated as a script and its `declare global` block does nothing.
+
+## Ten questions
+
+<Quiz>
+  <QuizItem number={1} question={<>What is the difference between <code>any</code> and <code>unknown</code>?</>}>
+    <p><code>any</code> disables type checking for that value — every operation is permitted and mistakes surface at runtime. <code>unknown</code> accepts any value but permits nothing until you narrow it.</p>
+    <p>Use <code>unknown</code> for API responses, <code>JSON.parse</code> output and caught errors. It forces the check you should be doing anyway.</p>
+  </QuizItem>
+
+  <QuizItem number={2} question={<>What does structural typing mean, and how does it differ from Java or C#?</>}>
+    <p>TypeScript compares the shape of types, not their names. Two differently named types with identical properties are interchangeable.</p>
+    <p>Java and C# are nominal — the declared name must match. TypeScript is structural because JavaScript objects are just collections of properties. For nominal behaviour you add a brand.</p>
+  </QuizItem>
+
+  <QuizItem number={3} question={<>When must you use a <code>type</code> rather than an <code>interface</code>, and vice versa?</>}>
+    <p>Only <code>type</code> can express unions, tuples, primitives, mapped types and conditional types. Only <code>interface</code> supports declaration merging, which is how you extend types you do not own such as <code>Window</code> or <code>Express.Request</code>.</p>
+    <p>For plain object shapes either works; consistency matters more than the choice.</p>
+  </QuizItem>
+
+  <QuizItem number={4} question={<>Model an API call that can be loading, successful or failed. Why not use optional fields?</>}>
+    <p>Use a discriminated union with a shared literal field, so each state carries exactly the data it needs and TypeScript narrows on a switch.</p>
+    <p>Optional fields make impossible states representable — loading true and an error and data all at once typechecks, even though it can never happen. The union makes those states unrepresentable.</p>
+  </QuizItem>
+
+  <QuizItem number={5} question={<>What does <code>K extends keyof T</code> achieve in a generic?</>}>
+    <p>It constrains the key parameter to be an actual key of the object type, so a typo is a compile error rather than an <code>undefined</code> at runtime.</p>
+    <p>Combined with an indexed access return type like <code>T[K]</code>, the return type follows the key you passed — <code>pluck(users, &quot;age&quot;)</code> gives <code>number[]</code>.</p>
+  </QuizItem>
+
+  <QuizItem number={6} question={<>How do you make the compiler fail when a new union member is added?</>}>
+    <p>Handle every case in a switch, then in the default branch assign the value to a variable typed <code>never</code>. If all cases are covered the value is <code>never</code> and it compiles; add a new member and the assignment becomes an error.</p>
+    <p>This turns a silent runtime fallthrough into a build failure that points at exactly the code needing an update.</p>
+  </QuizItem>
+
+  <QuizItem number={7} question={<>What is a type predicate, and what is its limitation?</>}>
+    <p>A function returning <code>value is Type</code>, which tells the compiler to narrow the argument in the true branch. Without the predicate the function returns a plain boolean and nothing is narrowed.</p>
+    <p>The limitation is that it is a promise, not a check. If the implementation is wrong, TypeScript believes it anyway — which is why schema validation is better at real boundaries.</p>
+  </QuizItem>
+
+  <QuizItem number={8} question={<>How do you add a typed <code>req.user</code> to Express?</>}>
+    <p>Declaration merging. In a <code>.d.ts</code> file, declare a global <code>Express</code> namespace and add a <code>user</code> property to the <code>Request</code> interface. Include an <code>export &#123;&#125;</code> so the file is treated as a module.</p>
+    <p><code>req.user</code> is then typed everywhere with no casting.</p>
+  </QuizItem>
+
+  <QuizItem number={9} question={<>Why do most teams avoid TypeScript enums now?</>}>
+    <p>They emit runtime code rather than disappearing at compile time, numeric enums are not fully type safe because any number is assignable, they tree shake poorly, and they behave nominally in a structural language.</p>
+    <p>A union of string literals, or a <code>const</code> object with <code>as const</code> when you also need to iterate values at runtime, covers the same ground with no runtime cost.</p>
+  </QuizItem>
+
+  <QuizItem number={10} question={<>Does typing an API response as <code>User</code> guarantee it is a User?</>}>
+    <p>No. Types are erased at compile time — there is no TypeScript at runtime. Annotating a <code>fetch</code> result is an assertion you made, not a check the compiler performs.</p>
+    <p>At any boundary — API, form, config, database — validate at runtime with something like Zod and infer the type from the schema, so the type and the check share one definition.</p>
+  </QuizItem>
+</Quiz>
+
+## Seven exercises
+
+<ol className="mt-8 list-none space-y-0 p-0">
+  <Exercise number={1} title="Replace every any in a real file">
+    Take a file from your own project and remove every <code>any</code>. Use <code>unknown</code> plus narrowing where the shape is genuinely unknown. Note which ones were hiding an actual bug.
+  </Exercise>
+  <Exercise number={2} title="Model a fetch with a discriminated union">
+    Write the loading, success and error states as a union, then a render function using a switch. Add a fourth state and confirm the compiler tells you every place that needs updating.
+  </Exercise>
+  <Exercise number={3} title="Write a typed get(object, path)">
+    Start with <code>get&lt;T, K extends keyof T&gt;(obj: T, key: K): T[K]</code>. Then attempt a two-level version where the second key is constrained to the keys of the first value.
+  </Exercise>
+  <Exercise number={4} title="Rebuild the utility types">
+    Implement <code>MyPartial</code>, <code>MyPick</code>, <code>MyOmit</code>, <code>MyReadonly</code> and <code>MyNonNullable</code> from scratch using mapped and conditional types. <code>Omit</code> is the interesting one — work out why it needs <code>Exclude</code>.
+  </Exercise>
+  <Exercise number={5} title="Add a typed req.user to an Express app">
+    Do it with declaration merging in a <code>.d.ts</code> file. Then write an auth middleware that sets it and a route that reads it, both with no casts anywhere.
+  </Exercise>
+  <Exercise number={6} title="One list, two uses">
+    Define your roles once as a <code>const</code> array with <code>as const</code>, derive the union type from it, and use the array to render a dropdown and the type to constrain a function parameter. Add a role and confirm both update.
+  </Exercise>
+  <Exercise number={7} title="Turn on strict">
+    Enable <code>strict</code> and <code>noUncheckedIndexedAccess</code> on a real project and count the errors. Fix ten of them properly. For each, write down whether it was a genuine bug or only noise.
+  </Exercise>
+</ol>
