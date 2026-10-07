@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { AlertCircle, ArrowLeft, LayoutDashboard, LogIn } from "lucide-react";
+import { AlertCircle, ArrowLeft, CheckCircle2, LayoutDashboard, LogIn } from "lucide-react";
 import { loginAction } from "../actions";
 
 type Props = {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; reset?: string }>;
 };
 
 export default async function AdminLoginPage({ searchParams }: Props) {
@@ -28,6 +28,13 @@ export default async function AdminLoginPage({ searchParams }: Props) {
           <p className="mt-2 text-[14px] leading-6 text-[var(--adm-muted)]">
             Sign in to manage portfolio content, SEO fields, and contact messages.
           </p>
+
+          {params.reset && (
+            <p className="adm-alert adm-alert-ok mt-5">
+              <CheckCircle2 className="h-4 w-4 shrink-0" />
+              Password reset. Sign in with your new password.
+            </p>
+          )}
 
           {params.error && (
             <p className="adm-alert mt-5">
@@ -56,6 +63,12 @@ export default async function AdminLoginPage({ searchParams }: Props) {
               Sign in
             </button>
           </form>
+          <Link
+            href="/admin/forgot-password"
+            className="mt-4 block text-center text-[13px] font-semibold text-[var(--adm-muted)] transition-colors hover:text-[var(--adm-text)]"
+          >
+            Forgot password?
+          </Link>
         </div>
       </div>
     </div>

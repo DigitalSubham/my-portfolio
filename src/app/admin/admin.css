@@ -591,6 +591,12 @@
   color: var(--adm-danger);
 }
 
+.adm-alert-ok {
+  border-color: transparent;
+  background: var(--adm-ok-soft);
+  color: var(--adm-ok);
+}
+
 .adm-spin { animation: adm-spin 0.7s linear infinite; }
 @keyframes adm-spin { to { transform: rotate(360deg); } }
 
