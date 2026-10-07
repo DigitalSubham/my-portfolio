@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { scryptSync, timingSafeEqual } from "node:crypto";
+import { createHash, randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 import { getSql, hasDatabase } from "./db";
 
 export const authCookieName = "portfolio_admin_token";
@@ -107,6 +107,26 @@ export async function authenticateAdmin(email: string, password: string) {
   );
   if (!isValid) return null;
   return { id: String(admin.id), email: String(admin.email) };
+}
+
+function sameSecret(a: string, b: string): boolean {
+  const hashA = createHash("sha256").update(a).digest();
+  const hashB = createHash("sha256").update(b).digest();
+  return timingSafeEqual(hashA, hashB);
+}
+
+export async function resetAdminPassword(email: string, recoveryKey: string, newPassword: string) {
+  const expectedKey = process.env.ADMIN_RECOVERY_KEY;
+  if (!hasDatabase || !expectedKey || !sameSecret(recoveryKey, expectedKey)) return false;
+  const salt = randomBytes(16).toString("hex");
+  const sql = getSql();
+  const rows = (await sql`
+    UPDATE admins
+    SET password_hash = ${hashPassword(newPassword, salt)}, password_salt = ${salt}
+    WHERE email = ${email.toLowerCase()}
+    RETURNING id
+  `) as Record<string, unknown>[];
+  return rows.length > 0;
 }
 
 export async function getCurrentAdmin() {

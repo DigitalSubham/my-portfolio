@@ -40,7 +40,11 @@ async function verifyJwt(token: string) {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  if (!pathname.startsWith("/admin") || pathname === "/admin/login") {
+  if (
+    !pathname.startsWith("/admin") ||
+    pathname === "/admin/login" ||
+    pathname === "/admin/forgot-password"
+  ) {
     return NextResponse.next();
   }
 

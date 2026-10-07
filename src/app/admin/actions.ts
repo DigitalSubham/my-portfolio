@@ -3,7 +3,13 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { authCookieName, authenticateAdmin, requireAdmin, signJwt } from "@/lib/auth";
+import {
+  authCookieName,
+  authenticateAdmin,
+  requireAdmin,
+  resetAdminPassword,
+  signJwt,
+} from "@/lib/auth";
 import { getAdminTable, type AdminField } from "@/lib/admin-config";
 import { getSql, hasDatabase } from "@/lib/db";
 
@@ -51,6 +57,20 @@ export async function loginAction(formData: FormData) {
     maxAge: 60 * 60 * 24 * 7,
   });
   redirect("/admin");
+}
+
+export async function resetPasswordAction(formData: FormData) {
+  const email = String(formData.get("email") || "").trim();
+  const recoveryKey = String(formData.get("recoveryKey") || "").trim();
+  const password = String(formData.get("password") || "");
+  const confirm = String(formData.get("confirm") || "");
+
+  if (password.length < 8) redirect("/admin/forgot-password?error=short");
+  if (password !== confirm) redirect("/admin/forgot-password?error=mismatch");
+  if (!(await resetAdminPassword(email, recoveryKey, password))) {
+    redirect("/admin/forgot-password?error=invalid");
+  }
+  redirect("/admin/login?reset=1");
 }
 
 export async function logoutAction() {
