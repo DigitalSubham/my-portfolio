@@ -17,6 +17,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import AdminShell from "./_components/AdminShell";
+import LinkPending from "./_components/LinkPending";
 import { adminSections } from "@/lib/admin-config";
 import { getAdminStats } from "@/lib/admin-data";
 import { requireAdmin } from "@/lib/auth";
@@ -65,6 +66,7 @@ export default async function AdminDashboardPage() {
             </span>
             <p className="adm-stat-value">{value}</p>
             <p className="adm-stat-label">{label}</p>
+            <LinkPending />
           </Link>
         ))}
       </div>
@@ -88,6 +90,7 @@ export default async function AdminDashboardPage() {
                 </span>
               </span>
               <ArrowUpRight className="adm-tile-arrow h-4 w-4" />
+              <LinkPending />
             </Link>
           );
         })}

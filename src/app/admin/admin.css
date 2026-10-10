@@ -598,6 +598,44 @@
 }
 
 .adm-spin { animation: adm-spin 0.7s linear infinite; }
+
+/* ---------- loaders ---------- */
+/* A busy button shows only the spinner, not its own icon. */
+.adm-btn[aria-busy="true"] > svg:not(.adm-spin),
+.adm-icon-btn[aria-busy="true"] > svg:not(.adm-spin) { display: none; }
+.adm-icon-btn .adm-spin { height: 17px; width: 17px; }
+.adm-icon-btn:disabled { cursor: progress; opacity: 0.7; }
+
+/* Page-navigation bar. Lives on <body>, outside .adm, so it uses literal colors.
+   The short delay keeps it from flashing on navigations that finish instantly. */
+.adm-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  height: 3px;
+  overflow: hidden;
+  pointer-events: none;
+  background: rgba(99, 102, 241, 0.18);
+  opacity: 0;
+  animation: adm-fade-in 0.15s ease-out 0.12s forwards;
+}
+.adm-progress::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 40%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6366f1, #a5b4fc);
+  animation: adm-progress-slide 1.1s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes adm-fade-in { to { opacity: 1; } }
+@keyframes adm-progress-slide {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(250%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .adm-progress::after { animation: none; width: 100%; opacity: 0.6; }
+}
 @keyframes adm-spin { to { transform: rotate(360deg); } }
 
 .adm ::-webkit-scrollbar { width: 10px; height: 10px; }

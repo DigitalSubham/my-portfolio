@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { SubmitButton } from "../_components/FormButtons";
+import LinkPending from "../_components/LinkPending";
 import { AlertCircle, ArrowLeft, CheckCircle2, LayoutDashboard, LogIn } from "lucide-react";
 import { loginAction } from "../actions";
 
@@ -18,6 +20,7 @@ export default async function AdminLoginPage({ searchParams }: Props) {
         >
           <ArrowLeft className="h-4 w-4" />
           Back to portfolio
+          <LinkPending />
         </Link>
 
         <div className="adm-card p-7">
@@ -58,16 +61,17 @@ export default async function AdminLoginPage({ searchParams }: Props) {
                 className="adm-input"
               />
             </label>
-            <button className="adm-btn adm-btn-primary mt-1 w-full">
+            <SubmitButton className="adm-btn adm-btn-primary mt-1 w-full">
               <LogIn />
               Sign in
-            </button>
+            </SubmitButton>
           </form>
           <Link
             href="/admin/forgot-password"
             className="mt-4 block text-center text-[13px] font-semibold text-[var(--adm-muted)] transition-colors hover:text-[var(--adm-text)]"
           >
             Forgot password?
+            <LinkPending />
           </Link>
         </div>
       </div>
