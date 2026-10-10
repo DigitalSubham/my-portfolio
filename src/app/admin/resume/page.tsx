@@ -1,4 +1,4 @@
-import { AlertCircle, CheckCircle2, ExternalLink, FileUp } from "lucide-react";
+import { AlertCircle, CheckCircle2, Download, ExternalLink, FileUp, FileUser } from "lucide-react";
 import AdminShell from "../_components/AdminShell";
 import { SubmitButton } from "../_components/FormButtons";
 import { uploadResumeAction } from "../actions";
@@ -20,53 +20,83 @@ export default async function AdminResumePage({ searchParams }: Props) {
   const params = await searchParams;
   const error = params.error && errors[params.error];
   const resume = await getResume();
+  // Changes on every upload so the preview never shows a cached copy.
+  const src = resume ? `/resume.pdf?v=${resume.updatedAt.getTime()}` : "";
 
   return (
     <AdminShell
       eyebrow="Files"
       title="Resume"
-      description="Upload the PDF exported from Overleaf. The site serves it at /resume.pdf right away."
-      actions={
-        resume && (
-          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="adm-btn adm-btn-ghost">
-            <ExternalLink />
-            View current
-          </a>
-        )
-      }
+      description="The PDF behind the View resume and Download buttons on your site."
     >
-      <div className="adm-card max-w-xl p-6">
-        <p className="text-[14px] text-[var(--adm-muted)]">
-          {resume
-            ? `Current resume: ${(resume.data.length / 1024).toFixed(0)} KB, updated ${resume.updatedAt.toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kolkata" })}.`
-            : "No resume uploaded yet. The resume links on the site return 404 until you upload one."}
-        </p>
-
-        {params.uploaded && (
-          <p className="adm-alert adm-alert-ok mt-5">
-            <CheckCircle2 className="h-4 w-4 shrink-0" />
-            Resume uploaded. It is live now.
+      <div className="adm-resume">
+        <section className="adm-card p-6">
+          <h2 className="adm-card-title">Upload new version</h2>
+          <p className="adm-card-desc">
+            Export the PDF from Overleaf and upload it here. It replaces the current resume
+            immediately, with no redeploy.
           </p>
-        )}
-        {error && (
-          <p className="adm-alert mt-5">
-            <AlertCircle className="h-4 w-4 shrink-0" />
-            {error}
-          </p>
-        )}
 
-        <form action={uploadResumeAction} className="mt-6 grid gap-4">
-          <label className="adm-label">
-            PDF file
-            <input name="resume" type="file" accept="application/pdf" required className="adm-input pt-2" />
-          </label>
-          <div>
+          {params.uploaded && (
+            <p className="adm-alert adm-alert-ok mt-5">
+              <CheckCircle2 className="h-4 w-4 shrink-0" />
+              Resume uploaded. It is live now.
+            </p>
+          )}
+          {error && (
+            <p className="adm-alert mt-5">
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              {error}
+            </p>
+          )}
+
+          <form action={uploadResumeAction} className="mt-5 grid gap-4">
+            <label className="adm-label">
+              PDF file
+              <input name="resume" type="file" accept="application/pdf" required className="adm-file" />
+              <span className="adm-hint">PDF only, up to 4 MB.</span>
+            </label>
             <SubmitButton>
               <FileUp />
               Upload resume
             </SubmitButton>
+          </form>
+        </section>
+
+        <section className="adm-card overflow-hidden">
+          <div className="adm-card-head">
+            <div>
+              <h2 className="adm-card-title">Current resume</h2>
+              <p className="adm-card-desc">
+                {resume
+                  ? `${Math.round(resume.data.length / 1024)} KB · updated ${resume.updatedAt.toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kolkata" })}`
+                  : "Nothing uploaded yet"}
+              </p>
+            </div>
+            {resume && (
+              <div className="flex gap-2">
+                <a href={src} target="_blank" rel="noopener noreferrer" className="adm-btn adm-btn-ghost">
+                  <ExternalLink />
+                  Open
+                </a>
+                <a href={src} download="Subham-Kumar-Resume.pdf" className="adm-btn adm-btn-ghost">
+                  <Download />
+                  Download
+                </a>
+              </div>
+            )}
           </div>
-        </form>
+
+          {resume ? (
+            <iframe src={src} title="Current resume" className="adm-resume-frame" />
+          ) : (
+            <div className="adm-empty">
+              <FileUser className="h-6 w-6 opacity-40" />
+              <p className="font-semibold">No resume uploaded</p>
+              <p>The resume buttons on your site show “Resume not uploaded yet” until you upload one.</p>
+            </div>
+          )}
+        </section>
       </div>
     </AdminShell>
   );

@@ -45,7 +45,7 @@ export const adminSections: AdminSectionConfig[] = [
   {
     slug: "profile",
     title: "Profile",
-    description: "Global identity, resume, and site profile values.",
+    description: "Global identity and site profile values.",
     tables: [
       {
         key: "site_profile",
@@ -62,7 +62,6 @@ export const adminSections: AdminSectionConfig[] = [
           { name: "keywords", label: "Keywords", type: "array" },
           { name: "og_image", label: "Open Graph image URL/path", type: "url", required: true },
           { name: "twitter_image", label: "Twitter image URL/path", type: "url", required: true },
-          { name: "resume_url", label: "Resume URL/path", type: "url", required: true },
         ],
       },
     ],
@@ -130,7 +129,7 @@ export const adminSections: AdminSectionConfig[] = [
   {
     slug: "about",
     title: "About",
-    description: "About copy, focus items, and resume link.",
+    description: "About copy and focus items.",
     tables: [
       {
         key: "about",
@@ -143,7 +142,6 @@ export const adminSections: AdminSectionConfig[] = [
           { name: "intro", label: "Intro", type: "textarea", required: true },
           { name: "body", label: "Body", type: "textarea", required: true },
           { name: "focus_items", label: "Focus items", type: "array" },
-          { name: "resume_url", label: "Resume URL/path", type: "url", required: true },
         ],
       },
     ],
