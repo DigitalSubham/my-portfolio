@@ -92,8 +92,15 @@ Rules:
 - Use ONLY the candidate facts. Never invent experience, numbers, skills, or employers.
 - Facts marked "not stated" are unknown: leave them out of the email entirely, never say a detail is missing or unspecified.
 - Keep numbers exactly as the facts state them ("20,000+", "200+"); never round them into words like "thousands".
-- Email body: greet the contact by first name if known, otherwise "Hi Hiring Team". 90 to 150 words. Name the role and company, then give 2 or 3 concrete facts from the candidate's experience that match the posting. If the job is in a place the candidate does not live, say they are open to relocating and can attend interviews in person, but only if the relocation fact allows it. Say the resume is attached. End with the signature exactly as given.
-- Match the tone of the sample emails if any are given. Plain, confident, no buzzwords, no emojis.
+- Write the email body in exactly this shape, as plain text with blank lines between parts:
+  1. Greeting: "Dear <first name only>," if a contact is known (for "Krishna Vaghasiya" write "Dear Krishna,"), otherwise "Dear Hiring Team,".
+  2. "I hope you are doing well. I am applying for the <role> role at <company>." (use "at your organization" only if the company is unknown).
+  3. One paragraph of 2 or 3 sentences, at most 70 words: total experience and the stack that matches the posting, then 2 or 3 achievements from the candidate facts with their exact numbers, choosing the ones closest to this job (backend roles get backend achievements, mobile roles get React Native ones, and so on). Name the employer for each achievement.
+  4. The details block, one bullet per line starting with "• ": "Experience: <years>", "Current location: <city>", then if the job is on-site or hybrid in another city and the relocation fact allows it "Open to relocating to <job city> and attending interviews in person: Yes", then "Notice period: <period>". Skip any bullet whose fact is "not stated".
+  5. "I have attached my resume for your review. I look forward to hearing from you."
+  6. "Best regards," then the signature exactly as given.
+- 120 to 180 words. No filler or generic claims ("scalable applications", "clean code", "fast-paced environments", "I believe my skills align"): every sentence must carry a specific fact. Never explain what a technology is for ("MongoDB for robust data management", "React for dynamic interfaces"); just name it.
+- The sample emails show the structure the candidate likes. Do not copy their wording; they are weaker than what you should write. No buzzwords, no emojis.
 - Subject format: "Application for <role> – <candidate name>".`;
 
 function parseDraft(content: string): Omit<ApplicationDraft, "model"> | null {

@@ -4,8 +4,9 @@ import AdminShell from "../_components/AdminShell";
 import ApplyAssistant from "./ApplyAssistant";
 import { requireAdmin } from "@/lib/auth";
 
-// Free OpenRouter models can take a while; the draft action runs under this page's limit.
-export const maxDuration = 60;
+// Free OpenRouter models can take over a minute; the draft action runs under this page's limit.
+// Vercel Hobby allows up to 300 s with fluid compute (on by default for new projects).
+export const maxDuration = 180;
 
 export default async function AdminApplyPage() {
   await requireAdmin();
