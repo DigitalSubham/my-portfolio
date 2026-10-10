@@ -12,6 +12,7 @@ import {
 } from "@/lib/auth";
 import { getAdminTable, type AdminField } from "@/lib/admin-config";
 import { getSql, hasDatabase, saveResume } from "@/lib/db";
+import { draftApplication, type ApplicationDraft } from "@/lib/job-apply";
 
 function fieldValue(field: AdminField, formData: FormData) {
   if (field.type === "boolean") return formData.get(field.name) === "on";
@@ -84,6 +85,30 @@ export async function uploadResumeAction(formData: FormData) {
 
   await saveResume(pdf);
   redirect("/admin/resume?uploaded=1");
+}
+
+export type DraftState = { draft?: ApplicationDraft; error?: string; at?: number };
+
+export async function draftApplicationAction(_prev: DraftState, formData: FormData): Promise<DraftState> {
+  await requireAdmin();
+  const text = String(formData.get("text") || "").trim();
+  const image = formData.get("image");
+  const hasImage = image instanceof File && image.size > 0;
+
+  if (!text && !hasImage) return { error: "Paste the job posting text or add a screenshot." };
+  if (hasImage && !image.type.startsWith("image/")) return { error: "The screenshot must be an image." };
+  if (hasImage && image.size > 3 * 1024 * 1024) return { error: "The screenshot must be 3 MB or smaller." };
+
+  const imageDataUrl = hasImage
+    ? `data:${image.type};base64,${Buffer.from(await image.arrayBuffer()).toString("base64")}`
+    : undefined;
+
+  try {
+    return { draft: await draftApplication({ text, imageDataUrl }), at: Date.now() };
+  } catch (error) {
+    console.error("Failed to draft application.", error);
+    return { error: error instanceof Error ? error.message : "Drafting failed. Try again." };
+  }
 }
 
 export async function logoutAction() {

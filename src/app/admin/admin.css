@@ -637,6 +637,12 @@
   cursor: pointer;
 }
 
+.adm-apply { display: grid; gap: 20px; align-items: start; }
+@media (min-width: 1024px) {
+  .adm-apply { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); }
+}
+.adm-alert:has(ul) { align-items: flex-start; }
+
 .adm-spin { animation: adm-spin 0.7s linear infinite; }
 @keyframes adm-spin { to { transform: rotate(360deg); } }
 

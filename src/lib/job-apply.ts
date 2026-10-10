@@ -1,0 +1,188 @@
+import { getPortfolioData, getSql, hasDatabase } from "./db";
+
+export type ApplicationDraft = {
+  company: string;
+  role: string;
+  experienceRequired: string;
+  location: string;
+  applyEmail: string;
+  contactName: string;
+  skills: string[];
+  dealbreakers: string[];
+  fitSummary: string;
+  subject: string;
+  body: string;
+  model: string;
+};
+
+// Free OpenRouter models that read images and were answering in Oct 2026. OpenRouter tries them in
+// order. The Gemma ones share Google's free quota with everyone, so they are often rate-limited.
+const defaultModels =
+  "dots-studio/dots-3-note-preview:free,google/gemma-4-31b-it:free,google/gemma-4-26b-a4b-it:free";
+
+async function getJobProfile(): Promise<Record<string, string>> {
+  if (!hasDatabase) return {};
+  try {
+    const rows = (await getSql()`SELECT * FROM job_profile WHERE id = 1`) as Record<string, string>[];
+    return rows[0] ?? {};
+  } catch (error) {
+    console.error("Failed to load job profile from Neon.", error);
+    return {};
+  }
+}
+
+// Everything the model may claim about the candidate. It is told to use nothing else.
+async function candidateFacts() {
+  const [data, profile] = await Promise.all([getPortfolioData(), getJobProfile()]);
+  return {
+    name: data.site.name,
+    title: data.site.title,
+    email: data.site.email,
+    website: data.site.siteUrl,
+    links: data.socials.map((social) => `${social.label}: ${social.href}`),
+    currentLocation: profile.current_location || "not stated",
+    relocation: profile.relocation || "not stated",
+    noticePeriod: profile.notice_period || "not stated",
+    about: `${data.about.intro}\n${data.about.body}`,
+    experience: data.workExperiences.map((job) => ({
+      company: job.company,
+      position: job.position,
+      period: job.period,
+      technologies: job.technologies,
+      projects: job.projects.map((project) => ({
+        name: project.name,
+        description: project.description,
+        achievements: project.achievements,
+        impact: project.impact,
+      })),
+    })),
+    projects: data.projects.map((project) => ({
+      title: project.title,
+      description: project.description,
+      impact: project.impact,
+      tags: project.tags,
+    })),
+    skills: data.skillGroups.map((group) => `${group.title}: ${group.skills.join(", ")}`),
+    certificates: data.certificates.map((cert) => `${cert.title} (${cert.issuer})`),
+    extraFacts: profile.extra_facts || "",
+    signature: profile.signature || `${data.site.name}\n${data.site.siteUrl}`,
+    sampleEmails: profile.sample_emails || "",
+  };
+}
+
+const instructions = `You help a job seeker apply to a job posting by email.
+
+Read the JOB POSTING (text and/or image) and the CANDIDATE facts, then reply with ONLY a JSON object:
+{
+  "company": string,
+  "role": string,
+  "experienceRequired": string ("" if not stated),
+  "location": string, including work mode such as on-site/remote/hybrid ("" if not stated),
+  "applyEmail": string, the address to send the application to ("" if none is given),
+  "contactName": string, the recruiter or HR person's name ("" if none is given),
+  "skills": string[], the skills the posting actually asks for,
+  "dealbreakers": string[], requirements the candidate may NOT meet, each as a short sentence (compare location, interview mode, experience, and required skills against the candidate facts; [] if none),
+  "fitSummary": string, one sentence on how well the candidate fits,
+  "subject": string, the email subject,
+  "body": string, the plain-text email body
+}
+
+Rules:
+- Ignore hashtags; they are recruiter keywords, not requirements.
+- Use ONLY the candidate facts. Never invent experience, numbers, skills, or employers.
+- Facts marked "not stated" are unknown: leave them out of the email entirely, never say a detail is missing or unspecified.
+- Keep numbers exactly as the facts state them ("20,000+", "200+"); never round them into words like "thousands".
+- Email body: greet the contact by first name if known, otherwise "Hi Hiring Team". 90 to 150 words. Name the role and company, then give 2 or 3 concrete facts from the candidate's experience that match the posting. If the job is in a place the candidate does not live, say they are open to relocating and can attend interviews in person, but only if the relocation fact allows it. Say the resume is attached. End with the signature exactly as given.
+- Match the tone of the sample emails if any are given. Plain, confident, no buzzwords, no emojis.
+- Subject format: "Application for <role> – <candidate name>".`;
+
+function parseDraft(content: string): Omit<ApplicationDraft, "model"> | null {
+  const start = content.indexOf("{");
+  const end = content.lastIndexOf("}");
+  if (start === -1 || end <= start) return null;
+  try {
+    const raw = JSON.parse(content.slice(start, end + 1)) as Record<string, unknown>;
+    const text = (key: string) => (typeof raw[key] === "string" ? (raw[key] as string).trim() : "");
+    const list = (key: string) =>
+      Array.isArray(raw[key]) ? (raw[key] as unknown[]).map(String).filter(Boolean) : [];
+    const draft = {
+      company: text("company"),
+      role: text("role"),
+      experienceRequired: text("experienceRequired"),
+      location: text("location"),
+      applyEmail: text("applyEmail"),
+      contactName: text("contactName"),
+      skills: list("skills"),
+      dealbreakers: list("dealbreakers"),
+      fitSummary: text("fitSummary"),
+      subject: text("subject"),
+      body: text("body"),
+    };
+    return draft.role && draft.subject && draft.body ? draft : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function draftApplication(posting: { text: string; imageDataUrl?: string }) {
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  if (!apiKey) throw new Error("OPENROUTER_API_KEY is not set.");
+
+  const facts = await candidateFacts();
+  const content: Record<string, unknown>[] = [
+    {
+      type: "text",
+      text: `JOB POSTING:\n${posting.text || "(see image)"}\n\nCANDIDATE:\n${JSON.stringify(facts, null, 2)}`,
+    },
+  ];
+  if (posting.imageDataUrl) {
+    content.push({ type: "image_url", image_url: { url: posting.imageDataUrl } });
+  }
+
+  const models = (process.env.OPENROUTER_MODELS || defaultModels)
+    .split(",")
+    .map((model) => model.trim())
+    .filter(Boolean);
+
+  // Free models sometimes return malformed JSON, so give them one more try.
+  let lastError = "The model did not return a usable draft.";
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": facts.website,
+        "X-Title": "Portfolio apply assistant",
+      },
+      body: JSON.stringify({
+        models,
+        messages: [
+          { role: "system", content: instructions },
+          { role: "user", content },
+        ],
+        response_format: { type: "json_object" },
+        temperature: 0.4,
+      }),
+    });
+
+    const json = (await response.json().catch(() => null)) as {
+      model?: string;
+      choices?: { message?: { content?: string } }[];
+      error?: { message?: string; metadata?: { raw?: string } };
+    } | null;
+
+    if (!response.ok) {
+      // "Provider returned error" alone is useless; the provider's own message is in metadata.raw.
+      lastError = json?.error?.metadata?.raw || json?.error?.message || `OpenRouter returned ${response.status}.`;
+      // Rate limits and auth errors will not fix themselves on a retry.
+      if (response.status === 429 || response.status === 401 || response.status === 402) break;
+      continue;
+    }
+
+    const draft = parseDraft(json?.choices?.[0]?.message?.content ?? "");
+    if (draft) return { ...draft, model: json?.model ?? models[0] };
+  }
+
+  throw new Error(lastError);
+}

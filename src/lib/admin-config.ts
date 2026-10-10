@@ -306,6 +306,27 @@ export const adminSections: AdminSectionConfig[] = [
       },
     ],
   },
+  {
+    slug: "job-profile",
+    title: "Job profile",
+    description: "Facts and tone the apply assistant uses on top of your portfolio content.",
+    tables: [
+      {
+        key: "job_profile",
+        title: "Job profile",
+        table: "job_profile",
+        singleton: true,
+        fields: [
+          { name: "current_location", label: "Current city", type: "text" },
+          { name: "relocation", label: "Relocation", type: "text" },
+          { name: "notice_period", label: "Notice period", type: "text" },
+          { name: "extra_facts", label: "Extra facts the assistant may use", type: "textarea" },
+          { name: "sample_emails", label: "Example emails you like (for tone)", type: "textarea" },
+          { name: "signature", label: "Email signature", type: "textarea" },
+        ],
+      },
+    ],
+  },
 ];
 
 export function getAdminSection(slug: string) {

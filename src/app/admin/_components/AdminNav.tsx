@@ -9,6 +9,7 @@ import {
   FileText,
   FileUser,
   FolderKanban,
+  IdCard,
   Inbox,
   LayoutDashboard,
   LogOut,
@@ -16,6 +17,7 @@ import {
   Menu,
   PenLine,
   Search,
+  Send,
   Sparkles,
   UserRound,
   Wrench,
@@ -41,6 +43,7 @@ const sectionIcons: Record<string, LucideIcon> = {
   blogs: FileText,
   certificates: Award,
   contact: Mail,
+  "job-profile": IdCard,
 };
 
 function NavLink({
@@ -134,6 +137,13 @@ export default function AdminNav({ sections, unreadMessages = 0 }: Props) {
           label="Messages"
           active={pathname === "/admin/messages"}
           count={unreadMessages}
+          onNavigate={close}
+        />
+        <NavLink
+          href="/admin/apply"
+          icon={Send}
+          label="Apply"
+          active={pathname === "/admin/apply"}
           onNavigate={close}
         />
         <NavLink

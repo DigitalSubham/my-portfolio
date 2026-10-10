@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  IdCard,
   ArrowUpRight,
   Award,
   Briefcase,
@@ -32,6 +33,7 @@ const sectionIcons: Record<string, LucideIcon> = {
   blogs: FileText,
   certificates: Award,
   contact: Mail,
+  "job-profile": IdCard,
 };
 
 export default async function AdminDashboardPage() {
