@@ -220,3 +220,9 @@ CREATE INDEX IF NOT EXISTS skill_groups_publish_order_idx ON skill_groups (is_pu
 CREATE INDEX IF NOT EXISTS blog_posts_publish_order_idx ON blog_posts (is_published, sort_order);
 CREATE INDEX IF NOT EXISTS certificates_publish_order_idx ON certificates (is_published, sort_order);
 CREATE INDEX IF NOT EXISTS contact_messages_created_idx ON contact_messages (created_at DESC);
+
+CREATE TABLE IF NOT EXISTS resume (
+  id INT PRIMARY KEY DEFAULT 1 CHECK (id = 1),
+  data BYTEA NOT NULL,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);

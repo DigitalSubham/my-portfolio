@@ -342,4 +342,29 @@ function mapContactChannel(row: Record<string, unknown>): ContactChannel {
   };
 }
 
+export async function getResume() {
+  if (!hasDatabase) return null;
+  try {
+    const rows = (await getSql()`
+      SELECT encode(data, 'base64') AS data, updated_at FROM resume WHERE id = 1
+    `) as Record<string, unknown>[];
+    if (!rows[0]) return null;
+    return {
+      data: Buffer.from(String(rows[0].data), "base64"),
+      updatedAt: new Date(String(rows[0].updated_at)),
+    };
+  } catch (error) {
+    console.error("Failed to load resume from Neon.", error);
+    return null;
+  }
+}
+
+export async function saveResume(pdf: Buffer) {
+  await getSql()`
+    INSERT INTO resume (id, data, updated_at)
+    VALUES (1, decode(${pdf.toString("base64")}, 'base64'), now())
+    ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data, updated_at = now()
+  `;
+}
+
 export { sortByOrder };

@@ -13,6 +13,8 @@ const prettyCodeOptions: PrettyCodeOptions = {
 const nextConfig: NextConfig = {
   distDir: process.env.NEXT_DIST_DIR || ".next",
   pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
+  // Resume PDF uploads go through a server action; Vercel caps request bodies at 4.5 MB.
+  experimental: { serverActions: { bodySizeLimit: "4mb" } },
   images: {
     remotePatterns: [
       {
