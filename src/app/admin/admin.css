@@ -597,6 +597,46 @@
   color: var(--adm-ok);
 }
 
+/* ---------- resume ---------- */
+.adm-resume { display: grid; gap: 20px; align-items: start; }
+@media (min-width: 1024px) {
+  .adm-resume { grid-template-columns: 340px minmax(0, 1fr); }
+}
+.adm-resume-frame {
+  display: block;
+  width: 100%;
+  height: 78vh;
+  min-height: 520px;
+  border: 0;
+  background: var(--adm-surface-3);
+}
+
+.adm-file {
+  width: 100%;
+  border: 1px dashed var(--adm-border-strong);
+  border-radius: 9px;
+  background: var(--adm-surface-2);
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 450;
+  color: var(--adm-muted);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.adm-file:hover { border-color: var(--adm-accent); }
+.adm-file:focus-visible { outline: none; border-color: var(--adm-accent); box-shadow: 0 0 0 3.5px var(--adm-ring); }
+.adm-file::file-selector-button {
+  margin-right: 12px;
+  border: 1px solid var(--adm-border-strong);
+  border-radius: 8px;
+  background: var(--adm-surface);
+  padding: 7px 12px;
+  font: inherit;
+  font-weight: 620;
+  color: var(--adm-text);
+  cursor: pointer;
+}
+
 .adm-spin { animation: adm-spin 0.7s linear infinite; }
 @keyframes adm-spin { to { transform: rotate(360deg); } }
 
