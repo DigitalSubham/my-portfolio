@@ -11,7 +11,7 @@ import {
   signJwt,
 } from "@/lib/auth";
 import { getAdminTable, type AdminField } from "@/lib/admin-config";
-import { getSql, hasDatabase } from "@/lib/db";
+import { getSql, hasDatabase, saveResume } from "@/lib/db";
 
 function fieldValue(field: AdminField, formData: FormData) {
   if (field.type === "boolean") return formData.get(field.name) === "on";
@@ -71,6 +71,19 @@ export async function resetPasswordAction(formData: FormData) {
     redirect("/admin/forgot-password?error=invalid");
   }
   redirect("/admin/login?reset=1");
+}
+
+export async function uploadResumeAction(formData: FormData) {
+  await requireAdmin();
+  const file = formData.get("resume");
+  if (!(file instanceof File) || file.size === 0) redirect("/admin/resume?error=missing");
+  if (file.size > 4 * 1024 * 1024) redirect("/admin/resume?error=size");
+
+  const pdf = Buffer.from(await file.arrayBuffer());
+  if (pdf.subarray(0, 5).toString() !== "%PDF-") redirect("/admin/resume?error=type");
+
+  await saveResume(pdf);
+  redirect("/admin/resume?uploaded=1");
 }
 
 export async function logoutAction() {

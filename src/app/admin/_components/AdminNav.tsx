@@ -7,6 +7,7 @@ import {
   Award,
   Briefcase,
   FileText,
+  FileUser,
   FolderKanban,
   Inbox,
   LayoutDashboard,
@@ -133,6 +134,13 @@ export default function AdminNav({ sections, unreadMessages = 0 }: Props) {
           label="Messages"
           active={pathname === "/admin/messages"}
           count={unreadMessages}
+          onNavigate={close}
+        />
+        <NavLink
+          href="/admin/resume"
+          icon={FileUser}
+          label="Resume"
+          active={pathname === "/admin/resume"}
           onNavigate={close}
         />
 
