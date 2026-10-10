@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { SubmitButton } from "../_components/FormButtons";
+import LinkPending from "../_components/LinkPending";
 import { AlertCircle, ArrowLeft, KeyRound } from "lucide-react";
 import { resetPasswordAction } from "../actions";
 
@@ -25,6 +27,7 @@ export default async function ForgotPasswordPage({ searchParams }: Props) {
         >
           <ArrowLeft className="h-4 w-4" />
           Back to sign in
+          <LinkPending />
         </Link>
 
         <div className="adm-card p-7">
@@ -81,10 +84,10 @@ export default async function ForgotPasswordPage({ searchParams }: Props) {
                 className="adm-input"
               />
             </label>
-            <button className="adm-btn adm-btn-primary mt-1 w-full">
+            <SubmitButton className="adm-btn adm-btn-primary mt-1 w-full">
               <KeyRound />
               Reset password
-            </button>
+            </SubmitButton>
           </form>
         </div>
       </div>

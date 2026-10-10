@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">LORQ AI knowledge transfer platform preview</title>
+  <desc id="desc">Onboarding chat with company knowledge next to a knowledge gap report for new employees.</desc>
+  <rect width="1200" height="800" fill="#1e1b4b"/>
+  <rect x="90" y="90" width="1020" height="620" rx="32" fill="#f8fafc"/>
+  <text x="160" y="180" font-family="Arial, sans-serif" font-size="54" font-weight="700" fill="#0f172a">LORQ AI</text>
+  <text x="160" y="232" font-family="Arial, sans-serif" font-size="30" fill="#475569">Knowledge transfer for new hires</text>
+
+  <rect x="160" y="280" width="520" height="370" rx="24" fill="#ffffff" stroke="#e2e8f0" stroke-width="3"/>
+  <rect x="190" y="310" width="330" height="62" rx="20" fill="#eef2ff"/>
+  <text x="215" y="350" font-family="Arial, sans-serif" font-size="24" fill="#3730a3">How do we deploy to prod?</text>
+  <rect x="320" y="392" width="330" height="104" rx="20" fill="#4f46e5"/>
+  <text x="345" y="432" font-family="Arial, sans-serif" font-size="23" fill="#ffffff">Merge to main, then the</text>
+  <text x="345" y="466" font-family="Arial, sans-serif" font-size="23" fill="#ffffff">release job ships it.</text>
+  <rect x="320" y="508" width="150" height="34" rx="17" fill="#e0e7ff"/>
+  <text x="395" y="532" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#4338ca">3 sources</text>
+  <rect x="190" y="575" width="460" height="50" rx="25" fill="#f1f5f9"/>
+  <text x="220" y="608" font-family="Arial, sans-serif" font-size="22" fill="#94a3b8">Ask about the codebase…</text>
+  <circle cx="618" cy="600" r="18" fill="#4f46e5"/>
+
+  <rect x="720" y="280" width="320" height="370" rx="24" fill="#ffffff" stroke="#e2e8f0" stroke-width="3"/>
+  <text x="750" y="330" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#0f172a">Knowledge gaps</text>
+  <text x="750" y="390" font-family="Arial, sans-serif" font-size="21" fill="#475569">Deployments</text>
+  <rect x="750" y="402" width="260" height="16" rx="8" fill="#e2e8f0"/>
+  <rect x="750" y="402" width="225" height="16" rx="8" fill="#22c55e"/>
+  <text x="750" y="464" font-family="Arial, sans-serif" font-size="21" fill="#475569">Billing module</text>
+  <rect x="750" y="476" width="260" height="16" rx="8" fill="#e2e8f0"/>
+  <rect x="750" y="476" width="150" height="16" rx="8" fill="#f59e0b"/>
+  <text x="750" y="538" font-family="Arial, sans-serif" font-size="21" fill="#475569">Access control</text>
+  <rect x="750" y="550" width="260" height="16" rx="8" fill="#e2e8f0"/>
+  <rect x="750" y="550" width="70" height="16" rx="8" fill="#ef4444"/>
+  <text x="750" y="616" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#4f46e5">RAG · LLM evaluation</text>
+</svg>

@@ -44,15 +44,17 @@ const Certificates = ({ certificates }: Props) => {
                   {certificate.description}
                 </p>
               </div>
-              <Link
-                href={certificate.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center justify-start text-sm font-semibold uppercase tracking-[0.12em] text-gray-950 dark:text-white md:justify-center"
-              >
-                View
-                <ArrowUpRight className="ml-2 h-4 w-4" />
-              </Link>
+              {certificate.url && (
+                <Link
+                  href={certificate.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-11 items-center justify-start text-sm font-semibold uppercase tracking-[0.12em] text-gray-950 dark:text-white md:justify-center"
+                >
+                  View
+                  <ArrowUpRight className="ml-2 h-4 w-4" />
+                </Link>
+              )}
             </article>
           ))}
         </div>

@@ -1,5 +1,6 @@
 import { Archive, Inbox, Mail, MailCheck, MailOpen, Trash2 } from "lucide-react";
 import AdminShell from "../_components/AdminShell";
+import { SubmitButton } from "../_components/FormButtons";
 import { markMessage } from "../actions";
 import { getContactMessages } from "@/lib/db";
 import { requireAdmin } from "@/lib/auth";
@@ -71,24 +72,24 @@ export default async function AdminMessagesPage() {
 
               <div className="flex flex-wrap gap-2 md:shrink-0">
                 <form action={markMessage.bind(null, message.id, message.isRead ? "unread" : "read")}>
-                  <button className="adm-btn adm-btn-ghost">
+                  <SubmitButton className="adm-btn adm-btn-ghost">
                     {message.isRead ? <MailOpen /> : <MailCheck />}
                     Mark {message.isRead ? "unread" : "read"}
-                  </button>
+                  </SubmitButton>
                 </form>
                 {!message.isArchived && (
                   <form action={markMessage.bind(null, message.id, "archive")}>
-                    <button className="adm-btn adm-btn-ghost">
+                    <SubmitButton className="adm-btn adm-btn-ghost">
                       <Archive />
                       Archive
-                    </button>
+                    </SubmitButton>
                   </form>
                 )}
                 <form action={markMessage.bind(null, message.id, "delete")}>
-                  <button className="adm-btn adm-btn-danger">
+                  <SubmitButton className="adm-btn adm-btn-danger">
                     <Trash2 />
                     Delete
-                  </button>
+                  </SubmitButton>
                 </form>
               </div>
             </div>

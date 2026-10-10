@@ -26,6 +26,8 @@ import {
 } from "lucide-react";
 import type { AdminSectionConfig } from "@/lib/admin-config";
 import { logoutAction } from "../actions";
+import { SubmitButton } from "./FormButtons";
+import LinkPending from "./LinkPending";
 
 type Props = {
   sections: AdminSectionConfig[];
@@ -66,6 +68,7 @@ function NavLink({
       <Icon />
       <span className="truncate">{label}</span>
       {count ? <span className="adm-nav-count">{count}</span> : null}
+      <LinkPending />
     </Link>
   );
 }
@@ -99,9 +102,9 @@ export default function AdminNav({ sections, unreadMessages = 0 }: Props) {
           <span className="adm-brand-name">Admin CMS</span>
         </div>
         <form action={logoutAction}>
-          <button className="adm-icon-btn" aria-label="Log out">
+          <SubmitButton className="adm-icon-btn" aria-label="Log out">
             <LogOut className="h-[17px] w-[17px]" />
-          </button>
+          </SubmitButton>
         </form>
       </div>
 
@@ -117,6 +120,7 @@ export default function AdminNav({ sections, unreadMessages = 0 }: Props) {
               <span className="adm-brand-name block">Admin CMS</span>
               <span className="adm-brand-sub block">Portfolio content</span>
             </span>
+            <LinkPending />
           </Link>
           <button type="button" className="adm-icon-btn adm-sidebar-close" onClick={close} aria-label="Close menu">
             <X className="h-[18px] w-[18px]" />
@@ -167,10 +171,10 @@ export default function AdminNav({ sections, unreadMessages = 0 }: Props) {
         ))}
 
         <form action={logoutAction} className="mt-auto hidden pt-6 lg:block">
-          <button className="adm-btn adm-btn-ghost w-full">
+          <SubmitButton className="adm-btn adm-btn-ghost w-full">
             <LogOut />
             Log out
-          </button>
+          </SubmitButton>
         </form>
       </aside>
     </>

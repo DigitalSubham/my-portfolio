@@ -90,24 +90,28 @@ export default function ProjectCard({ project }: ProjectProps) {
         </div>
 
         <div className="mt-5 flex flex-wrap gap-3">
-          <Link
-            target="_blank"
-            rel="noopener noreferrer"
-            href={project.codeUrl}
-            className="inline-flex min-h-11 items-center border border-gray-300 px-4 text-sm font-semibold text-gray-800 transition-colors hover:border-gray-950 dark:border-gray-800 dark:text-gray-200 dark:hover:border-white"
-          >
-            <Github className="mr-2 h-4 w-4" />
-            Code
-          </Link>
-          <Link
-            target="_blank"
-            rel="noopener noreferrer"
-            href={project.demoUrl}
-            className="inline-flex min-h-11 items-center bg-gray-950 px-4 text-sm font-semibold text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200"
-          >
-            <ExternalLink className="mr-2 h-4 w-4" />
-            Demo
-          </Link>
+          {project.codeUrl && (
+            <Link
+              target="_blank"
+              rel="noopener noreferrer"
+              href={project.codeUrl}
+              className="inline-flex min-h-11 items-center border border-gray-300 px-4 text-sm font-semibold text-gray-800 transition-colors hover:border-gray-950 dark:border-gray-800 dark:text-gray-200 dark:hover:border-white"
+            >
+              <Github className="mr-2 h-4 w-4" />
+              Code
+            </Link>
+          )}
+          {project.demoUrl && (
+            <Link
+              target="_blank"
+              rel="noopener noreferrer"
+              href={project.demoUrl}
+              className="inline-flex min-h-11 items-center bg-gray-950 px-4 text-sm font-semibold text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200"
+            >
+              <ExternalLink className="mr-2 h-4 w-4" />
+              Demo
+            </Link>
+          )}
         </div>
       </div>
     </article>

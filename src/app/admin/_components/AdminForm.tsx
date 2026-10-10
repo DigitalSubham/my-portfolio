@@ -59,10 +59,12 @@ function AdminInput({ field, row }: { field: AdminField; row: Row }) {
   return (
     <input
       {...common}
-      type={field.type}
+      // type="url" rejects site paths like /projects/x.svg, which these fields also hold.
+      type={field.type === "url" ? "text" : field.type}
+      inputMode={field.type === "url" ? "url" : undefined}
       className="adm-input"
       defaultValue={valueForField(row, field)}
-      placeholder={field.type === "url" ? "https://…" : undefined}
+      placeholder={field.type === "url" ? "https://… or /path" : undefined}
     />
   );
 }
