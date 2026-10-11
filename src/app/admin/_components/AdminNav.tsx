@@ -14,6 +14,7 @@ import {
   LayoutDashboard,
   LogOut,
   Mail,
+  MailCheck,
   Menu,
   PenLine,
   Search,
@@ -148,6 +149,13 @@ export default function AdminNav({ sections, unreadMessages = 0 }: Props) {
           icon={Send}
           label="Apply"
           active={pathname === "/admin/apply"}
+          onNavigate={close}
+        />
+        <NavLink
+          href="/admin/applications"
+          icon={MailCheck}
+          label="Applications"
+          active={pathname === "/admin/applications"}
           onNavigate={close}
         />
         <NavLink

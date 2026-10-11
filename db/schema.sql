@@ -239,3 +239,15 @@ CREATE TABLE IF NOT EXISTS job_profile (
 );
 
 INSERT INTO job_profile (id) VALUES (1) ON CONFLICT (id) DO NOTHING;
+
+CREATE TABLE IF NOT EXISTS applications (
+  id BIGSERIAL PRIMARY KEY,
+  company TEXT NOT NULL DEFAULT '',
+  role TEXT NOT NULL DEFAULT '',
+  to_email TEXT NOT NULL DEFAULT '',
+  subject TEXT NOT NULL,
+  body TEXT NOT NULL,
+  sent_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS applications_email_sent_idx ON applications (lower(to_email), sent_at DESC);

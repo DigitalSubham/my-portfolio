@@ -1,4 +1,5 @@
-import { getPortfolioData, getSql, hasDatabase } from "./db";
+import nodemailer from "nodemailer";
+import { getPortfolioData, getResume, getSql, hasDatabase } from "./db";
 
 export type ApplicationDraft = {
   company: string;
@@ -101,7 +102,7 @@ Rules:
   6. "Best regards," then the signature exactly as given.
 - 120 to 180 words. No filler or generic claims ("scalable applications", "clean code", "fast-paced environments", "I believe my skills align"): every sentence must carry a specific fact. Never explain what a technology is for ("MongoDB for robust data management", "React for dynamic interfaces"); just name it.
 - The sample emails show the structure the candidate likes. Do not copy their wording; they are weaker than what you should write. No buzzwords, no emojis.
-- Subject format: "Application for <role> – <candidate name>".`;
+- Subject format: "Application for <role> | <candidate name> | <years of experience> | <two skills>", where the two skills are the candidate's skills that best match the posting. Example: "Application for MERN Stack Developer | Subham Kumar | 3+ Years | React, Node.js". Keep it under 90 characters.`;
 
 function parseDraft(content: string): Omit<ApplicationDraft, "model"> | null {
   const start = content.indexOf("{");
@@ -192,4 +193,75 @@ export async function draftApplication(posting: { text: string; imageDataUrl?: s
   }
 
   throw new Error(lastError);
+}
+
+export type SentApplication = {
+  id: number;
+  company: string;
+  role: string;
+  toEmail: string;
+  subject: string;
+  body: string;
+  sentAt: string;
+};
+
+export async function getSentApplications(): Promise<SentApplication[]> {
+  if (!hasDatabase) return [];
+  try {
+    const rows = (await getSql()`
+      SELECT id, company, role, to_email, subject, body, sent_at FROM applications ORDER BY sent_at DESC
+    `) as Record<string, string>[];
+    return rows.map((row) => ({
+      id: Number(row.id),
+      company: row.company,
+      role: row.role,
+      toEmail: row.to_email,
+      subject: row.subject,
+      body: row.body,
+      sentAt: new Date(row.sent_at).toISOString(),
+    }));
+  } catch (error) {
+    console.error("Failed to load applications from Neon.", error);
+    return [];
+  }
+}
+
+export const gmailConnected = () => Boolean(process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD);
+
+// Sends one application from the user's Gmail with the current resume attached, then logs it.
+// Only ever called from the review screen's Send button.
+export async function sendApplication(email: {
+  to: string;
+  subject: string;
+  body: string;
+  company: string;
+  role: string;
+}) {
+  const user = process.env.GMAIL_USER;
+  const pass = process.env.GMAIL_APP_PASSWORD;
+  if (!user || !pass) throw new Error("Gmail is not connected: set GMAIL_USER and GMAIL_APP_PASSWORD.");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.to)) throw new Error("Enter a valid email address.");
+
+  const [resume, data] = await Promise.all([getResume(), getPortfolioData()]);
+  if (!resume) throw new Error("No resume uploaded. Upload one under Admin → Resume first.");
+
+  // Gmail's SMTP server keeps a copy in the Sent folder, so replies thread like normal mail.
+  await nodemailer.createTransport({ service: "gmail", auth: { user, pass } }).sendMail({
+    from: { name: data.site.name, address: user },
+    to: email.to,
+    subject: email.subject,
+    text: email.body,
+    attachments: [
+      {
+        filename: `${data.site.name.replace(/\s+/g, "_")}_Resume.pdf`,
+        content: resume.data,
+        contentType: "application/pdf",
+      },
+    ],
+  });
+
+  await getSql()`
+    INSERT INTO applications (company, role, to_email, subject, body)
+    VALUES (${email.company}, ${email.role}, ${email.to}, ${email.subject}, ${email.body})
+  `;
 }

@@ -12,7 +12,11 @@ import {
 } from "@/lib/auth";
 import { getAdminTable, type AdminField } from "@/lib/admin-config";
 import { getSql, hasDatabase, saveResume } from "@/lib/db";
-import { draftApplication, type ApplicationDraft } from "@/lib/job-apply";
+import {
+  draftApplication,
+  sendApplication,
+  type ApplicationDraft,
+} from "@/lib/job-apply";
 
 function fieldValue(field: AdminField, formData: FormData) {
   if (field.type === "boolean") return formData.get(field.name) === "on";
@@ -87,7 +91,11 @@ export async function uploadResumeAction(formData: FormData) {
   redirect("/admin/resume?uploaded=1");
 }
 
-export type DraftState = { draft?: ApplicationDraft; error?: string; at?: number };
+export type DraftState = {
+  draft?: ApplicationDraft;
+  error?: string;
+  at?: number;
+};
 
 export async function draftApplicationAction(_prev: DraftState, formData: FormData): Promise<DraftState> {
   await requireAdmin();
@@ -108,6 +116,26 @@ export async function draftApplicationAction(_prev: DraftState, formData: FormDa
   } catch (error) {
     console.error("Failed to draft application.", error);
     return { error: error instanceof Error ? error.message : "Drafting failed. Try again." };
+  }
+}
+
+export type SendState = { error?: string; sentTo?: string };
+
+export async function sendApplicationAction(_prev: SendState, formData: FormData): Promise<SendState> {
+  await requireAdmin();
+  const field = (name: string) => String(formData.get(name) || "").trim();
+  try {
+    await sendApplication({
+      to: field("to"),
+      subject: field("subject"),
+      body: String(formData.get("body") || ""),
+      company: field("company"),
+      role: field("role"),
+    });
+    return { sentTo: field("to") };
+  } catch (error) {
+    console.error("Failed to send application.", error);
+    return { error: error instanceof Error ? error.message : "Sending failed. Try again." };
   }
 }
 
