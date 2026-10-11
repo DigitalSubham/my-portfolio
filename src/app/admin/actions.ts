@@ -161,6 +161,12 @@ export async function logoutAction() {
   redirect("/admin/login");
 }
 
+// Public pages are prerendered, so refresh all of them (/, /projects, /blog, …) after any content
+// change instead of listing pages and missing one.
+function revalidatePublicSite() {
+  revalidatePath("/", "layout");
+}
+
 export async function saveSingleton(tableKey: string, formData: FormData) {
   await requireAdmin();
   if (!hasDatabase) redirect(`/admin/${tableKey}?error=db`);
@@ -173,8 +179,7 @@ export async function saveSingleton(tableKey: string, formData: FormData) {
     `UPDATE ${config.table} SET ${assignmentSql(config.fields)}, updated_at = now() WHERE id = 1`,
     values,
   );
-  revalidatePath("/");
-  revalidatePath("/blog");
+  revalidatePublicSite();
   revalidatePath(`/admin/${tableKey}`);
 }
 
@@ -190,8 +195,7 @@ export async function createRecord(tableKey: string, formData: FormData) {
     `INSERT INTO ${config.table} (${columns}) VALUES (${placeholders})`,
     values,
   );
-  revalidatePath("/");
-  revalidatePath("/blog");
+  revalidatePublicSite();
   revalidatePath("/admin");
 }
 
@@ -206,8 +210,7 @@ export async function updateRecord(tableKey: string, id: number, formData: FormD
     `UPDATE ${config.table} SET ${assignmentSql(config.fields, 2)}, updated_at = now() WHERE id = $1`,
     [id, ...values],
   );
-  revalidatePath("/");
-  revalidatePath("/blog");
+  revalidatePublicSite();
   revalidatePath("/admin");
 }
 
@@ -218,8 +221,7 @@ export async function deleteRecord(tableKey: string, id: number) {
 
   const sql = getSql();
   await sql.query(`DELETE FROM ${config.table} WHERE id = $1`, [id]);
-  revalidatePath("/");
-  revalidatePath("/blog");
+  revalidatePublicSite();
   revalidatePath("/admin");
 }
 
