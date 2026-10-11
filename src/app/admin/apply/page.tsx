@@ -2,6 +2,7 @@ import Link from "next/link";
 import AdminShell from "../_components/AdminShell";
 import ApplyAssistant from "./ApplyAssistant";
 import { requireAdmin } from "@/lib/auth";
+import { listResumes } from "@/lib/db";
 import { getSentApplications, gmailConnected } from "@/lib/job-apply";
 
 // Free OpenRouter models can take over a minute; the draft action runs under this page's limit.
@@ -14,7 +15,7 @@ type Props = {
 
 export default async function AdminApplyPage({ searchParams }: Props) {
   await requireAdmin();
-  const [{ reuse }, history] = await Promise.all([searchParams, getSentApplications()]);
+  const [{ reuse }, history, resumes] = await Promise.all([searchParams, getSentApplications(), listResumes()]);
 
   return (
     <AdminShell
@@ -25,6 +26,7 @@ export default async function AdminApplyPage({ searchParams }: Props) {
       <ApplyAssistant
         gmailReady={gmailConnected()}
         history={history}
+        resumes={resumes}
         initialReuseId={reuse ? Number(reuse) : undefined}
       />
       <p className="mt-6 text-[13px] text-[var(--adm-muted)]">

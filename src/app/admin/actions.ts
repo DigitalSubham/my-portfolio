@@ -11,7 +11,7 @@ import {
   signJwt,
 } from "@/lib/auth";
 import { getAdminTable, type AdminField } from "@/lib/admin-config";
-import { getSql, hasDatabase, saveResume } from "@/lib/db";
+import { addResume, deleteResume, getSql, hasDatabase, setDefaultResume } from "@/lib/db";
 import {
   draftApplication,
   sendApplication,
@@ -80,15 +80,30 @@ export async function resetPasswordAction(formData: FormData) {
 
 export async function uploadResumeAction(formData: FormData) {
   await requireAdmin();
+  const name = String(formData.get("name") || "").trim();
+  const bestFor = String(formData.get("bestFor") || "").trim();
   const file = formData.get("resume");
+  if (!name) redirect("/admin/resume?error=name");
   if (!(file instanceof File) || file.size === 0) redirect("/admin/resume?error=missing");
   if (file.size > 4 * 1024 * 1024) redirect("/admin/resume?error=size");
 
   const pdf = Buffer.from(await file.arrayBuffer());
   if (pdf.subarray(0, 5).toString() !== "%PDF-") redirect("/admin/resume?error=type");
 
-  await saveResume(pdf);
+  await addResume({ name, bestFor, pdf, makeDefault: formData.get("makeDefault") === "on" });
   redirect("/admin/resume?uploaded=1");
+}
+
+export async function setDefaultResumeAction(id: number) {
+  await requireAdmin();
+  await setDefaultResume(id);
+  revalidatePath("/admin/resume");
+}
+
+export async function deleteResumeAction(id: number) {
+  await requireAdmin();
+  await deleteResume(id);
+  revalidatePath("/admin/resume");
 }
 
 export type DraftState = {
@@ -131,6 +146,7 @@ export async function sendApplicationAction(_prev: SendState, formData: FormData
       body: String(formData.get("body") || ""),
       company: field("company"),
       role: field("role"),
+      resumeId: Number(formData.get("resumeId")) || 0,
     });
     return { sentTo: field("to") };
   } catch (error) {

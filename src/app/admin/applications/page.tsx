@@ -62,7 +62,9 @@ export default async function AdminApplicationsPage() {
                   <dt>Subject</dt>
                   <dd>{app.subject}</dd>
                   <dt>Sent</dt>
-                  <dd>{dateTime(app.sentAt)} with resume attached</dd>
+                  <dd>{dateTime(app.sentAt)}</dd>
+                  <dt>Resume</dt>
+                  <dd>{app.resumeName || "Resume attached"}</dd>
                 </dl>
                 <p className="adm-app-body">{app.body}</p>
                 <div>

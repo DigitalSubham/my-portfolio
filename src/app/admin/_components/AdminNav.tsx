@@ -161,7 +161,7 @@ export default function AdminNav({ sections, unreadMessages = 0 }: Props) {
         <NavLink
           href="/admin/resume"
           icon={FileUser}
-          label="Resume"
+          label="Resumes"
           active={pathname === "/admin/resume"}
           onNavigate={close}
         />

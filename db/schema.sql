@@ -251,3 +251,22 @@ CREATE TABLE IF NOT EXISTS applications (
 );
 
 CREATE INDEX IF NOT EXISTS applications_email_sent_idx ON applications (lower(to_email), sent_at DESC);
+
+-- Multiple resumes, the default one is served at /resume.pdf. Replaces the single-row resume table.
+CREATE TABLE IF NOT EXISTS resumes (
+  id BIGSERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  best_for TEXT NOT NULL DEFAULT '',
+  data BYTEA NOT NULL,
+  is_default BOOLEAN NOT NULL DEFAULT false,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS resumes_one_default_idx ON resumes (is_default) WHERE is_default;
+
+INSERT INTO resumes (name, best_for, data, is_default)
+SELECT 'Full Stack', 'Full stack, MERN, React and Node.js roles', data, true FROM resume
+WHERE NOT EXISTS (SELECT 1 FROM resumes);
+
+ALTER TABLE applications ADD COLUMN IF NOT EXISTS resume_id BIGINT;
+ALTER TABLE applications ADD COLUMN IF NOT EXISTS resume_name TEXT NOT NULL DEFAULT '';

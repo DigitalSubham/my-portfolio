@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { getPortfolioData, getResume, getSql, hasDatabase } from "./db";
+import { getPortfolioData, getResumeFile, getSql, hasDatabase, listResumes } from "./db";
 
 export type ApplicationDraft = {
   company: string;
@@ -13,6 +13,8 @@ export type ApplicationDraft = {
   fitSummary: string;
   subject: string;
   body: string;
+  // The resume to attach; the AI picks it when there is more than one.
+  resumeId: number;
   model: string;
 };
 
@@ -85,7 +87,8 @@ Read the JOB POSTING (text and/or image) and the CANDIDATE facts, then reply wit
   "dealbreakers": string[], requirements the candidate may NOT meet, each as a short sentence (compare location, interview mode, experience, and required skills against the candidate facts; [] if none),
   "fitSummary": string, one sentence on how well the candidate fits,
   "subject": string, the email subject,
-  "body": string, the plain-text email body
+  "body": string, the plain-text email body,
+  "resumeId": number, the id from RESUMES whose "bestFor" fits this job best (the default one if none fits better)
 }
 
 Rules:
@@ -104,7 +107,7 @@ Rules:
 - The sample emails show the structure the candidate likes. Do not copy their wording; they are weaker than what you should write. No buzzwords, no emojis.
 - Subject format: "Application for <role> | <candidate name> | <years of experience> | <two skills>", where the two skills are the candidate's skills that best match the posting. Example: "Application for MERN Stack Developer | Subham Kumar | 3+ Years | React, Node.js". Keep it under 90 characters.`;
 
-function parseDraft(content: string): Omit<ApplicationDraft, "model"> | null {
+function parseDraft(content: string): Omit<ApplicationDraft, "model" | "resumeId"> & { resumeId: number } | null {
   const start = content.indexOf("{");
   const end = content.lastIndexOf("}");
   if (start === -1 || end <= start) return null;
@@ -125,6 +128,7 @@ function parseDraft(content: string): Omit<ApplicationDraft, "model"> | null {
       fitSummary: text("fitSummary"),
       subject: text("subject"),
       body: text("body"),
+      resumeId: Number(raw.resumeId) || 0,
     };
     return draft.role && draft.subject && draft.body ? draft : null;
   } catch {
@@ -136,11 +140,12 @@ export async function draftApplication(posting: { text: string; imageDataUrl?: s
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) throw new Error("OPENROUTER_API_KEY is not set.");
 
-  const facts = await candidateFacts();
+  const [facts, resumes] = await Promise.all([candidateFacts(), listResumes()]);
+  const resumeChoices = resumes.map(({ id, name, bestFor, isDefault }) => ({ id, name, bestFor, isDefault }));
   const content: Record<string, unknown>[] = [
     {
       type: "text",
-      text: `JOB POSTING:\n${posting.text || "(see image)"}\n\nCANDIDATE:\n${JSON.stringify(facts, null, 2)}`,
+      text: `JOB POSTING:\n${posting.text || "(see image)"}\n\nCANDIDATE:\n${JSON.stringify(facts, null, 2)}\n\nRESUMES:\n${JSON.stringify(resumeChoices, null, 2)}`,
     },
   ];
   if (posting.imageDataUrl) {
@@ -189,7 +194,11 @@ export async function draftApplication(posting: { text: string; imageDataUrl?: s
     }
 
     const draft = parseDraft(json?.choices?.[0]?.message?.content ?? "");
-    if (draft) return { ...draft, model: json?.model ?? models[0] };
+    if (draft) {
+      // Fall back to the default resume when the model picks an id that does not exist.
+      const picked = resumes.find((resume) => resume.id === draft.resumeId) ?? resumes.find((resume) => resume.isDefault);
+      return { ...draft, resumeId: picked?.id ?? 0, model: json?.model ?? models[0] };
+    }
   }
 
   throw new Error(lastError);
@@ -203,13 +212,15 @@ export type SentApplication = {
   subject: string;
   body: string;
   sentAt: string;
+  resumeId: number;
+  resumeName: string;
 };
 
 export async function getSentApplications(): Promise<SentApplication[]> {
   if (!hasDatabase) return [];
   try {
     const rows = (await getSql()`
-      SELECT id, company, role, to_email, subject, body, sent_at FROM applications ORDER BY sent_at DESC
+      SELECT id, company, role, to_email, subject, body, sent_at, resume_id, resume_name FROM applications ORDER BY sent_at DESC
     `) as Record<string, string>[];
     return rows.map((row) => ({
       id: Number(row.id),
@@ -219,6 +230,8 @@ export async function getSentApplications(): Promise<SentApplication[]> {
       subject: row.subject,
       body: row.body,
       sentAt: new Date(row.sent_at).toISOString(),
+      resumeId: Number(row.resume_id) || 0,
+      resumeName: row.resume_name,
     }));
   } catch (error) {
     console.error("Failed to load applications from Neon.", error);
@@ -236,14 +249,15 @@ export async function sendApplication(email: {
   body: string;
   company: string;
   role: string;
+  resumeId: number;
 }) {
   const user = process.env.GMAIL_USER;
   const pass = process.env.GMAIL_APP_PASSWORD;
   if (!user || !pass) throw new Error("Gmail is not connected: set GMAIL_USER and GMAIL_APP_PASSWORD.");
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.to)) throw new Error("Enter a valid email address.");
 
-  const [resume, data] = await Promise.all([getResume(), getPortfolioData()]);
-  if (!resume) throw new Error("No resume uploaded. Upload one under Admin → Resume first.");
+  const [resume, data] = await Promise.all([getResumeFile(email.resumeId), getPortfolioData()]);
+  if (!resume) throw new Error("No resume uploaded. Upload one under Admin → Resumes first.");
 
   // Gmail's SMTP server keeps a copy in the Sent folder, so replies thread like normal mail.
   await nodemailer.createTransport({ service: "gmail", auth: { user, pass } }).sendMail({
@@ -261,7 +275,7 @@ export async function sendApplication(email: {
   });
 
   await getSql()`
-    INSERT INTO applications (company, role, to_email, subject, body)
-    VALUES (${email.company}, ${email.role}, ${email.to}, ${email.subject}, ${email.body})
+    INSERT INTO applications (company, role, to_email, subject, body, resume_id, resume_name)
+    VALUES (${email.company}, ${email.role}, ${email.to}, ${email.subject}, ${email.body}, ${resume.id}, ${resume.name})
   `;
 }

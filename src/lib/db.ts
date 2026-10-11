@@ -342,16 +342,51 @@ function mapContactChannel(row: Record<string, unknown>): ContactChannel {
   };
 }
 
-export async function getResume() {
+export type ResumeMeta = {
+  id: number;
+  name: string;
+  bestFor: string;
+  isDefault: boolean;
+  size: number;
+  createdAt: string;
+};
+
+export async function listResumes(): Promise<ResumeMeta[]> {
+  if (!hasDatabase) return [];
+  try {
+    const rows = (await getSql()`
+      SELECT id, name, best_for, is_default, octet_length(data) AS size, created_at
+      FROM resumes ORDER BY is_default DESC, created_at DESC
+    `) as Record<string, unknown>[];
+    return rows.map((row) => ({
+      id: Number(row.id),
+      name: String(row.name),
+      bestFor: String(row.best_for),
+      isDefault: Boolean(row.is_default),
+      size: Number(row.size),
+      createdAt: new Date(String(row.created_at)).toISOString(),
+    }));
+  } catch (error) {
+    console.error("Failed to list resumes from Neon.", error);
+    return [];
+  }
+}
+
+// One resume's PDF; without an id (or for an id that no longer exists) the default one.
+export async function getResumeFile(id?: number) {
   if (!hasDatabase) return null;
   try {
     const rows = (await getSql()`
-      SELECT encode(data, 'base64') AS data, updated_at FROM resume WHERE id = 1
+      SELECT id, name, encode(data, 'base64') AS data, created_at FROM resumes
+      WHERE id = ${id ?? 0} OR is_default
+      ORDER BY (id = ${id ?? 0}) DESC LIMIT 1
     `) as Record<string, unknown>[];
     if (!rows[0]) return null;
     return {
+      id: Number(rows[0].id),
+      name: String(rows[0].name),
       data: Buffer.from(String(rows[0].data), "base64"),
-      updatedAt: new Date(String(rows[0].updated_at)),
+      createdAt: new Date(String(rows[0].created_at)),
     };
   } catch (error) {
     console.error("Failed to load resume from Neon.", error);
@@ -359,12 +394,31 @@ export async function getResume() {
   }
 }
 
-export async function saveResume(pdf: Buffer) {
-  await getSql()`
-    INSERT INTO resume (id, data, updated_at)
-    VALUES (1, decode(${pdf.toString("base64")}, 'base64'), now())
-    ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data, updated_at = now()
-  `;
+export async function addResume(resume: { name: string; bestFor: string; pdf: Buffer; makeDefault: boolean }) {
+  const sql = getSql();
+  const [{ count }] = (await sql`SELECT COUNT(*)::int AS count FROM resumes`) as { count: number }[];
+  // The first resume is always the default, so /resume.pdf never goes missing.
+  const makeDefault = resume.makeDefault || count === 0;
+  await sql.transaction([
+    ...(makeDefault ? [sql`UPDATE resumes SET is_default = false WHERE is_default`] : []),
+    sql`
+      INSERT INTO resumes (name, best_for, data, is_default)
+      VALUES (${resume.name}, ${resume.bestFor}, decode(${resume.pdf.toString("base64")}, 'base64'), ${makeDefault})
+    `,
+  ]);
+}
+
+export async function setDefaultResume(id: number) {
+  const sql = getSql();
+  await sql.transaction([
+    sql`UPDATE resumes SET is_default = false WHERE is_default AND id <> ${id}`,
+    sql`UPDATE resumes SET is_default = true WHERE id = ${id}`,
+  ]);
+}
+
+// The default resume backs the portfolio's download button, so it cannot be deleted.
+export async function deleteResume(id: number) {
+  await getSql()`DELETE FROM resumes WHERE id = ${id} AND NOT is_default`;
 }
 
 export { sortByOrder };
