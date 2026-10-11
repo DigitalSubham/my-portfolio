@@ -5,9 +5,9 @@ import { requireAdmin } from "@/lib/auth";
 import { listResumes } from "@/lib/db";
 import { getSentApplications, gmailConnected } from "@/lib/job-apply";
 
-// Free OpenRouter models can take over a minute; the draft action runs under this page's limit.
-// Vercel Hobby allows up to 300 s with fluid compute (on by default for new projects).
-export const maxDuration = 180;
+// The draft action runs under this page's limit. 60 s is the most Vercel Hobby allows without
+// Fluid compute; drafts take about 10 s with reasoning turned off.
+export const maxDuration = 60;
 
 type Props = {
   searchParams: Promise<{ reuse?: string }>;

@@ -178,7 +178,7 @@ export default function ApplyAssistant({ gmailReady, history, resumes, initialRe
               <p className="font-semibold">No draft yet</p>
               <p>
                 {mode === "posting"
-                  ? "Your email and a fit check show up here. Free models can take a minute or two."
+                  ? "Your email and a fit check show up here, usually in about 10 seconds."
                   : "Pick a sent email to reuse it."}
               </p>
             </div>

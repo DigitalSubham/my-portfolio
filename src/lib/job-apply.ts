@@ -176,6 +176,9 @@ export async function draftApplication(posting: { text: string; imageDataUrl?: s
         ],
         response_format: { type: "json_object" },
         temperature: 0.4,
+        // The default model "thinks" for ~6k hidden tokens first: 90+ s with no better email.
+        // Off, a draft takes under 10 s, well inside Vercel Hobby's 60 s function limit.
+        reasoning: { enabled: false },
       }),
     });
 
