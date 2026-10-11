@@ -221,12 +221,6 @@ CREATE INDEX IF NOT EXISTS blog_posts_publish_order_idx ON blog_posts (is_publis
 CREATE INDEX IF NOT EXISTS certificates_publish_order_idx ON certificates (is_published, sort_order);
 CREATE INDEX IF NOT EXISTS contact_messages_created_idx ON contact_messages (created_at DESC);
 
-CREATE TABLE IF NOT EXISTS resume (
-  id INT PRIMARY KEY DEFAULT 1 CHECK (id = 1),
-  data BYTEA NOT NULL,
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
 CREATE TABLE IF NOT EXISTS job_profile (
   id INT PRIMARY KEY DEFAULT 1 CHECK (id = 1),
   current_location TEXT NOT NULL DEFAULT '',
@@ -252,7 +246,7 @@ CREATE TABLE IF NOT EXISTS applications (
 
 CREATE INDEX IF NOT EXISTS applications_email_sent_idx ON applications (lower(to_email), sent_at DESC);
 
--- Multiple resumes, the default one is served at /resume.pdf. Replaces the single-row resume table.
+-- Multiple resumes, the default one is served at /resume.pdf.
 CREATE TABLE IF NOT EXISTS resumes (
   id BIGSERIAL PRIMARY KEY,
   name TEXT NOT NULL,
@@ -263,10 +257,6 @@ CREATE TABLE IF NOT EXISTS resumes (
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS resumes_one_default_idx ON resumes (is_default) WHERE is_default;
-
-INSERT INTO resumes (name, best_for, data, is_default)
-SELECT 'Full Stack', 'Full stack, MERN, React and Node.js roles', data, true FROM resume
-WHERE NOT EXISTS (SELECT 1 FROM resumes);
 
 ALTER TABLE applications ADD COLUMN IF NOT EXISTS resume_id BIGINT;
 ALTER TABLE applications ADD COLUMN IF NOT EXISTS resume_name TEXT NOT NULL DEFAULT '';
