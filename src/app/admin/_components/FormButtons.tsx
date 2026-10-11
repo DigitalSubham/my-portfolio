@@ -13,7 +13,7 @@ export function SubmitButton({
 }: SubmitButtonProps) {
   const { pending } = useFormStatus();
   return (
-    <button {...props} className={className} disabled={pending} aria-busy={pending}>
+    <button {...props} className={className} disabled={pending || props.disabled} aria-busy={pending}>
       {pending && <Loader2 className="adm-spin" />}
       {children}
     </button>

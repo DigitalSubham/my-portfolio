@@ -1,0 +1,41 @@
+import Link from "next/link";
+import AdminShell from "../_components/AdminShell";
+import ApplyAssistant from "./ApplyAssistant";
+import { requireAdmin } from "@/lib/auth";
+import { listResumes } from "@/lib/db";
+import { getSentApplications, gmailConnected } from "@/lib/job-apply";
+
+// The draft action runs under this page's limit. 60 s is the most Vercel Hobby allows without
+// Fluid compute; drafts take about 10 s with reasoning turned off.
+export const maxDuration = 60;
+
+type Props = {
+  searchParams: Promise<{ reuse?: string }>;
+};
+
+export default async function AdminApplyPage({ searchParams }: Props) {
+  await requireAdmin();
+  const [{ reuse }, history, resumes] = await Promise.all([searchParams, getSentApplications(), listResumes()]);
+
+  return (
+    <AdminShell
+      eyebrow="Jobs"
+      title="Apply"
+      description="Draft from a job posting with AI, or reuse an email you already sent. Review, then send with your resume attached."
+    >
+      <ApplyAssistant
+        gmailReady={gmailConnected()}
+        history={history}
+        resumes={resumes}
+        initialReuseId={reuse ? Number(reuse) : undefined}
+      />
+      <p className="mt-6 text-[13px] text-[var(--adm-muted)]">
+        AI drafts use your published portfolio content plus your{" "}
+        <Link href="/admin/job-profile" className="font-semibold text-[var(--adm-accent-text)]">
+          job profile
+        </Link>
+        . Keep both up to date for better emails.
+      </p>
+    </AdminShell>
+  );
+}

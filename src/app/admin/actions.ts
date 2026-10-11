@@ -11,7 +11,12 @@ import {
   signJwt,
 } from "@/lib/auth";
 import { getAdminTable, type AdminField } from "@/lib/admin-config";
-import { getSql, hasDatabase, saveResume } from "@/lib/db";
+import { addResume, deleteResume, getSql, hasDatabase, setDefaultResume } from "@/lib/db";
+import {
+  draftApplication,
+  sendApplication,
+  type ApplicationDraft,
+} from "@/lib/job-apply";
 
 function fieldValue(field: AdminField, formData: FormData) {
   if (field.type === "boolean") return formData.get(field.name) === "on";
@@ -75,21 +80,91 @@ export async function resetPasswordAction(formData: FormData) {
 
 export async function uploadResumeAction(formData: FormData) {
   await requireAdmin();
+  const name = String(formData.get("name") || "").trim();
+  const bestFor = String(formData.get("bestFor") || "").trim();
   const file = formData.get("resume");
+  if (!name) redirect("/admin/resume?error=name");
   if (!(file instanceof File) || file.size === 0) redirect("/admin/resume?error=missing");
   if (file.size > 4 * 1024 * 1024) redirect("/admin/resume?error=size");
 
   const pdf = Buffer.from(await file.arrayBuffer());
   if (pdf.subarray(0, 5).toString() !== "%PDF-") redirect("/admin/resume?error=type");
 
-  await saveResume(pdf);
+  await addResume({ name, bestFor, pdf, makeDefault: formData.get("makeDefault") === "on" });
   redirect("/admin/resume?uploaded=1");
+}
+
+export async function setDefaultResumeAction(id: number) {
+  await requireAdmin();
+  await setDefaultResume(id);
+  revalidatePath("/admin/resume");
+}
+
+export async function deleteResumeAction(id: number) {
+  await requireAdmin();
+  await deleteResume(id);
+  revalidatePath("/admin/resume");
+}
+
+export type DraftState = {
+  draft?: ApplicationDraft;
+  error?: string;
+  at?: number;
+};
+
+export async function draftApplicationAction(_prev: DraftState, formData: FormData): Promise<DraftState> {
+  await requireAdmin();
+  const text = String(formData.get("text") || "").trim();
+  const image = formData.get("image");
+  const hasImage = image instanceof File && image.size > 0;
+
+  if (!text && !hasImage) return { error: "Paste the job posting text or add a screenshot." };
+  if (hasImage && !image.type.startsWith("image/")) return { error: "The screenshot must be an image." };
+  if (hasImage && image.size > 3 * 1024 * 1024) return { error: "The screenshot must be 3 MB or smaller." };
+
+  const imageDataUrl = hasImage
+    ? `data:${image.type};base64,${Buffer.from(await image.arrayBuffer()).toString("base64")}`
+    : undefined;
+
+  try {
+    return { draft: await draftApplication({ text, imageDataUrl }), at: Date.now() };
+  } catch (error) {
+    console.error("Failed to draft application.", error);
+    return { error: error instanceof Error ? error.message : "Drafting failed. Try again." };
+  }
+}
+
+export type SendState = { error?: string; sentTo?: string };
+
+export async function sendApplicationAction(_prev: SendState, formData: FormData): Promise<SendState> {
+  await requireAdmin();
+  const field = (name: string) => String(formData.get(name) || "").trim();
+  try {
+    await sendApplication({
+      to: field("to"),
+      subject: field("subject"),
+      body: String(formData.get("body") || ""),
+      company: field("company"),
+      role: field("role"),
+      resumeId: Number(formData.get("resumeId")) || 0,
+    });
+    return { sentTo: field("to") };
+  } catch (error) {
+    console.error("Failed to send application.", error);
+    return { error: error instanceof Error ? error.message : "Sending failed. Try again." };
+  }
 }
 
 export async function logoutAction() {
   const cookieStore = await cookies();
   cookieStore.delete(authCookieName);
   redirect("/admin/login");
+}
+
+// Public pages are prerendered, so refresh all of them (/, /projects, /blog, …) after any content
+// change instead of listing pages and missing one.
+function revalidatePublicSite() {
+  revalidatePath("/", "layout");
 }
 
 export async function saveSingleton(tableKey: string, formData: FormData) {
@@ -104,8 +179,7 @@ export async function saveSingleton(tableKey: string, formData: FormData) {
     `UPDATE ${config.table} SET ${assignmentSql(config.fields)}, updated_at = now() WHERE id = 1`,
     values,
   );
-  revalidatePath("/");
-  revalidatePath("/blog");
+  revalidatePublicSite();
   revalidatePath(`/admin/${tableKey}`);
 }
 
@@ -121,8 +195,7 @@ export async function createRecord(tableKey: string, formData: FormData) {
     `INSERT INTO ${config.table} (${columns}) VALUES (${placeholders})`,
     values,
   );
-  revalidatePath("/");
-  revalidatePath("/blog");
+  revalidatePublicSite();
   revalidatePath("/admin");
 }
 
@@ -137,8 +210,7 @@ export async function updateRecord(tableKey: string, id: number, formData: FormD
     `UPDATE ${config.table} SET ${assignmentSql(config.fields, 2)}, updated_at = now() WHERE id = $1`,
     [id, ...values],
   );
-  revalidatePath("/");
-  revalidatePath("/blog");
+  revalidatePublicSite();
   revalidatePath("/admin");
 }
 
@@ -149,8 +221,7 @@ export async function deleteRecord(tableKey: string, id: number) {
 
   const sql = getSql();
   await sql.query(`DELETE FROM ${config.table} WHERE id = $1`, [id]);
-  revalidatePath("/");
-  revalidatePath("/blog");
+  revalidatePublicSite();
   revalidatePath("/admin");
 }
 

@@ -602,6 +602,21 @@
 @media (min-width: 1024px) {
   .adm-resume { grid-template-columns: 340px minmax(0, 1fr); }
 }
+.adm-resume-row {
+  display: grid;
+  gap: 12px;
+  border-top: 1px solid var(--adm-border);
+  padding: 16px 20px;
+}
+.adm-card-head + .adm-resume-row { border-top: none; }
+@media (min-width: 640px) {
+  .adm-resume-row { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+}
+.adm-resume-row[data-selected="true"] { background: var(--adm-accent-soft); box-shadow: inset 3px 0 0 var(--adm-accent); }
+.adm-resume-pick { display: block; min-width: 0; border-radius: 8px; }
+.adm-resume-pick:hover .adm-resume-name { color: var(--adm-accent-text); }
+.adm-resume-pick:focus-visible { outline: none; box-shadow: 0 0 0 3.5px var(--adm-ring); }
+.adm-resume-name { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 650; }
 .adm-resume-frame {
   display: block;
   width: 100%;
@@ -635,6 +650,123 @@
   font-weight: 620;
   color: var(--adm-text);
   cursor: pointer;
+}
+
+.adm-apply { display: grid; gap: 20px; align-items: start; }
+@media (min-width: 1024px) {
+  .adm-apply { grid-template-columns: minmax(300px, 0.8fr) minmax(0, 1.4fr); }
+  /* The input panel stays in view while scrolling through a long draft. */
+  .adm-apply-input { position: sticky; top: 24px; }
+}
+.adm-apply-single { max-width: 880px; }
+.adm-apply-empty { min-height: 320px; align-content: center; }
+
+.adm-tabs-top { max-width: 520px; }
+.adm-tabs button { white-space: nowrap; }
+@media (max-width: 479px) {
+  .adm-tabs button svg { display: none; }
+}
+
+/* Review card: header, fields, then an action bar. */
+.adm-review { overflow: hidden; }
+.adm-review-head { border-bottom: 1px solid var(--adm-border); padding: 18px 24px; }
+.adm-review-body { display: grid; gap: 18px; padding: 20px 24px 24px; }
+.adm-review-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--adm-border);
+  background: var(--adm-surface-2);
+  padding: 14px 24px;
+}
+.adm-review-foot .adm-hint { max-width: 380px; }
+.adm-fields-3, .adm-fields-2 { display: grid; gap: 14px; align-items: start; }
+@media (min-width: 768px) {
+  .adm-fields-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .adm-fields-2 { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
+}
+
+/* Clickable list of sent emails on the Reuse tab. */
+.adm-pick-list { display: grid; max-height: 460px; overflow-y: auto; }
+.adm-pick {
+  display: grid;
+  gap: 3px;
+  border-top: 1px solid var(--adm-border);
+  padding: 13px 20px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.adm-pick:first-child { border-top: none; }
+.adm-pick:hover { background: var(--adm-surface-3); }
+.adm-pick[aria-selected="true"] { background: var(--adm-accent-soft); box-shadow: inset 3px 0 0 var(--adm-accent); }
+.adm-pick-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 620; }
+.adm-pick-meta { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; color: var(--adm-faint); }
+.adm-alert:has(ul) { align-items: flex-start; }
+
+.adm-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  border-radius: 10px;
+  background: var(--adm-surface-3);
+  padding: 4px;
+}
+.adm-tabs button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 36px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 620;
+  color: var(--adm-muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.adm-tabs button svg { height: 15px; width: 15px; }
+.adm-tabs button:hover { color: var(--adm-text); }
+.adm-tabs button[aria-selected="true"] {
+  background: var(--adm-surface);
+  color: var(--adm-text);
+  box-shadow: var(--adm-shadow);
+}
+
+/* ---------- applications ---------- */
+.adm-app-company { font-weight: 450; color: var(--adm-muted); }
+.adm-app-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--adm-faint);
+  text-align: right;
+}
+.adm-app-to { font-weight: 600; color: var(--adm-muted); }
+@media (max-width: 639px) {
+  .adm-app-to { display: none; }
+}
+.adm-app-fields {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 6px 16px;
+  font-size: 13.5px;
+}
+.adm-app-fields dt { font-weight: 600; color: var(--adm-muted); }
+.adm-app-fields dd { overflow-wrap: anywhere; }
+.adm-app-body {
+  white-space: pre-wrap;
+  border: 1px solid var(--adm-border);
+  border-radius: 9px;
+  background: var(--adm-surface);
+  padding: 14px 16px;
+  font-size: 14px;
+  line-height: 1.65;
 }
 
 .adm-spin { animation: adm-spin 0.7s linear infinite; }

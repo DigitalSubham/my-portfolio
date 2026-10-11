@@ -226,3 +226,47 @@ CREATE TABLE IF NOT EXISTS resume (
   data BYTEA NOT NULL,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+CREATE TABLE IF NOT EXISTS job_profile (
+  id INT PRIMARY KEY DEFAULT 1 CHECK (id = 1),
+  current_location TEXT NOT NULL DEFAULT '',
+  relocation TEXT NOT NULL DEFAULT 'Open to relocating anywhere',
+  notice_period TEXT NOT NULL DEFAULT '',
+  extra_facts TEXT NOT NULL DEFAULT '',
+  sample_emails TEXT NOT NULL DEFAULT '',
+  signature TEXT NOT NULL DEFAULT '',
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+INSERT INTO job_profile (id) VALUES (1) ON CONFLICT (id) DO NOTHING;
+
+CREATE TABLE IF NOT EXISTS applications (
+  id BIGSERIAL PRIMARY KEY,
+  company TEXT NOT NULL DEFAULT '',
+  role TEXT NOT NULL DEFAULT '',
+  to_email TEXT NOT NULL DEFAULT '',
+  subject TEXT NOT NULL,
+  body TEXT NOT NULL,
+  sent_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS applications_email_sent_idx ON applications (lower(to_email), sent_at DESC);
+
+-- Multiple resumes, the default one is served at /resume.pdf. Replaces the single-row resume table.
+CREATE TABLE IF NOT EXISTS resumes (
+  id BIGSERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  best_for TEXT NOT NULL DEFAULT '',
+  data BYTEA NOT NULL,
+  is_default BOOLEAN NOT NULL DEFAULT false,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS resumes_one_default_idx ON resumes (is_default) WHERE is_default;
+
+INSERT INTO resumes (name, best_for, data, is_default)
+SELECT 'Full Stack', 'Full stack, MERN, React and Node.js roles', data, true FROM resume
+WHERE NOT EXISTS (SELECT 1 FROM resumes);
+
+ALTER TABLE applications ADD COLUMN IF NOT EXISTS resume_id BIGINT;
+ALTER TABLE applications ADD COLUMN IF NOT EXISTS resume_name TEXT NOT NULL DEFAULT '';
