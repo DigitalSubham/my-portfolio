@@ -34,7 +34,8 @@ export default async function Home() {
         </section>
       )}
 
-      <Projects projects={data.projects} />
+      {/* The homepage shows the first 6 by sort order; /projects lists them all. */}
+      <Projects projects={data.projects.slice(0, 6)} />
       <Skills groups={data.skillGroups} delivery={data.deliveryStrengths} />
       <Notes />
       <Blogs posts={data.blogPosts} />
