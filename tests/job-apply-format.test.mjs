@@ -104,7 +104,20 @@ test("draft review rejects altered metrics and unsupported AWS services", () => 
 test("draft review rejects project lists, excessive length and logistics in the paragraph", () => {
   const evidence = { text: "AWS", projectNames: ["Sarthaks.com", "Quizard", "Enterprise ERP System"] };
   const issues = experienceParagraphIssues(`Sarthaks.com Quizard Enterprise ERP System ${"production interfaces ".repeat(60)} Open to relocating to Noida.`, evidence);
-  assert.ok(issues.some((issue) => issue.includes("75 to 110 words")));
+  assert.ok(issues.some((issue) => issue.includes("45 to 65 words")));
   assert.ok(issues.some((issue) => issue.includes("only TWO projects")));
   assert.ok(issues.some((issue) => issue.includes("logistics")));
+});
+
+test("a concise project-focused paragraph passes and the former long draft needs revision", () => {
+  const evidence = {
+    text: "3+ years React Next.js TypeScript. Enterprise ERP System with 200+ modules and reusable components. Sarthaks.com serves 20M+ users with improved UI performance. REST APIs and AWS deployments.",
+    projectNames: ["Enterprise ERP System", "Sarthaks.com", "Quizard", "Admin Dashboard"],
+  };
+  const concise = "I have 3+ years of experience building applications with React, Next.js, and TypeScript. I built reusable components and financial workflows for the 200+ module Enterprise ERP System and improved UI performance on Sarthaks.com, serving 20M+ users. My experience also includes REST API integration and AWS deployments.";
+  assert.deepEqual(experienceParagraphIssues(concise, evidence), []);
+  const previous = "I have 3+ years of experience building production web applications using React.js, Next.js, and TypeScript. At Walsis eConnect India, I worked on Sarthaks.com, a student dashboard serving 20M+ users, where I improved UI performance and raised daily engagement by 30%. I also optimized SSR and SEO for Quizard, doubling organic traffic, and built a comprehensive Admin Dashboard for project and database management. My current role at Codebucket Solutions involves developing complex enterprise systems with React, TypeScript, and AWS deployments.";
+  const issues = experienceParagraphIssues(previous, evidence);
+  assert.ok(issues.some((issue) => issue.includes("45 to 65 words")));
+  assert.ok(issues.some((issue) => issue.includes("vague role summaries")));
 });

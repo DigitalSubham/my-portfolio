@@ -1,4 +1,5 @@
 export const officialWebsite = "https://subhams.online";
+export const experienceParagraphWordRange = { min: 45, max: 65 };
 
 export function normalizePublicLink(value: string) {
   // Match the whole link, including prefixes left by older drafts, in one pass.
@@ -23,7 +24,9 @@ export function formatApplicationSignature(value: string) {
 export function experienceParagraphIssues(paragraph: string, evidence: { text: string; projectNames: string[] }) {
   const issues: string[] = [];
   const words = paragraph.trim().split(/\s+/).filter(Boolean).length;
-  if (words < 75 || words > 110) issues.push(`The experience paragraph has ${words} words. Use 75 to 110 words.`);
+  if (words < experienceParagraphWordRange.min || words > experienceParagraphWordRange.max) {
+    issues.push(`The experience paragraph has ${words} words. Use ${experienceParagraphWordRange.min} to ${experienceParagraphWordRange.max} words.`);
+  }
   const namedProjects = evidence.projectNames.filter((name) => paragraph.toLowerCase().includes(name.toLowerCase()));
   if (namedProjects.length > 2) issues.push(`Describe only TWO projects, not ${namedProjects.length}: ${namedProjects.join(", ")}.`);
 
@@ -37,6 +40,9 @@ export function experienceParagraphIssues(paragraph: string, evidence: { text: s
   if (unsupportedServices.length) issues.push(`Do not claim these AWS services; they are absent from the candidate facts: ${unsupportedServices.join(", ")}.`);
   if (/\b(?:relocat\w*|notice period|current location|in.person interviews?|best regards)\b|https?:\/\//i.test(paragraph)) {
     issues.push("The experience paragraph must contain only experience and project contributions. The app adds logistics and the signature.");
+  }
+  if (/\b(?:my current role|complex enterprise systems|comprehensive admin dashboard|scalable applications|clean code|fast.paced environments)\b/i.test(paragraph)) {
+    issues.push("Replace vague role summaries and generic claims with a named project and your specific contribution.");
   }
   return issues;
 }
@@ -80,10 +86,10 @@ export function buildApplicationBody(input: BodyInput, facts: BodyFacts, posting
 
   return [
     firstName ? `Dear ${firstName},` : "Dear Hiring Team,",
-    `I hope you are doing well. I am applying for the ${input.role} role ${input.company ? `at ${input.company}` : "at your organization"}${input.company.endsWith(".") ? "" : "."}`,
+    `I am applying for the ${input.role} role ${input.company ? `at ${input.company}` : "at your organization"}${input.company.endsWith(".") ? "" : "."}`,
     normalizePublicLink(input.experienceParagraph.replace(/\s+/g, " ").trim()),
     details.join("\n"),
-    "I have attached my resume for your review. I look forward to hearing from you.",
+    "My resume is attached for your review.",
     `Best regards,\n${formatApplicationSignature(facts.signature)}`,
   ].filter(Boolean).join("\n\n");
 }
