@@ -4,7 +4,6 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { ExternalLink, Github } from "lucide-react";
 import SmartImage from "@/components/common/SmartImage";
-import { getIcon } from "@/components/common/Icon";
 import type { Project } from "@/lib/portfolio-types";
 
 interface ProjectProps {
@@ -14,7 +13,6 @@ interface ProjectProps {
 export default function ProjectCard({ project }: ProjectProps) {
   const [isHovering, setIsHovering] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const ProjectIcon = getIcon(project.icon);
 
   const videoUrl = project.videoUrl?.includes("cloudinary.com")
     ? project.videoUrl.replace("/upload/", "/upload/q_auto,f_auto/")
@@ -59,10 +57,6 @@ export default function ProjectCard({ project }: ProjectProps) {
             src={videoUrl}
           />
         )}
-        <div className="absolute left-4 top-4 inline-flex items-center gap-2 bg-white/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-gray-800 backdrop-blur dark:bg-gray-950/80 dark:text-gray-100">
-          <ProjectIcon className="h-4 w-4" />
-          Case study
-        </div>
       </div>
 
       <div className="p-5">
