@@ -13,6 +13,9 @@ type Props = {
 
 const Navbar = ({ site, navItems }: Props) => {
   const [open, setOpen] = useState(false);
+  const visibleNavItems = navItems.some((item) => item.href === "/dsa-practice.html")
+    ? navItems
+    : [...navItems, { href: "/dsa-practice.html", label: "DSA Practice", sortOrder: 99, isPublished: true }];
 
   return (
     <header className="fixed left-0 right-0 top-0 z-50 border-b border-black/5 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-gray-950/80">
@@ -30,7 +33,7 @@ const Navbar = ({ site, navItems }: Props) => {
           </Link>
 
           <nav className="hidden items-center gap-1 rounded-full border border-gray-200 bg-white/70 p-1 text-sm text-gray-600 shadow-sm dark:border-gray-800 dark:bg-gray-900/60 dark:text-gray-300 md:flex">
-            {navItems.map((item) => (
+            {visibleNavItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -57,7 +60,7 @@ const Navbar = ({ site, navItems }: Props) => {
 
         {open && (
           <nav className="grid gap-1 border-t border-gray-100 py-3 text-sm text-gray-700 dark:border-gray-800 dark:text-gray-200 md:hidden">
-            {navItems.map((item) => (
+            {visibleNavItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}

@@ -49,7 +49,8 @@ export const fallbackPortfolioData: PortfolioData = {
     { href: "#projects", label: "Projects", sortOrder: 3, isPublished: true },
     { href: "#skills", label: "Skills", sortOrder: 4, isPublished: true },
     { href: "#blogs", label: "Writing", sortOrder: 5, isPublished: true },
-    { href: "#contact", label: "Contact", sortOrder: 6, isPublished: true },
+    { href: "/dsa-practice.html", label: "DSA Practice", sortOrder: 6, isPublished: true },
+    { href: "#contact", label: "Contact", sortOrder: 7, isPublished: true },
   ],
   socials: [
     {
