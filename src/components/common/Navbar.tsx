@@ -13,9 +13,9 @@ type Props = {
 
 const Navbar = ({ site, navItems }: Props) => {
   const [open, setOpen] = useState(false);
-  const visibleNavItems = navItems.some((item) => item.href === "/dsa-practice.html")
+  const visibleNavItems = navItems.some((item) => item.href === "/practice")
     ? navItems
-    : [...navItems, { href: "/dsa-practice.html", label: "DSA Practice", sortOrder: 99, isPublished: true }];
+    : [...navItems, { href: "/practice", label: "Practice", sortOrder: 99, isPublished: true }];
 
   return (
     <header className="fixed left-0 right-0 top-0 z-50 border-b border-black/5 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-gray-950/80">

@@ -11,7 +11,6 @@ import Footer from "@/components/common/Footer";
 import WorkExperience from "@/components/portfolio/WorkExperience";
 import SectionHeading from "@/components/portfolio/SectionHeading";
 import { getPortfolioData } from "@/lib/db";
-import DsaPractice from "@/components/portfolio/DsaPractice";
 
 export default async function Home() {
   const data = await getPortfolioData();
@@ -39,7 +38,6 @@ export default async function Home() {
       <Projects projects={data.projects.slice(0, 6)} />
       <Skills groups={data.skillGroups} delivery={data.deliveryStrengths} />
       <Notes />
-      <DsaPractice />
       <Blogs posts={data.blogPosts} />
       <Certificates certificates={data.certificates} />
       <Contact channels={data.contactChannels} />
