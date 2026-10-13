@@ -22,6 +22,16 @@ export type ApplicationDraft = {
 // order. The Gemma ones share Google's free quota with everyone, so they are often rate-limited.
 const defaultModels =
   "dots-studio/dots-3-note-preview:free,google/gemma-4-31b-it:free,google/gemma-4-26b-a4b-it:free";
+const officialWebsite = "https://subhams.online";
+
+function normalizePublicLink(value: string) {
+  return value
+    .replaceAll("https://subhams.site", officialWebsite)
+    .replaceAll("http://subhams.site", officialWebsite)
+    .replaceAll("subhams.site", officialWebsite)
+    .replaceAll("github.com/DigitalSubham", "https://github.com/DigitalSubham")
+    .replaceAll("linkedin.com/in/subham-kr", "https://www.linkedin.com/in/subham-kr");
+}
 
 async function getJobProfile(): Promise<Record<string, string>> {
   if (!hasDatabase) return {};
@@ -37,12 +47,13 @@ async function getJobProfile(): Promise<Record<string, string>> {
 // Everything the model may claim about the candidate. It is told to use nothing else.
 async function candidateFacts() {
   const [data, profile] = await Promise.all([getPortfolioData(), getJobProfile()]);
+  const signature = normalizePublicLink(profile.signature || `${data.site.name}\n${officialWebsite}`);
   return {
     name: data.site.name,
     title: data.site.title,
     email: data.site.email,
-    website: data.site.siteUrl,
-    links: data.socials.map((social) => `${social.label}: ${social.href}`),
+    website: officialWebsite,
+    links: data.socials.map((social) => normalizePublicLink(`${social.label}: ${social.href}`)),
     currentLocation: profile.current_location || "not stated",
     relocation: profile.relocation || "not stated",
     noticePeriod: profile.notice_period || "not stated",
@@ -68,7 +79,7 @@ async function candidateFacts() {
     skills: data.skillGroups.map((group) => `${group.title}: ${group.skills.join(", ")}`),
     certificates: data.certificates.map((cert) => `${cert.title} (${cert.issuer})`),
     extraFacts: profile.extra_facts || "",
-    signature: profile.signature || `${data.site.name}\n${data.site.siteUrl}`,
+    signature,
     sampleEmails: profile.sample_emails || "",
   };
 }
@@ -99,11 +110,12 @@ Rules:
 - Write the email body in exactly this shape, as plain text with blank lines between parts:
   1. Greeting: "Dear <first name only>," if a contact is known (for "Krishna Vaghasiya" write "Dear Krishna,"), otherwise "Dear Hiring Team,".
   2. "I hope you are doing well. I am applying for the <role> role at <company>." (use "at your organization" only if the company is unknown).
-  3. One paragraph of 2 or 3 sentences, at most 70 words: total experience and the stack that matches the posting, then 2 or 3 achievements from the candidate facts with their exact numbers, choosing the ones closest to this job (backend roles get backend achievements, mobile roles get React Native ones, and so on). Name the employer for each achievement.
-  4. The details block, one bullet per line starting with "• ": "Experience: <years>", "Current location: <city>", then if the job is on-site or hybrid in another city and the relocation fact allows it "Open to relocating to <job city> and attending interviews in person: Yes", then "Notice period: <period>". Skip any bullet whose fact is "not stated".
+  3. One paragraph of 2 or 3 sentences, at most 85 words: total experience and the stack that matches the posting, then 2 or 3 strong project achievements from the candidate facts with their exact numbers, choosing the ones closest to this job. Prioritize named production projects such as Sarthaks.com, Enterprise ERP System, COMFED/Sudha, QR Coin, Sita Dairy, admin dashboards, and SEO-sensitive React apps when they match the role. Name the employer or project for each achievement.
+  4. The details block, one bullet per line starting with "• ": "Current location: <city>", then only if the job posting explicitly asks about relocation, on-site availability, hybrid work in another city, or in-person interviews and the relocation fact allows it "Open to relocating to <job city> and attending interviews in person: Yes", then "Notice period: <period>". Skip any bullet whose fact is "not stated". Do not include an Experience bullet because experience is already in the paragraph.
   5. "I have attached my resume for your review. I look forward to hearing from you."
   6. "Best regards," then the signature exactly as given.
-- 120 to 180 words. No filler or generic claims ("scalable applications", "clean code", "fast-paced environments", "I believe my skills align"): every sentence must carry a specific fact. Never explain what a technology is for ("MongoDB for robust data management", "React for dynamic interfaces"); just name it.
+- 120 to 180 words. No filler or generic claims ("scalable applications", "clean code", "fast-paced environments", "I believe my skills align"): every sentence must carry a specific fact. Never explain what a technology is for ("MongoDB for robust data management", "React for dynamic interfaces"); just name it. Do not repeat the same fact in both paragraph and bullets.
+- In the signature and links, keep full URLs beginning with "https://" so mail clients turn them into clickable links.
 - The sample emails show the structure the candidate likes. Do not copy their wording; they are weaker than what you should write. No buzzwords, no emojis.
 - Subject format: "Application for <role> | <candidate name> | <years of experience> | <two skills>", where the two skills are the candidate's skills that best match the posting. Example: "Application for MERN Stack Developer | Subham Kumar | 3+ Years | React, Node.js". Keep it under 90 characters.`;
 
@@ -126,8 +138,8 @@ function parseDraft(content: string): Omit<ApplicationDraft, "model" | "resumeId
       skills: list("skills"),
       dealbreakers: list("dealbreakers"),
       fitSummary: text("fitSummary"),
-      subject: text("subject"),
-      body: text("body"),
+      subject: normalizePublicLink(text("subject")),
+      body: normalizePublicLink(text("body")),
       resumeId: Number(raw.resumeId) || 0,
     };
     return draft.role && draft.subject && draft.body ? draft : null;

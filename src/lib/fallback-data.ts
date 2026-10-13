@@ -6,7 +6,7 @@ export const fallbackPortfolioData: PortfolioData = {
     initials: "SK",
     title: "Full Stack Developer",
     email: "shubhamkr354@gmail.com",
-    siteUrl: process.env.SITE_URL || "https://subhams.site",
+    siteUrl: process.env.SITE_URL || "https://subhams.online",
     defaultDescription:
       "Portfolio of Subham Kumar - Full-stack Developer passionate about building scalable web applications and delightful user experiences.",
     keywords: [
