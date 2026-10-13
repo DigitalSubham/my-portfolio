@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "test:apply": "node --experimental-strip-types --test tests/job-apply-format.test.mjs",
     "db:setup": "node scripts/setup-db.mjs"
   },
   "dependencies": {
