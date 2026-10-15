@@ -47,7 +47,7 @@ export default async function AdminLoginPage({ searchParams }: Props) {
           )}
 
           <form action={loginAction} className="mt-6 grid gap-4">
-            {params.next === "/dsa-practice.html" && <input type="hidden" name="next" value="/dsa-practice.html" />}
+            {["/practice/dsa", "/dsa-practice.html"].includes(params.next || "") && <input type="hidden" name="next" value="/practice/dsa" />}
             <label className="adm-label">
               Email
               <input name="email" type="email" autoComplete="email" required className="adm-input" />

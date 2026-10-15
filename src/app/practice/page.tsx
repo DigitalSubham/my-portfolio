@@ -10,7 +10,7 @@ const practiceSubjects = [
   {
     title: "DSA Practice",
     description: "TRE DSA question bank for daily revision and interview preparation.",
-    href: "/dsa-practice.html",
+    href: "/practice/dsa",
     meta: "Question bank",
   },
 ];

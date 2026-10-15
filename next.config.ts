@@ -24,6 +24,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [{ source: "/dsa-practice.html", destination: "/practice/dsa", permanent: true }];
+  },
   async headers() {
     return [
       {

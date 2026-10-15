@@ -37,9 +37,12 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## DSA Practice Data
 
-The quiz at `/dsa-practice.html` loads its complete question bank from
+The React quiz at `/practice/dsa` loads its complete question bank from
 `/api/practice/dsa/questions` once, then handles questions, navigation, answers,
 explanations, filters, review and scoring in the browser.
+Its components and scoped styles live in `src/app/practice/dsa`; it does not
+embed, load or depend on a standalone HTML file or public quiz script.
+The old `/dsa-practice.html` address permanently redirects to `/practice/dsa`.
 
 Run `npm run db:practice` with `DATABASE_URL` configured to create the practice
 tables and import the original 1,044 questions. The import preserves existing

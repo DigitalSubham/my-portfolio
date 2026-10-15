@@ -44,13 +44,13 @@ function insertSql(fields: AdminField[]) {
 }
 
 export async function loginAction(formData: FormData) {
-  const next = formData.get("next") === "/dsa-practice.html" ? "/dsa-practice.html" : "/admin";
+  const next = ["/practice/dsa", "/dsa-practice.html"].includes(String(formData.get("next"))) ? "/practice/dsa" : "/admin";
   const email = String(formData.get("email") || "").trim();
   const password = String(formData.get("password") || "");
   const admin = await authenticateAdmin(email, password);
 
   if (!admin) {
-    redirect(`/admin/login?error=1${next === "/dsa-practice.html" ? "&next=/dsa-practice.html" : ""}`);
+    redirect(`/admin/login?error=1${next === "/practice/dsa" ? "&next=/practice/dsa" : ""}`);
   }
 
   const token = await signJwt({ sub: admin.id, email: admin.email });

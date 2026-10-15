@@ -8,6 +8,12 @@ export type PracticeQuestion = {
   exp: string;
   level: number;
   type: string;
+  concept?: string;
+  code?: string;
+  work?: string;
+  why?: string[];
+  tip?: string;
+  sec?: string;
   [key: string]: unknown;
 };
 
