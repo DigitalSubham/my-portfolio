@@ -14,3 +14,7 @@ CREATE TABLE IF NOT EXISTS practice_saves (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   PRIMARY KEY (admin_id, subject)
 );
+
+ALTER TABLE practice_saves ADD COLUMN IF NOT EXISTS writer_id TEXT NOT NULL DEFAULT '';
+ALTER TABLE practice_saves ADD COLUMN IF NOT EXISTS writer_sequence INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE practice_saves ADD COLUMN IF NOT EXISTS writer_base_revision INTEGER NOT NULL DEFAULT 0;

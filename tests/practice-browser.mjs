@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
 import { createHmac, randomUUID, scryptSync } from "node:crypto";
-import { mkdir } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import nextEnv from "@next/env";
 import { neon } from "@neondatabase/serverless";
 
@@ -10,6 +10,8 @@ const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 const sql = neon(process.env.DATABASE_URL);
 const baseURL = process.env.PRACTICE_TEST_URL || "http://localhost:3000";
+const questions = JSON.parse(await readFile(new URL("../db/seeds/dsa-questions.json", import.meta.url), "utf8"));
+const answerFor = new Map(questions.map((q) => [q.id, "ABCDE".indexOf(q.ans)]));
 const email = `practice-test-${randomUUID()}@example.invalid`;
 const password = randomUUID();
 const salt = randomUUID();
@@ -39,7 +41,8 @@ try {
   await page.locator('[data-act="start"][data-key="stacks"]').click();
   const firstId = await page.locator(".qid").innerText();
   for (let i = 0; i < 44; i++) {
-    await page.locator('[data-act="pick"][data-i="0"]').click();
+    const id = await page.locator(".qid").innerText();
+    await page.locator(`[data-act="pick"][data-i="${answerFor.get(id)}"]`).click();
     await page.locator('[data-act="next"]').click();
   }
   assert.match(await page.locator(".qbar .right").innerText(), /45 \/ 137/);
@@ -50,13 +53,14 @@ try {
   assert.equal(await page.locator(".opt.picked").count(), 1);
   await page.locator('[data-act="next"]').click();
   assert.equal(await page.locator(".qid").innerText(), currentId);
-  await page.getByRole("button", { name: "Save progress", exact: true }).click();
+  const wrongPick = (answerFor.get(currentId) + 1) % 5;
+  await page.locator(`[data-act="pick"][data-i="${wrongPick}"]`).click();
   await page.getByRole("status").filter({ hasText: "Saved to your account" }).waitFor();
   assert.equal(calls.filter((call) => call.method === "POST").length, 1);
   const before = await desktop.request.get(`${baseURL}/api/practice/dsa/progress`);
   const firstSave = await before.json();
   assert.equal(firstSave.snapshot.session.i, 44);
-  assert.equal(Object.keys(firstSave.snapshot.session.picks).length, 44);
+  assert.equal(Object.keys(firstSave.snapshot.session.picks).length, 45);
   await page.reload();
   await page.locator(".qid").waitFor();
   assert.equal(await page.locator(".qid").innerText(), currentId);
@@ -72,15 +76,16 @@ try {
   assert.equal(await mobile.locator(".qid").innerText(), currentId, "fresh device resumes saved question 45");
   assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
   await mobile.screenshot({ path: "screenshots/practice/mobile-question.png", fullPage: true });
-  await mobile.locator('[data-act="pick"][data-i="1"]').click();
   await mobile.locator('[data-act="next"]').click();
   await mobile.getByRole("button", { name: "Save progress", exact: true }).click();
   await mobile.getByRole("status").filter({ hasText: "Saved to your account" }).waitFor();
-  await page.getByRole("button", { name: "Save progress", exact: true }).click();
+  await page.locator('[data-act="next"]').click();
+  await page.locator('[data-act="quit"]').click();
   await page.getByRole("status").filter({ hasText: "newer save exists" }).waitFor();
   assert.equal(await page.getByRole("button", { name: "Load saved progress" }).count(), 1);
 
   await mobile.locator('[data-act="quit"]').click();
+  await mobile.getByRole("status").filter({ hasText: "Saved to your account" }).waitFor();
   await mobile.locator('[data-act="reset"]').click();
   await mobile.getByRole("button", { name: "Yes, clear my progress" }).click();
   await mobile.getByRole("status").filter({ hasText: "Saved to your account" }).waitFor();
@@ -131,8 +136,34 @@ try {
   assert.equal(await guestPage.locator(".opt.picked").count(), 1);
   await guestPage.getByRole("button", { name: "Save progress", exact: true }).click();
   await guestPage.getByRole("status").filter({ hasText: "Saved to your account" }).waitFor();
+  await guestPage.locator('[data-act="next"]').click();
+  await guestPage.goto(baseURL);
+  // Browser instrumentation detaches keepalive traffic from the old document.
+  // Verify the durable save after navigation instead of awaiting network events.
+  let stored;
+  for (let attempt = 0; attempt < 20; attempt++) {
+    [stored] = await sql`SELECT snapshot FROM practice_saves WHERE admin_id = ${admin.id} AND subject = 'dsa'`;
+    if (stored?.snapshot?.session?.i === 1) break;
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
+  assert.equal(stored?.snapshot?.session?.i, 1);
+  const resumed = await (await guest.request.get(`${baseURL}/api/practice/dsa/progress`)).json();
+  assert.equal(resumed.snapshot.session.i, 1, "leaving the page saves the latest position without clicking Save");
+  const raceWriter = randomUUID();
+  const sendSequence = (sequence, position, writerId = raceWriter, revision = resumed.revision) => guest.request.post(`${baseURL}/api/practice/dsa/progress`, {
+    headers: { Origin: baseURL },
+    data: { revision, writerId, sequence, snapshot: { ...resumed.snapshot, session: { ...resumed.snapshot.session, i: position } } },
+  });
+  const latest = await sendSequence(2, 3);
+  assert.equal(latest.status(), 200);
+  const delayed = await sendSequence(1, 2);
+  assert.equal(delayed.status(), 200);
+  const afterRace = await (await guest.request.get(`${baseURL}/api/practice/dsa/progress`)).json();
+  assert.equal(afterRace.snapshot.session.i, 3, "an older wrong-answer save cannot overwrite the exit checkpoint");
+  assert.equal((await sendSequence(1, 4, randomUUID(), afterRace.revision)).status(), 200);
+  assert.equal((await sendSequence(3, 5)).status(), 409, "another device's save must still block stale writers");
   assert.deepEqual(errors, []);
-  console.log("Passed: DB bank load, no per-question requests, question-45 save/reload/cross-device resume, Previous, stale-save conflict, reset, timed tests, mobile layout, access controls, and sign-in return with guest progress intact.");
+  console.log("Passed: DB bank load, no requests for correct answers or navigation, wrong-answer autosave, leave autosave, question-45 cross-device resume, Previous, stale-save conflict, reset, timed tests, mobile layout, access controls, and sign-in return.");
 } finally {
   if (browser) await browser.close();
   await sql`DELETE FROM admins WHERE id = ${admin.id} AND email = ${email}`;

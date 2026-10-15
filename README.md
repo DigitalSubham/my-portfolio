@@ -50,7 +50,9 @@ Sign in with the existing portfolio admin account to save across devices.
 **Save progress** writes a checkpoint containing the ordered question IDs,
 current position, answers, topic statistics and remaining test time. Questions
 and navigation do not trigger individual API calls. Browser recovery stays
-local until Save is pressed; confirmed **Reset progress** also saves the reset.
+local during navigation and correct answers. Wrong answers are saved in a short
+batch, and leaving the quiz or hiding/closing the tab saves the current position.
+The Save button remains available; confirmed **Reset progress** also saves the reset.
 An older tab cannot overwrite a newer checkpoint without loading it first.
 
 `npm run test:practice` checks checkpoint validation and the imported bank.

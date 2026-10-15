@@ -46,6 +46,9 @@
   let storeMode = "memory";
   let storeNote = "";
   let revision = remote ? remote.revision : 0;
+  const baseRevision = revision, writerId = crypto.randomUUID();
+  let sequence = 0, saveTimer = null, pendingSaves = 0, saveAgain = false;
+  let lastRequestedCheckpoint = "", lastConfirmedCheckpoint = "";
   let saving = false, conflict = false;
   const LS_KEY = "tre-dsa-session-v2-" + (remote ? remote.owner : "guest");
   function blank() { return { r: {}, h: "" }; }
@@ -102,14 +105,33 @@
     storeNote = remote ? "Unsaved changes" : "Progress is kept in this browser.";
     renderSaveChip();
   }
-  async function saveCloud() {
-    if (saving || !remote || conflict) return;
-    const checkpoint = JSON.stringify(snapshot());
+  function saveWrongAnswer() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => saveCloud(), 800);
+  }
+  function saveWhenLeaving() {
+    saveLocal();
+    if (S) saveCloud({ leaving: true });
+  }
+  async function saveCloud({ leaving = false } = {}) {
+    clearTimeout(saveTimer);
+    if (!remote || conflict) return;
+    if (saving && !leaving) { saveAgain = true; return; }
+    const state = snapshot();
+    if (state.session && !state.session.done) state.view = "q";
+    const checkpoint = JSON.stringify(state);
+    if (checkpoint === lastRequestedCheckpoint) {
+      storeNote = saving ? "Saving…" : "Saved to your account"; renderSaveChip(); return;
+    }
+    lastRequestedCheckpoint = checkpoint;
+    pendingSaves++;
+    const requestSequence = ++sequence;
     saving = true; storeNote = "Saving…"; renderSaveChip();
     try {
       const response = await fetch("/api/practice/dsa/progress", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ revision, snapshot: JSON.parse(checkpoint) })
+        body: JSON.stringify({ revision: baseRevision, writerId, sequence: requestSequence, snapshot: state }),
+        keepalive: leaving
       });
       const result = await response.json();
       if (!response.ok) {
@@ -117,11 +139,19 @@
         if (response.status === 401) remote = null;
         throw new Error(result.error || "Saving failed. Please retry.");
       }
-      revision = result.revision;
-      storeNote = JSON.stringify(snapshot()) === checkpoint ? "Saved to your account" : "Checkpoint saved · newer changes are in this browser";
+      revision = Math.max(revision, result.revision);
+      if (requestSequence === sequence) lastConfirmedCheckpoint = checkpoint;
+      const current = snapshot();
+      if (current.session && !current.session.done) current.view = "q";
+      storeNote = JSON.stringify(current) === lastConfirmedCheckpoint ? "Saved to your account" : "Unsaved changes";
       saveLocal();
-    } catch (error) { storeNote = error.message || "Saving failed. Your progress is still in this browser."; }
-    finally { saving = false; renderSaveChip(); }
+    } catch (error) {
+      if (lastRequestedCheckpoint === checkpoint) lastRequestedCheckpoint = "";
+      storeNote = error.message || "Saving failed. Your progress is still in this browser.";
+    } finally {
+      pendingSaves--; saving = pendingSaves > 0; renderSaveChip();
+      if (!saving && saveAgain) { saveAgain = false; saveCloud(); }
+    }
   }
 
   function rec(q) { return topicData(q.k).r[q.id] || null; }
@@ -299,6 +329,7 @@
       S.picks[q.id] = i;
       const ok = LETTERS[i] === q.ans;
       record(q, ok); persist();
+      if (!ok) saveWrongAnswer();
       renderQuestion(true);
       const nx = document.getElementById("next"); if (nx) nx.focus();
     } else {
@@ -332,6 +363,7 @@
     S.list.forEach(id => { const q = BY_ID[id]; const p = S.picks[id]; if (p == null) return; record(q, LETTERS[p] === q.ans); });
     view = "done"; render();
     persist();
+    if (S.list.some(id => S.picks[id] != null && LETTERS[S.picks[id]] !== BY_ID[id].ans)) saveWrongAnswer();
   }
   function focusQ() { const el = document.getElementById("qtext"); if (el) el.focus({ preventScroll: false }); window.scrollTo({ top: 0 }); }
 
@@ -458,7 +490,7 @@
     }
     else if (act === "skip") next(true);
     else if (act === "finish") finishTest();
-    else if (act === "quit") { clearInterval(timerId); if (S && S.kind === "test" && !S.done) S.used = S.limit - remaining(); view = "home"; openSetup = null; persist(); renderHome(); window.scrollTo({ top: 0 }); }
+    else if (act === "quit") { clearInterval(timerId); if (S && S.kind === "test" && !S.done) S.used = S.limit - remaining(); view = "home"; openSetup = null; persist(); saveWhenLeaving(); renderHome(); window.scrollTo({ top: 0 }); }
     else if (act === "redo-session") { const qs = S.list.map(id => BY_ID[id]).filter(q => S.picks[q.id] == null || LETTERS[S.picks[q.id]] !== q.ans); startPractice(S.title.replace(/ · redo$/, "") + " · redo", shuffle(qs), S.key); }
     else if (act === "setup-again") { S = null; view = "home"; openSetup = k; persist(); renderHome(); const el = document.getElementById("t-" + k); if (el) el.scrollIntoView({ block: "start" }); }
     else if (act === "reset") { confirmReset = true; renderHome(); }
@@ -485,6 +517,6 @@
   loadSaved();
   render();
   if (S && S.kind === "test" && !S.done && view === "q") { tick(); timerId = setInterval(tick, 1000); }
-  window.addEventListener("pagehide", saveLocal);
-  document.addEventListener("visibilitychange", () => { if (document.hidden) saveLocal(); });
+  window.addEventListener("pagehide", saveWhenLeaving);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) saveWhenLeaving(); });
 })();
