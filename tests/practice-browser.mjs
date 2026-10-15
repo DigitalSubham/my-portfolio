@@ -1,0 +1,139 @@
+import assert from "node:assert/strict";
+import { createRequire } from "node:module";
+import { createHmac, randomUUID, scryptSync } from "node:crypto";
+import { mkdir } from "node:fs/promises";
+import nextEnv from "@next/env";
+import { neon } from "@neondatabase/serverless";
+
+nextEnv.loadEnvConfig(process.cwd());
+const require = createRequire(import.meta.url);
+const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
+const sql = neon(process.env.DATABASE_URL);
+const baseURL = process.env.PRACTICE_TEST_URL || "http://localhost:3000";
+const email = `practice-test-${randomUUID()}@example.invalid`;
+const password = randomUUID();
+const salt = randomUUID();
+const hash = scryptSync(password, salt, 64).toString("hex");
+const [admin] = await sql`INSERT INTO admins (email, password_hash, password_salt) VALUES (${email}, ${hash}, ${salt}) RETURNING id`;
+const unsigned = [
+  { alg: "HS256", typ: "JWT" },
+  { sub: String(admin.id), email, exp: Math.floor(Date.now() / 1000) + 3600 },
+].map((value) => Buffer.from(JSON.stringify(value)).toString("base64url")).join(".");
+const token = `${unsigned}.${createHmac("sha256", process.env.JWT_SECRET).update(unsigned).digest("base64url")}`;
+const cookie = { name: "portfolio_admin_token", value: token, url: baseURL };
+let browser;
+try {
+  browser = await chromium.launch({ headless: true, channel: "chrome" });
+  const errors = [];
+  const desktop = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  await desktop.addCookies([cookie]);
+  const page = await desktop.newPage();
+  page.on("pageerror", (error) => errors.push(error.message));
+  const calls = [];
+  page.on("request", (request) => { if (request.url().includes("/api/practice/")) calls.push({ method: request.method(), url: request.url() }); });
+  await page.goto(`${baseURL}/dsa-practice.html`);
+  await page.getByRole("heading", { name: "TRE DSA Question Bank" }).waitFor();
+  assert.equal(calls.length, 2);
+  await page.locator('#t-stacks [data-act="setup"]').click();
+  await page.locator('label[for="ps-3"]').click();
+  await page.locator('[data-act="start"][data-key="stacks"]').click();
+  const firstId = await page.locator(".qid").innerText();
+  for (let i = 0; i < 44; i++) {
+    await page.locator('[data-act="pick"][data-i="0"]').click();
+    await page.locator('[data-act="next"]').click();
+  }
+  assert.match(await page.locator(".qbar .right").innerText(), /45 \/ 137/);
+  const currentId = await page.locator(".qid").innerText();
+  assert.notEqual(currentId, firstId);
+  assert.equal(calls.length, 2, "answering 44 questions must not issue API requests");
+  await page.locator('[data-act="previous"]').click();
+  assert.equal(await page.locator(".opt.picked").count(), 1);
+  await page.locator('[data-act="next"]').click();
+  assert.equal(await page.locator(".qid").innerText(), currentId);
+  await page.getByRole("button", { name: "Save progress", exact: true }).click();
+  await page.getByRole("status").filter({ hasText: "Saved to your account" }).waitFor();
+  assert.equal(calls.filter((call) => call.method === "POST").length, 1);
+  const before = await desktop.request.get(`${baseURL}/api/practice/dsa/progress`);
+  const firstSave = await before.json();
+  assert.equal(firstSave.snapshot.session.i, 44);
+  assert.equal(Object.keys(firstSave.snapshot.session.picks).length, 44);
+  await page.reload();
+  await page.locator(".qid").waitFor();
+  assert.equal(await page.locator(".qid").innerText(), currentId);
+  await mkdir("screenshots/practice", { recursive: true });
+  await page.screenshot({ path: "screenshots/practice/desktop-question.png", fullPage: true });
+
+  const phone = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true });
+  await phone.addCookies([cookie]);
+  const mobile = await phone.newPage();
+  mobile.on("pageerror", (error) => errors.push(error.message));
+  await mobile.goto(`${baseURL}/dsa-practice.html`);
+  await mobile.locator(".qid").waitFor();
+  assert.equal(await mobile.locator(".qid").innerText(), currentId, "fresh device resumes saved question 45");
+  assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+  await mobile.screenshot({ path: "screenshots/practice/mobile-question.png", fullPage: true });
+  await mobile.locator('[data-act="pick"][data-i="1"]').click();
+  await mobile.locator('[data-act="next"]').click();
+  await mobile.getByRole("button", { name: "Save progress", exact: true }).click();
+  await mobile.getByRole("status").filter({ hasText: "Saved to your account" }).waitFor();
+  await page.getByRole("button", { name: "Save progress", exact: true }).click();
+  await page.getByRole("status").filter({ hasText: "newer save exists" }).waitFor();
+  assert.equal(await page.getByRole("button", { name: "Load saved progress" }).count(), 1);
+
+  await mobile.locator('[data-act="quit"]').click();
+  await mobile.locator('[data-act="reset"]').click();
+  await mobile.getByRole("button", { name: "Yes, clear my progress" }).click();
+  await mobile.getByRole("status").filter({ hasText: "Saved to your account" }).waitFor();
+  await mobile.reload();
+  await mobile.getByRole("heading", { name: "TRE DSA Question Bank" }).waitFor();
+  assert.match(await mobile.locator(".summary .stat").first().innerText(), /^0\n/);
+  assert.equal(await mobile.locator('[data-act="resume"]').count(), 0);
+  await mobile.screenshot({ path: "screenshots/practice/mobile-topics.png", fullPage: true });
+
+  await mobile.locator('[data-act="setup"][data-key="test"]').click();
+  await mobile.locator('[data-act="start-test"]').click();
+  const testQuestion = await mobile.locator(".qid").innerText();
+  await mobile.locator('[data-act="pick"][data-i="0"]').click();
+  await mobile.locator('[data-act="next"]').click();
+  await mobile.locator('[data-act="previous"]').click();
+  assert.equal(await mobile.locator(".qid").innerText(), testQuestion);
+  await mobile.locator('[data-act="quit"]').click();
+  await mobile.getByRole("button", { name: "Save progress", exact: true }).click();
+  await mobile.getByRole("status").filter({ hasText: "Saved to your account" }).waitFor();
+  await mobile.reload();
+  await mobile.locator('[data-act="resume"]').click();
+  assert.equal(await mobile.locator(".qid").innerText(), testQuestion);
+  await mobile.locator('[data-act="finish"]').click();
+  await mobile.getByRole("heading", { name: "Review", exact: true }).waitFor();
+  assert.ok((await mobile.locator(".review details").count()) > 0);
+
+  const guest = await browser.newContext();
+  const denied = await guest.request.get(`${baseURL}/api/practice/dsa/progress`);
+  assert.equal(denied.status(), 401);
+  const deniedSave = await guest.request.post(`${baseURL}/api/practice/dsa/progress`, { headers: { Origin: baseURL }, data: {} });
+  assert.equal(deniedSave.status(), 401);
+  const invalid = await desktop.request.post(`${baseURL}/api/practice/dsa/progress`, { headers: { Origin: baseURL }, data: { revision: 0, snapshot: { version: 1 } } });
+  assert.equal(invalid.status(), 400);
+  await sql`DELETE FROM practice_saves WHERE admin_id = ${admin.id} AND subject = 'dsa'`;
+  const guestPage = await guest.newPage();
+  await guestPage.goto(`${baseURL}/dsa-practice.html`);
+  await guestPage.locator('#t-arrays [data-act="setup"]').click();
+  await guestPage.locator('[data-act="start"][data-key="arrays"]').click();
+  const guestQuestion = await guestPage.locator(".qid").innerText();
+  await guestPage.locator('[data-act="pick"][data-i="0"]').click();
+  await guestPage.getByRole("link", { name: "Sign in to save" }).click();
+  await guestPage.getByLabel("Email", { exact: true }).fill(email);
+  await guestPage.getByLabel("Password", { exact: true }).fill(password);
+  await guestPage.getByRole("button", { name: "Sign in", exact: true }).click();
+  await guestPage.waitForURL(`${baseURL}/dsa-practice.html`);
+  await guestPage.locator(".qid").waitFor();
+  assert.equal(await guestPage.locator(".qid").innerText(), guestQuestion);
+  assert.equal(await guestPage.locator(".opt.picked").count(), 1);
+  await guestPage.getByRole("button", { name: "Save progress", exact: true }).click();
+  await guestPage.getByRole("status").filter({ hasText: "Saved to your account" }).waitFor();
+  assert.deepEqual(errors, []);
+  console.log("Passed: DB bank load, no per-question requests, question-45 save/reload/cross-device resume, Previous, stale-save conflict, reset, timed tests, mobile layout, access controls, and sign-in return with guest progress intact.");
+} finally {
+  if (browser) await browser.close();
+  await sql`DELETE FROM admins WHERE id = ${admin.id} AND email = ${email}`;
+}

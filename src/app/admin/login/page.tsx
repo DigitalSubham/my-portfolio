@@ -5,7 +5,7 @@ import { AlertCircle, ArrowLeft, CheckCircle2, LayoutDashboard, LogIn } from "lu
 import { loginAction } from "../actions";
 
 type Props = {
-  searchParams: Promise<{ error?: string; reset?: string }>;
+  searchParams: Promise<{ error?: string; reset?: string; next?: string }>;
 };
 
 export default async function AdminLoginPage({ searchParams }: Props) {
@@ -47,6 +47,7 @@ export default async function AdminLoginPage({ searchParams }: Props) {
           )}
 
           <form action={loginAction} className="mt-6 grid gap-4">
+            {params.next === "/dsa-practice.html" && <input type="hidden" name="next" value="/dsa-practice.html" />}
             <label className="adm-label">
               Email
               <input name="email" type="email" autoComplete="email" required className="adm-input" />

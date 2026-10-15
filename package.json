@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint .",
     "test:apply": "node --experimental-strip-types --test tests/job-apply-format.test.mjs",
-    "db:setup": "node scripts/setup-db.mjs"
+    "db:setup": "node scripts/setup-db.mjs",
+    "db:practice": "node scripts/setup-practice.mjs",
+    "test:practice": "node --experimental-strip-types --test tests/practice-state.test.mjs"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

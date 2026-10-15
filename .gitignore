@@ -12,9 +12,11 @@
 
 # testing
 /coverage
+/screenshots/practice/
 
 # next.js
 /.next/
+/.next-practice-dev/
 /out/
 
 # production

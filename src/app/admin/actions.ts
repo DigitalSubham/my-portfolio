@@ -44,12 +44,13 @@ function insertSql(fields: AdminField[]) {
 }
 
 export async function loginAction(formData: FormData) {
+  const next = formData.get("next") === "/dsa-practice.html" ? "/dsa-practice.html" : "/admin";
   const email = String(formData.get("email") || "").trim();
   const password = String(formData.get("password") || "");
   const admin = await authenticateAdmin(email, password);
 
   if (!admin) {
-    redirect("/admin/login?error=1");
+    redirect(`/admin/login?error=1${next === "/dsa-practice.html" ? "&next=/dsa-practice.html" : ""}`);
   }
 
   const token = await signJwt({ sub: admin.id, email: admin.email });
@@ -61,7 +62,7 @@ export async function loginAction(formData: FormData) {
     path: "/",
     maxAge: 60 * 60 * 24 * 7,
   });
-  redirect("/admin");
+  redirect(next);
 }
 
 export async function resetPasswordAction(formData: FormData) {
