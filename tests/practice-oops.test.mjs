@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { emptyQuiz, quizStats, recordAnswer, quizSnapshot } from '../src/lib/practice-quiz.ts';
 import { validatePracticeSnapshot } from '../src/lib/practice-state.ts';
+import { continuousOopContent } from '../src/lib/oop-note-content.ts';
 
 const json = async (path) => JSON.parse(await readFile(new URL(path, import.meta.url), 'utf8'));
 const sources = await json('../db/seeds/oops-source.json');
@@ -23,27 +24,47 @@ test('all 199 printed OOP questions and all five original options are preserved'
       assert.deepEqual(q.opts, markers.map((m, i) => original.text.slice(m.index + m[0].length, markers[i + 1]?.index).trim()));
       assert.match(q.ans, /^[ABCDE]$/);
       assert.ok(q.exp.length > 80);
-      assert.ok(chapters.some((c) => q.noteHref.endsWith('/' + c.key)));
+      assert.ok(chapters.some((c) => q.noteHref === '/practice/oops/notes#' + c.key));
     }
   }
   assert.equal(bank.find((q) => q.id === 'OOP-A1-098').source.keyNumber, 99);
   assert.equal(bank.some((q) => q.id === 'OOP-A1-099'), false);
 });
 
-test('all source PDFs are unchanged and all 45 notes pages have lesson coverage and images', async () => {
+test('all source PDFs are unchanged and all 45 notes pages retain content coverage', async () => {
   for (const source of sources) {
     const pdf = await readFile(new URL(`../public/study/oops/${source.id}.pdf`, import.meta.url));
     assert.equal(createHash('sha256').update(pdf).digest('hex'), source.sha256);
   }
   assert.equal(chapters.length, 20);
-  const pages = await json('../src/content/oops/pages.json');
-  assert.equal(pages.length, 45);
-  for (const page of pages) {
-    assert.ok(chapters.some((c) => c.pages.includes(page.number)));
-    assert.ok((await readFile(new URL(`../public/study/oops/pages/${page.number}.webp`, import.meta.url))).length > 1000);
-  }
+  for (let page = 1; page <= 45; page++) assert.ok(chapters.some((c) => c.pages.includes(page)));
   const notes = await json('../db/seeds/oops-notes.json');
   assert.deepEqual(notes.map((n) => n.id), chapters.map((c) => c.key));
+});
+
+test('continuous notes retain every character and example with unique heading anchors', async () => {
+  const notes = await json('../db/seeds/oops-notes.json');
+  const text = (nodes) => nodes.map((node) => typeof node === 'string' ? node : text(node.children)).join('');
+  const ids = new Set();
+  let examples = 0;
+  function check(nodes) {
+    for (const node of nodes) {
+      if (typeof node === 'string') continue;
+      assert.notEqual(node.tag, 'h1');
+      if (node.attrs.id) {
+        assert.ok(!ids.has(node.attrs.id), `Duplicate anchor: ${node.attrs.id}`);
+        ids.add(node.attrs.id);
+        if (node.attrs.id.includes('-example-')) examples++;
+      }
+      check(node.children);
+    }
+  }
+  for (const note of notes) {
+    const combined = continuousOopContent(note.content, note.id);
+    assert.equal(text(combined), text(note.content));
+    check(combined);
+  }
+  assert.equal(examples, 51);
 });
 
 test('review-only answers retain a resumable choice without affecting accuracy or wrong-answer records', () => {

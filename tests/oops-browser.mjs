@@ -71,9 +71,7 @@ try {
   assert.equal(timed.list.length, 16);
   assert.ok(timed.list.every((id) => !questions.find((q) => q.id === id).unscored));
   await mobile.goto(`${base}/practice/oops/notes`);
-  assert.equal(await mobile.locator('.chapter-list > li').count(), 20);
-  await mobile.getByRole('textbox', { name: 'Search OOP lessons' }).fill('constructor');
-  assert.ok(await mobile.locator('.chapter-list > li').count() < 20);
+  assert.equal(await mobile.locator('#oops-note > .oop-topic').count(), 20);
   await mkdir('screenshots/practice', { recursive: true });
   await mobile.goto(`${base}/practice/oops/notes/refresh`);
   await mobile.locator('#oops-note pre').first().scrollIntoViewIfNeeded();
@@ -82,17 +80,15 @@ try {
   await mobile.getByRole('button', { name: 'Increase text size' }).click();
   assert.equal(await mobile.locator('.reading-tools output').innerText(), '19');
   assert.equal(await mobile.evaluate(() => localStorage.getItem('history-font-size')), null);
-  await mobile.goto(`${base}/practice/oops/notes`);
-  await mobile.getByRole('link', { name: /Continue: Start Here/ }).waitFor();
-  await mobile.goto(`${base}/practice/oops/notes/original/2`);
-  await mobile.locator('.source-page-image').waitFor();
-  assert.equal(await mobile.locator('.source-page-image').evaluate((image) => image.complete && image.naturalWidth > 0), true);
+  assert.equal(new URL(mobile.url()).hash, '#refresh');
+  assert.equal(await mobile.locator('#oops-note img').count(), 0);
   assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
   const reader = await desktop.newPage();
   for (const chapter of chapters) {
     const response = await reader.goto(`${base}/practice/oops/notes/${chapter.key}`);
     assert.equal(response.status(), 200);
-    assert.equal(await reader.locator('#oops-note h1').innerText(), chapter.title);
+    assert.equal(await reader.locator(`#${chapter.key} > h2`).innerText(), chapter.title);
+    assert.equal(new URL(reader.url()).hash, `#${chapter.key}`);
     assert.equal(await reader.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
   }
   await reader.goto(`${base}/practice/oops/notes/inheritance`);
@@ -100,7 +96,7 @@ try {
   assert.equal((await reader.goto(`${base}/practice/oops/notes/sources`)).status(), 200);
   for (const doc of ['notes', 'assignment-1', 'assignment-2']) assert.equal((await desktop.request.get(`${base}/study/oops/${doc}.pdf`)).status(), 200);
   assert.deepEqual(errors, []);
-  console.log('Passed: 20 database lessons, mobile reader, source images/PDFs, review-only scoring, no per-question saves, wrong-answer save, cross-device resume, isolated subjects and timed-test exclusions.');
+  console.log('Passed: continuous database notes, mobile reader, PDF downloads, review-only scoring, no per-question saves, wrong-answer save, cross-device resume, isolated subjects and timed-test exclusions.');
 } finally {
   if (browser) await browser.close();
   await sql`DELETE FROM admins WHERE id = ${admin.id} AND email = ${email}`;

@@ -42,7 +42,7 @@ for (const document of sources.slice(1)) {
       ...(codeStart > 0 ? { code: stem.slice(codeStart) } : {}),
       opts, ans: review[0] || sourceAnswer.answer, unscored: review[0] === null,
       exp: review[2], concept: lesson.summary, level: codeStart >= 0 ? 2 : 1,
-      type: codeStart >= 0 ? 'code' : 'concept', noteHref: `/practice/oops/notes/${lesson.key}`,
+      type: codeStart >= 0 ? 'code' : 'concept', noteHref: `/practice/oops/notes#${lesson.key}`,
       ...(wrap ? { transcriptionNote: 'The PDF wraps a // comment onto the next printed line. It is joined here so the comment remains a comment; no executable statement was changed.' } : {}),
       source: { document: document.id, number: original.number, pages: original.pages, keyNumber, answer: sourceAnswer.answer, explanation: sourceAnswer.text, originalText: original.text },
     });

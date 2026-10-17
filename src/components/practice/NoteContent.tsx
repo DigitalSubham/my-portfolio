@@ -1,7 +1,7 @@
 import { createElement, type ReactNode } from "react";
 import { noteHref, type NoteNode } from "@/lib/history-notes";
 
-const tags = new Set(["p", "h1", "h2", "h3", "b", "strong", "span", "table", "thead", "tr", "th", "tbody", "td", "aside", "ul", "li", "i", "div", "br", "a", "section", "pre", "code"]);
+const tags = new Set(["p", "h1", "h2", "h3", "h4", "b", "strong", "span", "table", "thead", "tr", "th", "tbody", "td", "aside", "ul", "li", "i", "div", "br", "a", "section", "pre", "code"]);
 
 export default function NoteContent({ nodes }: { nodes: NoteNode[] }) {
   function render(node: NoteNode, key: number): ReactNode {

@@ -17,7 +17,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-1",
       "number": 1,
@@ -48,7 +48,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-1",
       "number": 2,
@@ -79,7 +79,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-1",
       "number": 3,
@@ -110,7 +110,7 @@
     "concept": "Follow object creation one step at a time. Learn what the compiler supplies, what it does not supply, and why a constructor is not an ordinary returning function.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/constructors",
+    "noteHref": "/practice/oops/notes#constructors",
     "source": {
       "document": "assignment-1",
       "number": 4,
@@ -141,7 +141,7 @@
     "concept": "Learn the symbols that appear repeatedly in the MCQs: std::, cout, &, *, ->, references, sizeof, comma expressions and default arguments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/cpp-basics",
+    "noteHref": "/practice/oops/notes#cpp-basics",
     "source": {
       "document": "assignment-1",
       "number": 5,
@@ -172,7 +172,7 @@
     "concept": "Learn exactly what public, private, protected and omitted modifiers mean. Do not transfer C++ defaults into Java or Python.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/access",
+    "noteHref": "/practice/oops/notes#access",
     "source": {
       "document": "assignment-1",
       "number": 6,
@@ -203,7 +203,7 @@
     "concept": "An abstract type can define a contract without being directly constructible. An abstract base pointer is not an abstract base object.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/abstract",
+    "noteHref": "/practice/oops/notes#abstract",
     "source": {
       "document": "assignment-1",
       "number": 7,
@@ -234,7 +234,7 @@
     "concept": "Follow object creation one step at a time. Learn what the compiler supplies, what it does not supply, and why a constructor is not an ordinary returning function.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/constructors",
+    "noteHref": "/practice/oops/notes#constructors",
     "source": {
       "document": "assignment-1",
       "number": 8,
@@ -265,7 +265,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-1",
       "number": 9,
@@ -296,7 +296,7 @@
     "concept": "Separate three questions: the shape of the hierarchy, the accessibility of inherited operations, and which implementation a call selects.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/inheritance",
+    "noteHref": "/practice/oops/notes#inheritance",
     "source": {
       "document": "assignment-1",
       "number": 10,
@@ -327,7 +327,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-1",
       "number": 11,
@@ -358,7 +358,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-1",
       "number": 12,
@@ -389,7 +389,7 @@
     "concept": "The supplied syllabus lists exceptions but does not develop them into a full chapter. This added foundation fills that gap and explains the assignment questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/exceptions",
+    "noteHref": "/practice/oops/notes#exceptions",
     "source": {
       "document": "assignment-1",
       "number": 13,
@@ -420,7 +420,7 @@
     "concept": "Learn the symbols that appear repeatedly in the MCQs: std::, cout, &, *, ->, references, sizeof, comma expressions and default arguments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/cpp-basics",
+    "noteHref": "/practice/oops/notes#cpp-basics",
     "source": {
       "document": "assignment-1",
       "number": 14,
@@ -451,7 +451,7 @@
     "concept": "Learn the symbols that appear repeatedly in the MCQs: std::, cout, &, *, ->, references, sizeof, comma expressions and default arguments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/cpp-basics",
+    "noteHref": "/practice/oops/notes#cpp-basics",
     "source": {
       "document": "assignment-1",
       "number": 15,
@@ -482,7 +482,7 @@
     "concept": "Follow object creation one step at a time. Learn what the compiler supplies, what it does not supply, and why a constructor is not an ordinary returning function.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/constructors",
+    "noteHref": "/practice/oops/notes#constructors",
     "source": {
       "document": "assignment-1",
       "number": 16,
@@ -513,7 +513,7 @@
     "concept": "Follow object creation one step at a time. Learn what the compiler supplies, what it does not supply, and why a constructor is not an ordinary returning function.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/constructors",
+    "noteHref": "/practice/oops/notes#constructors",
     "source": {
       "document": "assignment-1",
       "number": 17,
@@ -544,7 +544,7 @@
     "concept": "Separate three questions: the shape of the hierarchy, the accessibility of inherited operations, and which implementation a call selects.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/inheritance",
+    "noteHref": "/practice/oops/notes#inheritance",
     "source": {
       "document": "assignment-1",
       "number": 18,
@@ -575,7 +575,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-1",
       "number": 19,
@@ -606,7 +606,7 @@
     "concept": "Follow object creation one step at a time. Learn what the compiler supplies, what it does not supply, and why a constructor is not an ordinary returning function.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/constructors",
+    "noteHref": "/practice/oops/notes#constructors",
     "source": {
       "document": "assignment-1",
       "number": 20,
@@ -637,7 +637,7 @@
     "concept": "Separate three questions: the shape of the hierarchy, the accessibility of inherited operations, and which implementation a call selects.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/inheritance",
+    "noteHref": "/practice/oops/notes#inheritance",
     "source": {
       "document": "assignment-1",
       "number": 21,
@@ -668,7 +668,7 @@
     "concept": "Refresh what you already know, then attach the new syntax to familiar ideas. You do not need to become an expert in three languages before understanding OOP questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/refresh",
+    "noteHref": "/practice/oops/notes#refresh",
     "source": {
       "document": "assignment-1",
       "number": 22,
@@ -699,7 +699,7 @@
     "concept": "Separate three questions: the shape of the hierarchy, the accessibility of inherited operations, and which implementation a call selects.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/inheritance",
+    "noteHref": "/practice/oops/notes#inheritance",
     "source": {
       "document": "assignment-1",
       "number": 23,
@@ -730,7 +730,7 @@
     "concept": "Refresh what you already know, then attach the new syntax to familiar ideas. You do not need to become an expert in three languages before understanding OOP questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/refresh",
+    "noteHref": "/practice/oops/notes#refresh",
     "source": {
       "document": "assignment-1",
       "number": 24,
@@ -761,7 +761,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-1",
       "number": 25,
@@ -792,7 +792,7 @@
     "concept": "Separate three questions: the shape of the hierarchy, the accessibility of inherited operations, and which implementation a call selects.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/inheritance",
+    "noteHref": "/practice/oops/notes#inheritance",
     "source": {
       "document": "assignment-1",
       "number": 26,
@@ -823,7 +823,7 @@
     "concept": "Read exactly what is protected: a value, a pointer, an object's observable state, a method override, or a class's inheritance. Similar words do different jobs.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/const-final",
+    "noteHref": "/practice/oops/notes#const-final",
     "source": {
       "document": "assignment-1",
       "number": 27,
@@ -854,7 +854,7 @@
     "concept": "Reuse an algorithm across types, but keep the three languages' mechanisms distinct. Generic does not mean every operation works on every possible type.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/templates",
+    "noteHref": "/practice/oops/notes#templates",
     "source": {
       "document": "assignment-1",
       "number": 28,
@@ -885,7 +885,7 @@
     "concept": "Learn exactly what public, private, protected and omitted modifiers mean. Do not transfer C++ defaults into Java or Python.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/access",
+    "noteHref": "/practice/oops/notes#access",
     "source": {
       "document": "assignment-1",
       "number": 29,
@@ -916,7 +916,7 @@
     "concept": "Follow object creation one step at a time. Learn what the compiler supplies, what it does not supply, and why a constructor is not an ordinary returning function.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/constructors",
+    "noteHref": "/practice/oops/notes#constructors",
     "source": {
       "document": "assignment-1",
       "number": 30,
@@ -947,7 +947,7 @@
     "concept": "An abstract type can define a contract without being directly constructible. An abstract base pointer is not an abstract base object.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/abstract",
+    "noteHref": "/practice/oops/notes#abstract",
     "source": {
       "document": "assignment-1",
       "number": 31,
@@ -978,7 +978,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-1",
       "number": 32,
@@ -1009,7 +1009,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-1",
       "number": 33,
@@ -1040,7 +1040,7 @@
     "concept": "Keep performance hints separate from language permissions. inline does not mean 'must be faster', and friend does not mean 'a member of this class'.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/inline-friends",
+    "noteHref": "/practice/oops/notes#inline-friends",
     "source": {
       "document": "assignment-1",
       "number": 34,
@@ -1071,7 +1071,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-1",
       "number": 35,
@@ -1102,7 +1102,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-1",
       "number": 36,
@@ -1133,7 +1133,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-1",
       "number": 37,
@@ -1164,7 +1164,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-1",
       "number": 38,
@@ -1195,7 +1195,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-1",
       "number": 39,
@@ -1226,7 +1226,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-1",
       "number": 40,
@@ -1257,7 +1257,7 @@
     "concept": "Learn exactly what public, private, protected and omitted modifiers mean. Do not transfer C++ defaults into Java or Python.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/access",
+    "noteHref": "/practice/oops/notes#access",
     "source": {
       "document": "assignment-1",
       "number": 41,
@@ -1288,7 +1288,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-1",
       "number": 42,
@@ -1319,7 +1319,7 @@
     "concept": "Use an account with a rule: its balance must not become negative. A getter/setter pair is not automatically a safe design; the operations must preserve the rule.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/encapsulation",
+    "noteHref": "/practice/oops/notes#encapsulation",
     "source": {
       "document": "assignment-1",
       "number": 43,
@@ -1350,7 +1350,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-1",
       "number": 44,
@@ -1381,7 +1381,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-1",
       "number": 45,
@@ -1412,7 +1412,7 @@
     "concept": "Use an account with a rule: its balance must not become negative. A getter/setter pair is not automatically a safe design; the operations must preserve the rule.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/encapsulation",
+    "noteHref": "/practice/oops/notes#encapsulation",
     "source": {
       "document": "assignment-1",
       "number": 46,
@@ -1443,7 +1443,7 @@
     "concept": "Separate three questions: the shape of the hierarchy, the accessibility of inherited operations, and which implementation a call selects.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/inheritance",
+    "noteHref": "/practice/oops/notes#inheritance",
     "source": {
       "document": "assignment-1",
       "number": 47,
@@ -1474,7 +1474,7 @@
     "concept": "Follow object creation one step at a time. Learn what the compiler supplies, what it does not supply, and why a constructor is not an ordinary returning function.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/constructors",
+    "noteHref": "/practice/oops/notes#constructors",
     "source": {
       "document": "assignment-1",
       "number": 48,
@@ -1505,7 +1505,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-1",
       "number": 49,
@@ -1536,7 +1536,7 @@
     "concept": "Follow object creation one step at a time. Learn what the compiler supplies, what it does not supply, and why a constructor is not an ordinary returning function.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/constructors",
+    "noteHref": "/practice/oops/notes#constructors",
     "source": {
       "document": "assignment-1",
       "number": 50,
@@ -1567,7 +1567,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-1",
       "number": 51,
@@ -1598,7 +1598,7 @@
     "concept": "Use an account with a rule: its balance must not become negative. A getter/setter pair is not automatically a safe design; the operations must preserve the rule.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/encapsulation",
+    "noteHref": "/practice/oops/notes#encapsulation",
     "source": {
       "document": "assignment-1",
       "number": 52,
@@ -1629,7 +1629,7 @@
     "concept": "Learn the symbols that appear repeatedly in the MCQs: std::, cout, &, *, ->, references, sizeof, comma expressions and default arguments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/cpp-basics",
+    "noteHref": "/practice/oops/notes#cpp-basics",
     "source": {
       "document": "assignment-1",
       "number": 53,
@@ -1660,7 +1660,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-1",
       "number": 54,
@@ -1691,7 +1691,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-1",
       "number": 55,
@@ -1722,7 +1722,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-1",
       "number": 56,
@@ -1753,7 +1753,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-1",
       "number": 57,
@@ -1784,7 +1784,7 @@
     "concept": "Refresh what you already know, then attach the new syntax to familiar ideas. You do not need to become an expert in three languages before understanding OOP questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/refresh",
+    "noteHref": "/practice/oops/notes#refresh",
     "source": {
       "document": "assignment-1",
       "number": 58,
@@ -1815,7 +1815,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-1",
       "number": 59,
@@ -1846,7 +1846,7 @@
     "concept": "Learn exactly what public, private, protected and omitted modifiers mean. Do not transfer C++ defaults into Java or Python.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/access",
+    "noteHref": "/practice/oops/notes#access",
     "source": {
       "document": "assignment-1",
       "number": 60,
@@ -1877,7 +1877,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-1",
       "number": 61,
@@ -1908,7 +1908,7 @@
     "concept": "Keep performance hints separate from language permissions. inline does not mean 'must be faster', and friend does not mean 'a member of this class'.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/inline-friends",
+    "noteHref": "/practice/oops/notes#inline-friends",
     "source": {
       "document": "assignment-1",
       "number": 62,
@@ -1939,7 +1939,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-1",
       "number": 63,
@@ -1970,7 +1970,7 @@
     "concept": "Use an account with a rule: its balance must not become negative. A getter/setter pair is not automatically a safe design; the operations must preserve the rule.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/encapsulation",
+    "noteHref": "/practice/oops/notes#encapsulation",
     "source": {
       "document": "assignment-1",
       "number": 64,
@@ -2001,7 +2001,7 @@
     "concept": "Learn exactly what public, private, protected and omitted modifiers mean. Do not transfer C++ defaults into Java or Python.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/access",
+    "noteHref": "/practice/oops/notes#access",
     "source": {
       "document": "assignment-1",
       "number": 65,
@@ -2032,7 +2032,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-1",
       "number": 66,
@@ -2063,7 +2063,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-1",
       "number": 67,
@@ -2094,7 +2094,7 @@
     "concept": "Use an account with a rule: its balance must not become negative. A getter/setter pair is not automatically a safe design; the operations must preserve the rule.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/encapsulation",
+    "noteHref": "/practice/oops/notes#encapsulation",
     "source": {
       "document": "assignment-1",
       "number": 68,
@@ -2125,7 +2125,7 @@
     "concept": "Use an account with a rule: its balance must not become negative. A getter/setter pair is not automatically a safe design; the operations must preserve the rule.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/encapsulation",
+    "noteHref": "/practice/oops/notes#encapsulation",
     "source": {
       "document": "assignment-1",
       "number": 69,
@@ -2156,7 +2156,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-1",
       "number": 70,
@@ -2187,7 +2187,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-1",
       "number": 71,
@@ -2218,7 +2218,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-1",
       "number": 72,
@@ -2249,7 +2249,7 @@
     "concept": "Refresh what you already know, then attach the new syntax to familiar ideas. You do not need to become an expert in three languages before understanding OOP questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/refresh",
+    "noteHref": "/practice/oops/notes#refresh",
     "source": {
       "document": "assignment-1",
       "number": 73,
@@ -2280,7 +2280,7 @@
     "concept": "Refresh what you already know, then attach the new syntax to familiar ideas. You do not need to become an expert in three languages before understanding OOP questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/refresh",
+    "noteHref": "/practice/oops/notes#refresh",
     "source": {
       "document": "assignment-1",
       "number": 74,
@@ -2311,7 +2311,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-1",
       "number": 75,
@@ -2342,7 +2342,7 @@
     "concept": "Use an account with a rule: its balance must not become negative. A getter/setter pair is not automatically a safe design; the operations must preserve the rule.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/encapsulation",
+    "noteHref": "/practice/oops/notes#encapsulation",
     "source": {
       "document": "assignment-1",
       "number": 76,
@@ -2373,7 +2373,7 @@
     "concept": "Use an account with a rule: its balance must not become negative. A getter/setter pair is not automatically a safe design; the operations must preserve the rule.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/encapsulation",
+    "noteHref": "/practice/oops/notes#encapsulation",
     "source": {
       "document": "assignment-1",
       "number": 77,
@@ -2404,7 +2404,7 @@
     "concept": "Use an account with a rule: its balance must not become negative. A getter/setter pair is not automatically a safe design; the operations must preserve the rule.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/encapsulation",
+    "noteHref": "/practice/oops/notes#encapsulation",
     "source": {
       "document": "assignment-1",
       "number": 78,
@@ -2435,7 +2435,7 @@
     "concept": "Use an account with a rule: its balance must not become negative. A getter/setter pair is not automatically a safe design; the operations must preserve the rule.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/encapsulation",
+    "noteHref": "/practice/oops/notes#encapsulation",
     "source": {
       "document": "assignment-1",
       "number": 79,
@@ -2466,7 +2466,7 @@
     "concept": "Use an account with a rule: its balance must not become negative. A getter/setter pair is not automatically a safe design; the operations must preserve the rule.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/encapsulation",
+    "noteHref": "/practice/oops/notes#encapsulation",
     "source": {
       "document": "assignment-1",
       "number": 80,
@@ -2498,7 +2498,7 @@
     "concept": "Use an account with a rule: its balance must not become negative. A getter/setter pair is not automatically a safe design; the operations must preserve the rule.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/encapsulation",
+    "noteHref": "/practice/oops/notes#encapsulation",
     "source": {
       "document": "assignment-1",
       "number": 81,
@@ -2529,7 +2529,7 @@
     "concept": "Learn exactly what public, private, protected and omitted modifiers mean. Do not transfer C++ defaults into Java or Python.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/access",
+    "noteHref": "/practice/oops/notes#access",
     "source": {
       "document": "assignment-1",
       "number": 82,
@@ -2560,7 +2560,7 @@
     "concept": "Keep performance hints separate from language permissions. inline does not mean 'must be faster', and friend does not mean 'a member of this class'.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/inline-friends",
+    "noteHref": "/practice/oops/notes#inline-friends",
     "source": {
       "document": "assignment-1",
       "number": 83,
@@ -2591,7 +2591,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-1",
       "number": 84,
@@ -2623,7 +2623,7 @@
     "concept": "An abstract type can define a contract without being directly constructible. An abstract base pointer is not an abstract base object.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/abstract",
+    "noteHref": "/practice/oops/notes#abstract",
     "source": {
       "document": "assignment-1",
       "number": 85,
@@ -2654,7 +2654,7 @@
     "concept": "Keep performance hints separate from language permissions. inline does not mean 'must be faster', and friend does not mean 'a member of this class'.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/inline-friends",
+    "noteHref": "/practice/oops/notes#inline-friends",
     "source": {
       "document": "assignment-1",
       "number": 86,
@@ -2686,7 +2686,7 @@
     "concept": "Learn the symbols that appear repeatedly in the MCQs: std::, cout, &, *, ->, references, sizeof, comma expressions and default arguments.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/cpp-basics",
+    "noteHref": "/practice/oops/notes#cpp-basics",
     "source": {
       "document": "assignment-1",
       "number": 87,
@@ -2717,7 +2717,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-1",
       "number": 88,
@@ -2749,7 +2749,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-1",
       "number": 89,
@@ -2781,7 +2781,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-1",
       "number": 90,
@@ -2812,7 +2812,7 @@
     "concept": "Learn exactly what public, private, protected and omitted modifiers mean. Do not transfer C++ defaults into Java or Python.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/access",
+    "noteHref": "/practice/oops/notes#access",
     "source": {
       "document": "assignment-1",
       "number": 91,
@@ -2843,7 +2843,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-1",
       "number": 92,
@@ -2874,7 +2874,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-1",
       "number": 93,
@@ -2905,7 +2905,7 @@
     "concept": "Read exactly what is protected: a value, a pointer, an object's observable state, a method override, or a class's inheritance. Similar words do different jobs.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/const-final",
+    "noteHref": "/practice/oops/notes#const-final",
     "source": {
       "document": "assignment-1",
       "number": 94,
@@ -2936,7 +2936,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-1",
       "number": 95,
@@ -2967,7 +2967,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-1",
       "number": 96,
@@ -2999,7 +2999,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-1",
       "number": 97,
@@ -3031,7 +3031,7 @@
     "concept": "Read exactly what is protected: a value, a pointer, an object's observable state, a method override, or a class's inheritance. Similar words do different jobs.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/const-final",
+    "noteHref": "/practice/oops/notes#const-final",
     "source": {
       "document": "assignment-1",
       "number": 98,
@@ -3062,7 +3062,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-1",
       "number": 100,
@@ -3093,7 +3093,7 @@
     "concept": "Use the current object to resolve names, then distinguish a parent-qualified operation from a runtime virtual call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/this-super",
+    "noteHref": "/practice/oops/notes#this-super",
     "source": {
       "document": "assignment-2",
       "number": 1,
@@ -3125,7 +3125,7 @@
     "concept": "The word static has several contexts. First ask whether it describes a local variable, a file-scope name, a class field, or a member function.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/static",
+    "noteHref": "/practice/oops/notes#static",
     "source": {
       "document": "assignment-2",
       "number": 2,
@@ -3157,7 +3157,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-2",
       "number": 3,
@@ -3188,7 +3188,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-2",
       "number": 4,
@@ -3220,7 +3220,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-2",
       "number": 5,
@@ -3251,7 +3251,7 @@
     "concept": "C has no built-in class, inheritance or virtual keywords. Learn its typed variables, control flow, functions, arrays, pointers and structs first; these make C++ code far less intimidating.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/c-basics",
+    "noteHref": "/practice/oops/notes#c-basics",
     "source": {
       "document": "assignment-2",
       "number": 6,
@@ -3282,7 +3282,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-2",
       "number": 7,
@@ -3313,7 +3313,7 @@
     "concept": "Keep performance hints separate from language permissions. inline does not mean 'must be faster', and friend does not mean 'a member of this class'.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/inline-friends",
+    "noteHref": "/practice/oops/notes#inline-friends",
     "source": {
       "document": "assignment-2",
       "number": 8,
@@ -3345,7 +3345,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-2",
       "number": 9,
@@ -3376,7 +3376,7 @@
     "concept": "Refresh what you already know, then attach the new syntax to familiar ideas. You do not need to become an expert in three languages before understanding OOP questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/refresh",
+    "noteHref": "/practice/oops/notes#refresh",
     "source": {
       "document": "assignment-2",
       "number": 10,
@@ -3407,7 +3407,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-2",
       "number": 11,
@@ -3438,7 +3438,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-2",
       "number": 12,
@@ -3469,7 +3469,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-2",
       "number": 13,
@@ -3500,7 +3500,7 @@
     "concept": "An abstract type can define a contract without being directly constructible. An abstract base pointer is not an abstract base object.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/abstract",
+    "noteHref": "/practice/oops/notes#abstract",
     "source": {
       "document": "assignment-2",
       "number": 14,
@@ -3531,7 +3531,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-2",
       "number": 15,
@@ -3562,7 +3562,7 @@
     "concept": "The word static has several contexts. First ask whether it describes a local variable, a file-scope name, a class field, or a member function.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/static",
+    "noteHref": "/practice/oops/notes#static",
     "source": {
       "document": "assignment-2",
       "number": 16,
@@ -3594,7 +3594,7 @@
     "concept": "The word static has several contexts. First ask whether it describes a local variable, a file-scope name, a class field, or a member function.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/static",
+    "noteHref": "/practice/oops/notes#static",
     "source": {
       "document": "assignment-2",
       "number": 17,
@@ -3626,7 +3626,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-2",
       "number": 18,
@@ -3658,7 +3658,7 @@
     "concept": "Classify the program before calculating an output. A compiler error, undefined behavior, an implementation-specific assumption and a normal result are different answers.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/tracing",
+    "noteHref": "/practice/oops/notes#tracing",
     "source": {
       "document": "assignment-2",
       "number": 19,
@@ -3690,7 +3690,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-2",
       "number": 20,
@@ -3721,7 +3721,7 @@
     "concept": "An abstract type can define a contract without being directly constructible. An abstract base pointer is not an abstract base object.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/abstract",
+    "noteHref": "/practice/oops/notes#abstract",
     "source": {
       "document": "assignment-2",
       "number": 21,
@@ -3752,7 +3752,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-2",
       "number": 22,
@@ -3783,7 +3783,7 @@
     "concept": "Read Java from the outside in: class, main, types, references, methods and access. Similar-looking C++ punctuation is not automatically valid Java.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/java-basics",
+    "noteHref": "/practice/oops/notes#java-basics",
     "source": {
       "document": "assignment-2",
       "number": 23,
@@ -3815,7 +3815,7 @@
     "concept": "The word static has several contexts. First ask whether it describes a local variable, a file-scope name, a class field, or a member function.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/static",
+    "noteHref": "/practice/oops/notes#static",
     "source": {
       "document": "assignment-2",
       "number": 24,
@@ -3847,7 +3847,7 @@
     "concept": "The word static has several contexts. First ask whether it describes a local variable, a file-scope name, a class field, or a member function.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/static",
+    "noteHref": "/practice/oops/notes#static",
     "source": {
       "document": "assignment-2",
       "number": 25,
@@ -3879,7 +3879,7 @@
     "concept": "Use the current object to resolve names, then distinguish a parent-qualified operation from a runtime virtual call.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/this-super",
+    "noteHref": "/practice/oops/notes#this-super",
     "source": {
       "document": "assignment-2",
       "number": 26,
@@ -3911,7 +3911,7 @@
     "concept": "The word static has several contexts. First ask whether it describes a local variable, a file-scope name, a class field, or a member function.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/static",
+    "noteHref": "/practice/oops/notes#static",
     "source": {
       "document": "assignment-2",
       "number": 27,
@@ -3942,7 +3942,7 @@
     "concept": "Learn exactly what public, private, protected and omitted modifiers mean. Do not transfer C++ defaults into Java or Python.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/access",
+    "noteHref": "/practice/oops/notes#access",
     "source": {
       "document": "assignment-2",
       "number": 28,
@@ -3974,7 +3974,7 @@
     "concept": "Separate three questions: the shape of the hierarchy, the accessibility of inherited operations, and which implementation a call selects.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/inheritance",
+    "noteHref": "/practice/oops/notes#inheritance",
     "source": {
       "document": "assignment-2",
       "number": 29,
@@ -4006,7 +4006,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-2",
       "number": 30,
@@ -4038,7 +4038,7 @@
     "concept": "Separate three questions: the shape of the hierarchy, the accessibility of inherited operations, and which implementation a call selects.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/inheritance",
+    "noteHref": "/practice/oops/notes#inheritance",
     "source": {
       "document": "assignment-2",
       "number": 31,
@@ -4070,7 +4070,7 @@
     "concept": "Learn the symbols that appear repeatedly in the MCQs: std::, cout, &, *, ->, references, sizeof, comma expressions and default arguments.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/cpp-basics",
+    "noteHref": "/practice/oops/notes#cpp-basics",
     "source": {
       "document": "assignment-2",
       "number": 32,
@@ -4101,7 +4101,7 @@
     "concept": "Read exactly what is protected: a value, a pointer, an object's observable state, a method override, or a class's inheritance. Similar words do different jobs.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/const-final",
+    "noteHref": "/practice/oops/notes#const-final",
     "source": {
       "document": "assignment-2",
       "number": 33,
@@ -4133,7 +4133,7 @@
     "concept": "Read exactly what is protected: a value, a pointer, an object's observable state, a method override, or a class's inheritance. Similar words do different jobs.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/const-final",
+    "noteHref": "/practice/oops/notes#const-final",
     "source": {
       "document": "assignment-2",
       "number": 34,
@@ -4165,7 +4165,7 @@
     "concept": "Read exactly what is protected: a value, a pointer, an object's observable state, a method override, or a class's inheritance. Similar words do different jobs.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/const-final",
+    "noteHref": "/practice/oops/notes#const-final",
     "source": {
       "document": "assignment-2",
       "number": 35,
@@ -4196,7 +4196,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-2",
       "number": 36,
@@ -4228,7 +4228,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-2",
       "number": 37,
@@ -4259,7 +4259,7 @@
     "concept": "An abstract type can define a contract without being directly constructible. An abstract base pointer is not an abstract base object.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/abstract",
+    "noteHref": "/practice/oops/notes#abstract",
     "source": {
       "document": "assignment-2",
       "number": 38,
@@ -4291,7 +4291,7 @@
     "concept": "An abstract type can define a contract without being directly constructible. An abstract base pointer is not an abstract base object.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/abstract",
+    "noteHref": "/practice/oops/notes#abstract",
     "transcriptionNote": "The PDF wraps a // comment onto the next printed line. It is joined here so the comment remains a comment; no executable statement was changed.",
     "source": {
       "document": "assignment-2",
@@ -4324,7 +4324,7 @@
     "concept": "An abstract type can define a contract without being directly constructible. An abstract base pointer is not an abstract base object.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/abstract",
+    "noteHref": "/practice/oops/notes#abstract",
     "transcriptionNote": "The PDF wraps a // comment onto the next printed line. It is joined here so the comment remains a comment; no executable statement was changed.",
     "source": {
       "document": "assignment-2",
@@ -4357,7 +4357,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-2",
       "number": 41,
@@ -4389,7 +4389,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "transcriptionNote": "The PDF wraps a // comment onto the next printed line. It is joined here so the comment remains a comment; no executable statement was changed.",
     "source": {
       "document": "assignment-2",
@@ -4421,7 +4421,7 @@
     "concept": "Learn the symbols that appear repeatedly in the MCQs: std::, cout, &, *, ->, references, sizeof, comma expressions and default arguments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/cpp-basics",
+    "noteHref": "/practice/oops/notes#cpp-basics",
     "source": {
       "document": "assignment-2",
       "number": 43,
@@ -4452,7 +4452,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-2",
       "number": 44,
@@ -4483,7 +4483,7 @@
     "concept": "The supplied syllabus lists exceptions but does not develop them into a full chapter. This added foundation fills that gap and explains the assignment questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/exceptions",
+    "noteHref": "/practice/oops/notes#exceptions",
     "source": {
       "document": "assignment-2",
       "number": 45,
@@ -4514,7 +4514,7 @@
     "concept": "The supplied syllabus lists exceptions but does not develop them into a full chapter. This added foundation fills that gap and explains the assignment questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/exceptions",
+    "noteHref": "/practice/oops/notes#exceptions",
     "source": {
       "document": "assignment-2",
       "number": 46,
@@ -4545,7 +4545,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-2",
       "number": 47,
@@ -4576,7 +4576,7 @@
     "concept": "An abstract type can define a contract without being directly constructible. An abstract base pointer is not an abstract base object.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/abstract",
+    "noteHref": "/practice/oops/notes#abstract",
     "source": {
       "document": "assignment-2",
       "number": 48,
@@ -4608,7 +4608,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-2",
       "number": 49,
@@ -4640,7 +4640,7 @@
     "concept": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/lifetime",
+    "noteHref": "/practice/oops/notes#lifetime",
     "source": {
       "document": "assignment-2",
       "number": 50,
@@ -4672,7 +4672,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-2",
       "number": 51,
@@ -4704,7 +4704,7 @@
     "concept": "Learn the symbols that appear repeatedly in the MCQs: std::, cout, &, *, ->, references, sizeof, comma expressions and default arguments.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/cpp-basics",
+    "noteHref": "/practice/oops/notes#cpp-basics",
     "source": {
       "document": "assignment-2",
       "number": 52,
@@ -4736,7 +4736,7 @@
     "concept": "Classify the program before calculating an output. A compiler error, undefined behavior, an implementation-specific assumption and a normal result are different answers.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/tracing",
+    "noteHref": "/practice/oops/notes#tracing",
     "source": {
       "document": "assignment-2",
       "number": 53,
@@ -4768,7 +4768,7 @@
     "concept": "Learn the symbols that appear repeatedly in the MCQs: std::, cout, &, *, ->, references, sizeof, comma expressions and default arguments.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/cpp-basics",
+    "noteHref": "/practice/oops/notes#cpp-basics",
     "source": {
       "document": "assignment-2",
       "number": 54,
@@ -4800,7 +4800,7 @@
     "concept": "C has no built-in class, inheritance or virtual keywords. Learn its typed variables, control flow, functions, arrays, pointers and structs first; these make C++ code far less intimidating.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/c-basics",
+    "noteHref": "/practice/oops/notes#c-basics",
     "source": {
       "document": "assignment-2",
       "number": 55,
@@ -4832,7 +4832,7 @@
     "concept": "Classify the program before calculating an output. A compiler error, undefined behavior, an implementation-specific assumption and a normal result are different answers.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/tracing",
+    "noteHref": "/practice/oops/notes#tracing",
     "source": {
       "document": "assignment-2",
       "number": 56,
@@ -4864,7 +4864,7 @@
     "concept": "Learn the symbols that appear repeatedly in the MCQs: std::, cout, &, *, ->, references, sizeof, comma expressions and default arguments.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/cpp-basics",
+    "noteHref": "/practice/oops/notes#cpp-basics",
     "source": {
       "document": "assignment-2",
       "number": 57,
@@ -4896,7 +4896,7 @@
     "concept": "Learn the symbols that appear repeatedly in the MCQs: std::, cout, &, *, ->, references, sizeof, comma expressions and default arguments.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/cpp-basics",
+    "noteHref": "/practice/oops/notes#cpp-basics",
     "source": {
       "document": "assignment-2",
       "number": 58,
@@ -4928,7 +4928,7 @@
     "concept": "Learn the symbols that appear repeatedly in the MCQs: std::, cout, &, *, ->, references, sizeof, comma expressions and default arguments.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/cpp-basics",
+    "noteHref": "/practice/oops/notes#cpp-basics",
     "source": {
       "document": "assignment-2",
       "number": 59,
@@ -4960,7 +4960,7 @@
     "concept": "Classify the program before calculating an output. A compiler error, undefined behavior, an implementation-specific assumption and a normal result are different answers.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/tracing",
+    "noteHref": "/practice/oops/notes#tracing",
     "source": {
       "document": "assignment-2",
       "number": 60,
@@ -4992,7 +4992,7 @@
     "concept": "Classify the program before calculating an output. A compiler error, undefined behavior, an implementation-specific assumption and a normal result are different answers.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/tracing",
+    "noteHref": "/practice/oops/notes#tracing",
     "source": {
       "document": "assignment-2",
       "number": 61,
@@ -5024,7 +5024,7 @@
     "concept": "Classify the program before calculating an output. A compiler error, undefined behavior, an implementation-specific assumption and a normal result are different answers.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/tracing",
+    "noteHref": "/practice/oops/notes#tracing",
     "source": {
       "document": "assignment-2",
       "number": 62,
@@ -5056,7 +5056,7 @@
     "concept": "Classify the program before calculating an output. A compiler error, undefined behavior, an implementation-specific assumption and a normal result are different answers.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/tracing",
+    "noteHref": "/practice/oops/notes#tracing",
     "source": {
       "document": "assignment-2",
       "number": 63,
@@ -5088,7 +5088,7 @@
     "concept": "Classify the program before calculating an output. A compiler error, undefined behavior, an implementation-specific assumption and a normal result are different answers.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/tracing",
+    "noteHref": "/practice/oops/notes#tracing",
     "source": {
       "document": "assignment-2",
       "number": 64,
@@ -5120,7 +5120,7 @@
     "concept": "C has no built-in class, inheritance or virtual keywords. Learn its typed variables, control flow, functions, arrays, pointers and structs first; these make C++ code far less intimidating.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/c-basics",
+    "noteHref": "/practice/oops/notes#c-basics",
     "source": {
       "document": "assignment-2",
       "number": 65,
@@ -5151,7 +5151,7 @@
     "concept": "Separate three questions: the shape of the hierarchy, the accessibility of inherited operations, and which implementation a call selects.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/inheritance",
+    "noteHref": "/practice/oops/notes#inheritance",
     "source": {
       "document": "assignment-2",
       "number": 66,
@@ -5182,7 +5182,7 @@
     "concept": "Learn the symbols that appear repeatedly in the MCQs: std::, cout, &, *, ->, references, sizeof, comma expressions and default arguments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/cpp-basics",
+    "noteHref": "/practice/oops/notes#cpp-basics",
     "source": {
       "document": "assignment-2",
       "number": 67,
@@ -5213,7 +5213,7 @@
     "concept": "Follow object creation one step at a time. Learn what the compiler supplies, what it does not supply, and why a constructor is not an ordinary returning function.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/constructors",
+    "noteHref": "/practice/oops/notes#constructors",
     "source": {
       "document": "assignment-2",
       "number": 68,
@@ -5244,7 +5244,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-2",
       "number": 69,
@@ -5275,7 +5275,7 @@
     "concept": "Follow object creation one step at a time. Learn what the compiler supplies, what it does not supply, and why a constructor is not an ordinary returning function.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/constructors",
+    "noteHref": "/practice/oops/notes#constructors",
     "source": {
       "document": "assignment-2",
       "number": 70,
@@ -5306,7 +5306,7 @@
     "concept": "The supplied syllabus lists exceptions but does not develop them into a full chapter. This added foundation fills that gap and explains the assignment questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/exceptions",
+    "noteHref": "/practice/oops/notes#exceptions",
     "source": {
       "document": "assignment-2",
       "number": 71,
@@ -5337,7 +5337,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-2",
       "number": 72,
@@ -5368,7 +5368,7 @@
     "concept": "Read exactly what is protected: a value, a pointer, an object's observable state, a method override, or a class's inheritance. Similar words do different jobs.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/const-final",
+    "noteHref": "/practice/oops/notes#const-final",
     "source": {
       "document": "assignment-2",
       "number": 73,
@@ -5399,7 +5399,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-2",
       "number": 74,
@@ -5430,7 +5430,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-2",
       "number": 75,
@@ -5461,7 +5461,7 @@
     "concept": "Separate three questions: the shape of the hierarchy, the accessibility of inherited operations, and which implementation a call selects.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/inheritance",
+    "noteHref": "/practice/oops/notes#inheritance",
     "source": {
       "document": "assignment-2",
       "number": 76,
@@ -5492,7 +5492,7 @@
     "concept": "Use the current object to resolve names, then distinguish a parent-qualified operation from a runtime virtual call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/this-super",
+    "noteHref": "/practice/oops/notes#this-super",
     "source": {
       "document": "assignment-2",
       "number": 77,
@@ -5523,7 +5523,7 @@
     "concept": "Reuse an algorithm across types, but keep the three languages' mechanisms distinct. Generic does not mean every operation works on every possible type.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/templates",
+    "noteHref": "/practice/oops/notes#templates",
     "source": {
       "document": "assignment-2",
       "number": 78,
@@ -5554,7 +5554,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-2",
       "number": 79,
@@ -5585,7 +5585,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-2",
       "number": 80,
@@ -5616,7 +5616,7 @@
     "concept": "Learn exactly what public, private, protected and omitted modifiers mean. Do not transfer C++ defaults into Java or Python.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/access",
+    "noteHref": "/practice/oops/notes#access",
     "source": {
       "document": "assignment-2",
       "number": 81,
@@ -5647,7 +5647,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-2",
       "number": 82,
@@ -5678,7 +5678,7 @@
     "concept": "Keep performance hints separate from language permissions. inline does not mean 'must be faster', and friend does not mean 'a member of this class'.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/inline-friends",
+    "noteHref": "/practice/oops/notes#inline-friends",
     "source": {
       "document": "assignment-2",
       "number": 83,
@@ -5709,7 +5709,7 @@
     "concept": "An abstract type can define a contract without being directly constructible. An abstract base pointer is not an abstract base object.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/abstract",
+    "noteHref": "/practice/oops/notes#abstract",
     "source": {
       "document": "assignment-2",
       "number": 84,
@@ -5740,7 +5740,7 @@
     "concept": "Learn the symbols that appear repeatedly in the MCQs: std::, cout, &, *, ->, references, sizeof, comma expressions and default arguments.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/cpp-basics",
+    "noteHref": "/practice/oops/notes#cpp-basics",
     "source": {
       "document": "assignment-2",
       "number": 85,
@@ -5771,7 +5771,7 @@
     "concept": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/overloading",
+    "noteHref": "/practice/oops/notes#overloading",
     "source": {
       "document": "assignment-2",
       "number": 86,
@@ -5802,7 +5802,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-2",
       "number": 87,
@@ -5834,7 +5834,7 @@
     "concept": "Separate three questions: the shape of the hierarchy, the accessibility of inherited operations, and which implementation a call selects.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/inheritance",
+    "noteHref": "/practice/oops/notes#inheritance",
     "source": {
       "document": "assignment-2",
       "number": 88,
@@ -5865,7 +5865,7 @@
     "concept": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/dispatch",
+    "noteHref": "/practice/oops/notes#dispatch",
     "source": {
       "document": "assignment-2",
       "number": 89,
@@ -5896,7 +5896,7 @@
     "concept": "Learn exactly what public, private, protected and omitted modifiers mean. Do not transfer C++ defaults into Java or Python.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/access",
+    "noteHref": "/practice/oops/notes#access",
     "source": {
       "document": "assignment-2",
       "number": 90,
@@ -5927,7 +5927,7 @@
     "concept": "Learn exactly what public, private, protected and omitted modifiers mean. Do not transfer C++ defaults into Java or Python.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/access",
+    "noteHref": "/practice/oops/notes#access",
     "source": {
       "document": "assignment-2",
       "number": 91,
@@ -5958,7 +5958,7 @@
     "concept": "An abstract type can define a contract without being directly constructible. An abstract base pointer is not an abstract base object.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/abstract",
+    "noteHref": "/practice/oops/notes#abstract",
     "source": {
       "document": "assignment-2",
       "number": 92,
@@ -5989,7 +5989,7 @@
     "concept": "Learn exactly what public, private, protected and omitted modifiers mean. Do not transfer C++ defaults into Java or Python.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/access",
+    "noteHref": "/practice/oops/notes#access",
     "source": {
       "document": "assignment-2",
       "number": 93,
@@ -6020,7 +6020,7 @@
     "concept": "The word static has several contexts. First ask whether it describes a local variable, a file-scope name, a class field, or a member function.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/static",
+    "noteHref": "/practice/oops/notes#static",
     "source": {
       "document": "assignment-2",
       "number": 94,
@@ -6051,7 +6051,7 @@
     "concept": "Separate three questions: the shape of the hierarchy, the accessibility of inherited operations, and which implementation a call selects.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/inheritance",
+    "noteHref": "/practice/oops/notes#inheritance",
     "source": {
       "document": "assignment-2",
       "number": 95,
@@ -6082,7 +6082,7 @@
     "concept": "The word static has several contexts. First ask whether it describes a local variable, a file-scope name, a class field, or a member function.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/static",
+    "noteHref": "/practice/oops/notes#static",
     "source": {
       "document": "assignment-2",
       "number": 96,
@@ -6113,7 +6113,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-2",
       "number": 97,
@@ -6144,7 +6144,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-2",
       "number": 98,
@@ -6175,7 +6175,7 @@
     "concept": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
     "level": 1,
     "type": "concept",
-    "noteHref": "/practice/oops/notes/classes",
+    "noteHref": "/practice/oops/notes#classes",
     "source": {
       "document": "assignment-2",
       "number": 99,
@@ -6207,7 +6207,7 @@
     "concept": "Read Java from the outside in: class, main, types, references, methods and access. Similar-looking C++ punctuation is not automatically valid Java.",
     "level": 2,
     "type": "code",
-    "noteHref": "/practice/oops/notes/java-basics",
+    "noteHref": "/practice/oops/notes#java-basics",
     "source": {
       "document": "assignment-2",
       "number": 100,

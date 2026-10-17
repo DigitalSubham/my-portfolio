@@ -9,7 +9,7 @@ import { toPageNavItems } from "@/lib/nav";
 const practiceSubjects = [
   {
     title: "OOP & Language Foundations",
-    description: "Learn C, C++ and Java through familiar Python ideas. 20 lessons, 51 worked examples and all 199 supplied assignment questions.",
+    description: "Complete OOP, C, C++ and Java notes with Python comparisons, 51 worked examples and all 199 supplied assignment questions.",
     href: "/practice/oops", notesHref: "/practice/oops/notes", meta: "Notes & practice",
   },
   {
