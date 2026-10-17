@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowLeft, ArrowRight, ChevronLeft, LogIn, Save } from "lucide-react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { formatTime, letters, percent, quizStats, recordOf, remainingTime, sectionOf, shuffle, topicStatus, type QuizQuestion } from "@/lib/practice-quiz";
 import type { PracticeSubject } from "@/lib/practice-subjects";
@@ -14,17 +15,21 @@ const topicLabel = (quiz: QuizController, key: string) => quiz.subject.topics.fi
 
 function Button({ children, onClick, action, className = "btn", disabled = false, ...props }: {
   children: ReactNode; onClick?: () => void; action?: string; className?: string; disabled?: boolean;
-  "data-key"?: string; "data-i"?: number; id?: string;
+  "data-key"?: string; "data-i"?: number; id?: string; "aria-label"?: string; title?: string;
 }) {
   return <button type="button" className={className} data-act={action} disabled={disabled} onClick={onClick} {...props}>{children}</button>;
 }
 
-function SaveControls({ quiz }: { quiz: QuizController }) {
-  return <div className="save-controls" id="save">
-    <span className="save" role="status" data-mode={quiz.loaded?.account ? "account" : "browser"}>{quiz.note}</span>
+function SaveStatus({ quiz }: { quiz: QuizController }) {
+  return <span className="save" role="status" data-mode={quiz.loaded?.account ? "account" : "browser"}>{quiz.note}</span>;
+}
+
+function SaveControls({ quiz, compact = false }: { quiz: QuizController; compact?: boolean }) {
+  return <div className={`save-controls${compact ? " compact" : ""}`} id="save">
+    {!compact && <SaveStatus quiz={quiz} />}
     {quiz.loaded?.account
-      ? <Button action="save" disabled={quiz.saving || quiz.conflict} onClick={() => { void quiz.save(); }}>{quiz.saving ? "Saving..." : "Save progress"}</Button>
-      : <Link className="btn" href={`/admin/login?next=/practice/${quiz.subject.slug}`} prefetch={false}>Sign in to save</Link>}
+      ? <Button action="save" aria-label="Save progress" title="Save progress" disabled={quiz.saving || quiz.conflict} onClick={() => { void quiz.save(); }}>{compact && <Save size={17} aria-hidden="true" />}{quiz.saving ? "Saving..." : compact ? "Save" : "Save progress"}</Button>
+      : <Link className="btn" aria-label="Sign in to save" href={`/admin/login?next=/practice/${quiz.subject.slug}`} prefetch={false}>{compact && <LogIn size={17} aria-hidden="true" />}{compact ? "Sign in" : "Sign in to save"}</Link>}
     {(quiz.conflict || quiz.loaded?.accountError) && <Button action="load-save" onClick={quiz.loadSaved}>Load saved progress</Button>}
   </div>;
 }
@@ -167,8 +172,11 @@ function Question({ quiz }: { quiz: QuizController }) {
   const left = remainingTime(quiz.state);
   const last = session.i === session.list.length - 1;
   return <>
-    <div className="qbar"><Button className="link" action="quit" onClick={quiz.quit}>← {session.kind === "test" ? "Topics · pause test" : "Topics"}</Button><span className="qtitle">{session.title}</span><span className="right">{session.kind === "test" && <span className={`timer num${left <= 60 ? " low" : ""}`} id="timer">{formatTime(left)}</span>}<span className="num">{session.i + 1} / {session.list.length}</span></span></div>
-    <SaveControls quiz={quiz} />
+    <header className="qbar">
+      <div className="qtoolbar"><Button className="link" action="quit" onClick={quiz.quit}><ArrowLeft size={18} aria-hidden="true" />{session.kind === "test" ? "Topics · pause" : "Topics"}</Button><SaveControls quiz={quiz} compact /></div>
+      <div className="qheading"><span className="qtitle">{session.title}</span><span className="right">{session.kind === "test" && <span className={`timer num${left <= 60 ? " low" : ""}`} id="timer">{formatTime(left)}</span>}<span className="num">{session.i + 1} / {session.list.length}</span></span></div>
+      <SaveStatus quiz={quiz} />
+    </header>
     <div className="track"><i style={{ width: `${(session.i + (reveal ? 1 : 0)) / session.list.length * 100}%` }} /></div>
     <article className="qcard"><div className="qmeta"><span className="tag">{q.k === "pyq" ? q.subtopic : sectionOf(q)}</span><span className="tag">{levelLabels[q.level]}</span><span className="tag">{typeLabels[q.type]}</span><span className="qid">{q.id}</span></div>
       <p className="qtext" id="qtext" tabIndex={-1}>{q.q}</p>{q.code && <pre className="code"><code>{q.code}</code></pre>}
@@ -179,9 +187,12 @@ function Question({ quiz }: { quiz: QuizController }) {
       })}</ol>
       {reveal && <><div className="feedback" role="status"><p className={`verdict ${letters[picked] === q.ans ? "ok" : "bad"}`}>{letters[picked] === q.ans ? "Correct" : `Not quite. The answer is ${q.ans}.`}</p><p className="exp">{q.exp}</p></div><Teaching question={q} picked={picked} /></>}
     </article>
-    <div className="qnav"><div className="left"><Button action="previous" onClick={quiz.previous} disabled={!session.i}>← Previous</Button>{session.kind === "test" && <Button action="skip" onClick={() => quiz.next(true)}>Skip</Button>}<span className="num muted">{session.kind === "practice" ? `${right} correct of ${answered} answered` : `${answered} answered \u00b7 ${session.list.slice(0, session.i).filter((id) => session.picks[id] == null).length} skipped so far`}</span></div>
-      <div className="left">{session.kind === "test" && <Button className="link" action="finish" onClick={quiz.finishTest}>Finish test</Button>}<Button className="btn primary" id="next" action="next" onClick={() => quiz.next()} disabled={session.kind === "practice" && !reveal}>{last ? session.kind === "practice" ? "See summary" : "Finish test" : session.kind === "practice" ? "Next question →" : "Next →"}</Button></div>
-    </div>
+    <nav className={`qnav${session.kind === "test" ? " test-nav" : ""}`} aria-label="Question navigation">
+      <div className="qnav-status"><span className="num muted">{session.kind === "practice" ? `${right} correct of ${answered} answered` : `${answered} answered \u00b7 ${session.list.slice(0, session.i).filter((id) => session.picks[id] == null).length} skipped`}</span>{session.kind === "test" && !last && <Button className="link" action="finish" onClick={quiz.finishTest}>Finish test</Button>}</div>
+      <Button action="previous" aria-label="Previous question" onClick={quiz.previous} disabled={!session.i}><ChevronLeft size={18} aria-hidden="true" /><span>Previous</span></Button>
+      {session.kind === "test" && <Button action="skip" onClick={() => quiz.next(true)}>Skip</Button>}
+      <Button className="btn primary" id="next" action="next" onClick={() => quiz.next()} disabled={session.kind === "practice" && !reveal}><span>{last ? session.kind === "practice" ? "See summary" : "Finish test" : "Next"}</span><ArrowRight size={18} aria-hidden="true" /></Button>
+    </nav>
     <p className="keys"><kbd>A</kbd>–<kbd>E</kbd> answer · <kbd>Enter</kbd> next{session.kind === "test" && <> · <kbd>S</kbd> skip</>}</p>
     <div className="reset"><Button className="link" action="reset-session" onClick={quiz.resetSession}>Reset session</Button></div>
   </>;
@@ -240,7 +251,7 @@ export default function Quiz({ subject, initialTopic = null }: { subject: Practi
     document.querySelector(`.setup[data-for="${open}"]`)?.scrollIntoView({ block: "nearest", behavior: "instant" });
   }, [open, quiz.loaded]);
   return <div className={styles.quiz}>
-    <main className="wrap" aria-live="polite">
+    <main className={`wrap${quiz.state.view === "q" ? " question-view" : ""}`} aria-live="polite">
       {quiz.error ? <><p role="alert">{quiz.error}</p><Button onClick={() => location.reload()}>Try again</Button></> : !quiz.loaded ? <p role="status">Loading questions and saved practice...</p> : quiz.state.view === "home" ? <Home quiz={quiz} open={open} setOpen={setOpen} /> : quiz.state.view === "q" ? <Question quiz={quiz} /> : <Results quiz={quiz} setup={setOpen} />}
     </main>
   </div>;
