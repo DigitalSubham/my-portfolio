@@ -38,6 +38,6 @@ export default function ReadingTools({ chapter, subject = "history" }: { chapter
     <button type="button" title="Decrease text size" aria-label="Decrease text size" onClick={() => resize(Math.max(16, size - 1))} disabled={size <= 16}><Minus size={17} /></button>
     <output aria-label="Text size">{size}</output>
     <button type="button" title="Increase text size" aria-label="Increase text size" onClick={() => resize(Math.min(24, size + 1))} disabled={size >= 24}><Plus size={17} /></button>
-    <button type="button" title={subject === "oops" ? "Print complete notes" : "Print chapter"} aria-label={subject === "oops" ? "Print complete notes" : "Print chapter"} onClick={() => window.print()}><Printer size={17} /></button>
+    <button type="button" title={chapter === "complete" ? "Print complete notes" : "Print chapter"} aria-label={chapter === "complete" ? "Print complete notes" : "Print chapter"} onClick={() => window.print()}><Printer size={17} /></button>
   </div>;
 }

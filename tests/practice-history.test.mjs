@@ -3,6 +3,7 @@ import test from "node:test";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { validatePracticeSnapshot } from "../src/lib/practice-state.ts";
+import { continuousNoteContent } from "../src/lib/continuous-notes.ts";
 
 const json = (path) => JSON.parse(readFileSync(new URL(path, import.meta.url), "utf8"));
 const questions = json("../db/seeds/history-questions.json");
@@ -12,6 +13,26 @@ const audit = json("../src/content/history/import-audit.json");
 const coverage = json("../public/study/history/source-mcq-coverage.json");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const text = (node) => typeof node === "string" ? node : node.children.map(text).join("");
+
+test("continuous history notes preserve the introduction and every chapter with unique anchors", () => {
+  const ids = new Set();
+  const ordered = ["introduction", ...chapters.map((chapter) => chapter.key)].map((id) => documents.find((doc) => doc.id === id));
+  assert.equal(ordered.length, 25);
+  function visit(node) {
+    if (typeof node === "string") return;
+    assert.notEqual(node.tag, "h1");
+    if (node.attrs.id) {
+      assert.ok(!ids.has(node.attrs.id), `Duplicate anchor: ${node.attrs.id}`);
+      ids.add(node.attrs.id);
+    }
+    node.children.forEach(visit);
+  }
+  for (const document of ordered) {
+    const content = continuousNoteContent(document.content, document.id);
+    assert.equal(content.map(text).join(""), document.content.map(text).join(""));
+    content.forEach(visit);
+  }
+});
 
 test("all 880 original questions and all 24 chapter counts are preserved exactly", () => {
   assert.equal(questions.length, 880);

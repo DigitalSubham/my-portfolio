@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { emptyQuiz, quizStats, recordAnswer, quizSnapshot } from '../src/lib/practice-quiz.ts';
 import { validatePracticeSnapshot } from '../src/lib/practice-state.ts';
-import { continuousOopContent } from '../src/lib/oop-note-content.ts';
+import { continuousNoteContent } from '../src/lib/continuous-notes.ts';
 
 const json = async (path) => JSON.parse(await readFile(new URL(path, import.meta.url), 'utf8'));
 const sources = await json('../db/seeds/oops-source.json');
@@ -60,7 +60,7 @@ test('continuous notes retain every character and example with unique heading an
     }
   }
   for (const note of notes) {
-    const combined = continuousOopContent(note.content, note.id);
+    const combined = continuousNoteContent(note.content, note.id);
     assert.equal(text(combined), text(note.content));
     check(combined);
   }
