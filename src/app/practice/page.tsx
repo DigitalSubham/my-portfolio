@@ -13,6 +13,13 @@ const practiceSubjects = [
     href: "/practice/dsa",
     meta: "Question bank",
   },
+  {
+    title: "Bihar History & Indian National Movement",
+    description: "880 English practice questions and 24 chapters of Hindi notes, with timelines and revision tables.",
+    href: "/practice/history",
+    notesHref: "/practice/history/notes",
+    meta: "Notes & practice",
+  },
 ];
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -64,8 +71,7 @@ export default async function PracticePage() {
               Practice resources
             </h1>
             <p className="mt-4 max-w-2xl text-lg leading-8 text-gray-600 dark:text-gray-400">
-              Subject-wise question banks and revision tools. More subjects can be added here
-              without changing the main portfolio layout.
+              Subject-wise notes, question banks and revision.
             </p>
           </header>
 
@@ -73,7 +79,7 @@ export default async function PracticePage() {
             {practiceSubjects.map((subject) => (
               <article
                 key={subject.href}
-                className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg dark:border-gray-800 dark:bg-gray-900"
+                className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900"
               >
                 <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-gray-500 dark:text-gray-400">
                   <BookOpenCheck className="h-4 w-4" aria-hidden="true" />
@@ -85,13 +91,16 @@ export default async function PracticePage() {
                 <p className="mt-3 text-[15px] leading-relaxed text-gray-600 dark:text-gray-400">
                   {subject.description}
                 </p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                {subject.notesHref && <Link href={subject.notesHref} className="inline-flex min-h-11 items-center gap-2 rounded-md border border-gray-300 px-5 text-sm font-semibold dark:border-gray-700">Read notes <ArrowRight className="h-4 w-4" /></Link>}
                 <Link
                   href={subject.href}
-                  className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full bg-gray-950 px-5 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5 dark:bg-white dark:text-gray-950"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-md bg-gray-950 px-5 text-sm font-semibold text-white dark:bg-white dark:text-gray-950"
                 >
-                  Open
+                  Practise
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
+                </div>
               </article>
             ))}
           </section>

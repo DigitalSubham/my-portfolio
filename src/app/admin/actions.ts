@@ -12,6 +12,7 @@ import {
 } from "@/lib/auth";
 import { getAdminTable, type AdminField } from "@/lib/admin-config";
 import { addResume, deleteResume, getSql, hasDatabase, setDefaultResume } from "@/lib/db";
+import { practiceReturnPath } from "@/lib/practice-subjects";
 import {
   draftApplication,
   sendApplication,
@@ -44,13 +45,13 @@ function insertSql(fields: AdminField[]) {
 }
 
 export async function loginAction(formData: FormData) {
-  const next = ["/practice/dsa", "/dsa-practice.html"].includes(String(formData.get("next"))) ? "/practice/dsa" : "/admin";
+  const next = practiceReturnPath(formData.get("next"));
   const email = String(formData.get("email") || "").trim();
   const password = String(formData.get("password") || "");
   const admin = await authenticateAdmin(email, password);
 
   if (!admin) {
-    redirect(`/admin/login?error=1${next === "/practice/dsa" ? "&next=/practice/dsa" : ""}`);
+    redirect(`/admin/login?error=1${next !== "/admin" ? `&next=${encodeURIComponent(next)}` : ""}`);
   }
 
   const token = await signJwt({ sub: admin.id, email: admin.email });

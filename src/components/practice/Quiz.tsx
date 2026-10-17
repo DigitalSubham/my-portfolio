@@ -2,14 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
-import { formatTime, letters, percent, quizStats, recordOf, remainingTime, sectionOf, shuffle, topics, topicStatus, type QuizQuestion } from "@/lib/practice-quiz";
+import { formatTime, letters, percent, quizStats, recordOf, remainingTime, sectionOf, shuffle, topicStatus, type QuizQuestion } from "@/lib/practice-quiz";
+import type { PracticeSubject } from "@/lib/practice-subjects";
 import { useQuiz } from "./useQuiz";
 import styles from "./quiz.module.css";
 
 type QuizController = ReturnType<typeof useQuiz>;
-const typeLabels: Record<string, string> = { concept: "Concept", property: "Property", trace: "Trace", numerical: "Numerical", code: "Code" };
+const typeLabels: Record<string, string> = { concept: "Concept", property: "Property", trace: "Trace", numerical: "Numerical", code: "Code", match: "Match", chronology: "Chronology", statement: "Statement", assertion_reason: "Assertion & reason" };
 const levelLabels: Record<number, string> = { 1: "Easy", 2: "Medium", 3: "Hard" };
-const topicLabel = (key: string) => topics.find((topic) => topic.key === key)?.label || key;
+const topicLabel = (quiz: QuizController, key: string) => quiz.subject.topics.find((topic) => topic.key === key)?.label || key;
 
 function Button({ children, onClick, action, className = "btn", disabled = false, ...props }: {
   children: ReactNode; onClick?: () => void; action?: string; className?: string; disabled?: boolean;
@@ -23,7 +24,7 @@ function SaveControls({ quiz }: { quiz: QuizController }) {
     <span className="save" role="status" data-mode={quiz.loaded?.account ? "account" : "browser"}>{quiz.note}</span>
     {quiz.loaded?.account
       ? <Button action="save" disabled={quiz.saving || quiz.conflict} onClick={() => { void quiz.save(); }}>{quiz.saving ? "Saving..." : "Save progress"}</Button>
-      : <Link className="btn" href="/admin/login?next=/practice/dsa" prefetch={false}>Sign in to save</Link>}
+      : <Link className="btn" href={`/admin/login?next=/practice/${quiz.subject.slug}`} prefetch={false}>Sign in to save</Link>}
     {(quiz.conflict || quiz.loaded?.accountError) && <Button action="load-save" onClick={quiz.loadSaved}>Load saved progress</Button>}
   </div>;
 }
@@ -46,7 +47,7 @@ function Setup({ topic, quiz, close }: { topic: string; quiz: QuizController; cl
     event.preventDefault();
     const values = new FormData(event.currentTarget);
     let questions = base;
-    let title = topicLabel(topic);
+    let title = topicLabel(quiz, topic);
     if (test) {
       const count = Number(values.get("tn") || 16);
       const from = values.get("tf");
@@ -71,8 +72,8 @@ function Setup({ topic, quiz, close }: { topic: string; quiz: QuizController; cl
   }
   return <form className="setup" data-for={topic} onSubmit={submit}>
     {test ? <>
-      <fieldset className="seg"><legend>Number of questions (1 minute each, like the real exam)</legend><Segments name="tn" values={[["16", "16 \u00b7 one paper's DSA share"], ["30", "30"], ["50", "50"]]} selected="16" /></fieldset>
-      <fieldset className="seg"><legend>Questions from</legend><Segments name="tf" values={[["all", "All topics"], ["new", "Ones I haven't tried"], ["pyq", "Past papers only"]]} selected="all" /></fieldset>
+      <fieldset className="seg"><legend>Number of questions (1 minute each)</legend><Segments name="tn" values={[["16", "16"], ["30", "30"], ["50", "50"]]} selected="16" /></fieldset>
+      <fieldset className="seg"><legend>Questions from</legend><Segments name="tf" values={[["all", "All topics"], ["new", "Ones I haven't tried"], ...(quiz.subject.topics.some((t) => t.key === "pyq") ? [["pyq", "Past papers only"]] as [string, string][] : [])]} selected="all" /></fieldset>
     </> : <>
       <fieldset className="seg"><legend>Which questions</legend><Segments name="pm" values={[["new", `New first (${stats.total - stats.done} left)`], ["all", `Shuffle all ${stats.total}`], ["wrong", `Only my wrong ones (${stats.wrong})`]]} selected={stats.done < stats.total ? "new" : "all"} /></fieldset>
       <fieldset className="seg"><legend>How many</legend><Segments name="ps" values={[["10", "10"], ["25", "25"], ["50", "50"], ["0", "All"]]} selected="25" /></fieldset>
@@ -80,7 +81,7 @@ function Setup({ topic, quiz, close }: { topic: string; quiz: QuizController; cl
       {sections.length > 1 && topic !== "pyq" && <fieldset><legend>Sub-topic</legend><select id="psub" name="psub" className="btn"><option value="">All {sections.length} sub-topics</option>{sections.map((section) => <option key={section}>{section}</option>)}</select></fieldset>}
     </>}
     <div className="row"><button type="submit" className="btn primary" data-act={test ? "start-test" : "start"} data-key={topic}>{test ? "Start timed test" : "Start practice"}</button>
-      {test ? <span className="hint">Scored like TRE 4.0: +1 correct, −⅓ wrong, 0 skipped. Answers are shown at the end.</span> : <Button className="link" onClick={close}>Cancel</Button>}
+      {test ? <span className="hint">Practice scoring: +1 correct, −⅓ wrong, 0 skipped. Answers are shown at the end.</span> : <Button className="link" onClick={close}>Cancel</Button>}
       {error && <span role="alert" className="hint" style={{ color: "var(--bad)" }}>{error}</span>}
     </div>
   </form>;
@@ -89,6 +90,7 @@ function Setup({ topic, quiz, close }: { topic: string; quiz: QuizController; cl
 function Home({ quiz, open, setOpen }: { quiz: QuizController; open: string | null; setOpen: (value: string | null) => void }) {
   const [confirmReset, setConfirmReset] = useState(false);
   const bank = quiz.loaded!.questions;
+  const topics = quiz.subject.topics;
   const all = quizStats(quiz.state, bank);
   const topicStats = (key: string) => quizStats(quiz.state, bank.filter((q) => q.k === key), quiz.state.progress[key]?.h || "");
   const ready = topics.filter((t) => topicStatus(topicStats(t.key)).cls === "ready").length;
@@ -104,7 +106,9 @@ function Home({ quiz, open, setOpen }: { quiz: QuizController; open: string | nu
   const wrongQuestions = (questions: QuizQuestion[]) => shuffle(questions.filter((q) => { const r = recordOf(quiz.state, q); return r && !r[2]; }));
   function toggle(key: string) { setOpen(open === key ? null : key); setConfirmReset(false); }
   return <>
-    <header className="top"><div className="brand"><span className="eyebrow">BPSC TRE 4.0 · Computer Science · Class 11–12</span><h1>TRE DSA Question Bank</h1><p className="muted">{bank.length} questions in the exam&apos;s five-option format, from arrays to P vs NP, plus the 47 DSA questions from TRE 1–3.</p></div><SaveControls quiz={quiz} /></header>
+    <header className="top"><div className="brand"><span className="eyebrow">{quiz.subject.eyebrow}</span><h1>{quiz.subject.title}</h1><p className="muted">{bank.length} questions. {quiz.subject.description}</p></div><SaveControls quiz={quiz} /></header>
+    {quiz.subject.notesHref && <nav className="actions" aria-label="History views"><Link className="btn" href={quiz.subject.notesHref}>Read Hindi notes</Link><span className="chip">Practice questions</span></nav>}
+    {quiz.subject.formatNote && <aside className="tip">{quiz.subject.formatNote} <Link href="/practice/history/notes/sources">Source notes and corrections</Link></aside>}
     <section className="summary" aria-label="Your progress"><Stat value={all.done}>of {all.total} questions tried</Stat><Stat value={percent(all.acc)}>accuracy overall</Stat><Stat value={`${ready}/${topics.length}`}>topics ready (85%+ on last 50)</Stat><Stat value={all.wrong}>questions to redo</Stat></section>
     <section className="actions"><Button className="btn primary" action="setup" data-key="test" onClick={() => toggle("test")}>Timed test</Button>
       {quiz.state.session && !quiz.state.session.done && <Button className="btn primary" action="resume" onClick={quiz.resume}>Continue {quiz.state.session.title} · {quiz.state.session.i + 1} / {quiz.state.session.list.length}</Button>}
@@ -129,11 +133,11 @@ function Home({ quiz, open, setOpen }: { quiz: QuizController; open: string | nu
         </article>;
       })}
     </section>
-    {weakSections.length > 0 && <section className="weak"><h2>Sub-topics to revisit</h2><p className="muted" style={{ fontSize: 14 }}>Below 70% correct, with at least 5 attempts. Revise the concept first, then drill.</p><ul>{weakSections.map((w) => <li key={`${w.key}|${w.section}`}><span className="w-name">{w.section}<small>{topicLabel(w.key)} · {percent(w.correct / w.attempts)} of {w.attempts} attempts correct</small></span><Button onClick={() => quiz.start(shuffle(bank.filter((q) => q.k === w.key && sectionOf(q) === w.section)).slice(0, 25), `${topicLabel(w.key)} \u00b7 ${w.section}`, w.key)}>Drill this</Button></li>)}</ul></section>}
+    {weakSections.length > 0 && <section className="weak"><h2>Sub-topics to revisit</h2><p className="muted" style={{ fontSize: 14 }}>Below 70% correct, with at least 5 attempts. Revise the concept first, then drill.</p><ul>{weakSections.map((w) => <li key={`${w.key}|${w.section}`}><span className="w-name">{w.section}<small>{topicLabel(quiz, w.key)} · {percent(w.correct / w.attempts)} of {w.attempts} attempts correct</small></span><Button onClick={() => quiz.start(shuffle(bank.filter((q) => q.k === w.key && sectionOf(q) === w.section)).slice(0, 25), `${topicLabel(quiz, w.key)} \u00b7 ${w.section}`, w.key)}>Drill this</Button></li>)}</ul></section>}
     <section className="notes">
-      <div><h3>How the options work</h3><p>Every question has five options, as in TRE 1–3: A–C are content, <b>D</b> is “More than one of the above” and <b>E</b> is “None of the above”. About a quarter of the answers here are D or E, so read all three options before answering.</p></div>
+      <div><h3>How the options work</h3><p>Every practice question has five options: A–C are content, <b>D</b> is “More than one of the above” and <b>E</b> is “None of the above”. Read all three substantive choices before answering.</p></div>
       <div><h3>When is a topic ready?</h3><p>A topic turns green once your last 50 answers in it are at least 85% correct. Redo your wrong ones about a week later; a question leaves the redo list when you get it right.</p></div>
-      <div><h3>Where the answers come from</h3><p>Every answer was checked twice, the second time by an independent blind solve, and every trace, calculation and code answer was run as code. Each option has its own explanation. Past-paper answers are worked out here, not BPSC&apos;s official key; TRE 3 Q94 is ambiguous as printed.</p></div>
+      <div><h3>Where the answers come from</h3><p>{quiz.subject.slug === "dsa" ? "Every answer was checked twice, the second time by an independent blind solve, and every trace, calculation and code answer was run as code. Each option has its own explanation. Past-paper answers are worked out here, not BPSC's official key; TRE 3 Q94 is ambiguous as printed." : "The supplied history study pack includes chapter explanations and source corrections. Uncertain source items are not scored. These are practice questions, not an official answer key."}</p></div>
       <div><h3>Keyboard</h3><p><kbd>A</kbd>–<kbd>E</kbd> or <kbd>1</kbd>–<kbd>5</kbd> to answer, <kbd>Enter</kbd> for the next question, <kbd>S</kbd> to skip in a timed test.</p></div>
     </section>
     <div className="reset">{confirmReset ? <><span>Clear every answer and start over?</span><Button className="btn danger" onClick={() => { quiz.reset(); setConfirmReset(false); }}>Yes, clear my progress</Button><Button className="link" onClick={() => setConfirmReset(false)}>Keep it</Button></> : <Button className="link" action="reset" onClick={() => setConfirmReset(true)}>Reset progress</Button>}</div>
@@ -196,18 +200,18 @@ function Results({ quiz, setup }: { quiz: QuizController; setup: (key: string) =
   const order: Record<string, number> = { bad: 0, skip: 1, ok: 2 };
   return <>
     <div className="qbar"><Button className="link" action="quit" onClick={quiz.quit}>← Topics</Button><span className="qtitle">{session.title}</span><span /></div><SaveControls quiz={quiz} />
-    <header className="result-head"><span className="eyebrow">{session.kind === "test" ? "Timed test result" : "Practice summary"}</span><h1 className="num">{session.kind === "test" ? Math.round((correct - wrong / 3) * 100) / 100 : correct} / {rows.length}{session.kind === "practice" ? " correct" : ""}</h1><p className="muted">{session.kind === "test" ? `Net score with TRE 4.0 marking (+1, −⅓, 0). Time used ${formatTime(session.used || 0)} of ${formatTime(session.limit || 0)}.` : correct === rows.length ? "Clean sheet. Move on or try a harder level." : "The ones you missed are on your redo list."}</p></header>
+    <header className="result-head"><span className="eyebrow">{session.kind === "test" ? "Timed test result" : "Practice summary"}</span><h1 className="num">{session.kind === "test" ? Math.round((correct - wrong / 3) * 100) / 100 : correct} / {rows.length}{session.kind === "practice" ? " correct" : ""}</h1><p className="muted">{session.kind === "test" ? `Practice score (+1, −⅓, 0). Time used ${formatTime(session.used || 0)} of ${formatTime(session.limit || 0)}.` : correct === rows.length ? "Clean sheet. Move on or try a harder level." : "The ones you missed are on your redo list."}</p></header>
     {session.kind === "test" && <section className="summary"><Stat value={correct}>correct</Stat><Stat value={wrong}>wrong (−{Math.round(wrong / 3 * 100) / 100})</Stat><Stat value={skipped}>skipped</Stat><Stat value={percent(correct + wrong ? correct / (correct + wrong) : null)}>accuracy on attempted</Stat></section>}
     <section className="actions">{missed.length > 0 && session.kind === "practice" && <Button className="btn primary" action="redo-session" onClick={() => quiz.start(shuffle(missed.map((r) => r.q)), session.title.replace(/ \u00b7 redo$/, "") + " \u00b7 redo", session.key)}>Redo the {missed.length} I missed</Button>}
-      {session.key && <Button action="setup-again" onClick={() => { quiz.quit(); setup(session.key!); }}>Practise {topicLabel(session.key)} again</Button>}<Button action="quit" onClick={quiz.quit}>Back to topics</Button>
+      {session.key && <Button action="setup-again" onClick={() => { quiz.quit(); setup(session.key!); }}>Practise {topicLabel(quiz, session.key)} again</Button>}<Button action="quit" onClick={quiz.quit}>Back to topics</Button>
     </section>
     <section className="review"><h2>Review</h2>{[...rows].sort((a, b) => order[a.status] - order[b.status]).map(({ q, picked, status }) => <details key={q.id} open={status === "bad" && session.kind === "test" ? true : undefined}><summary><span className={`st ${status}`}>{status === "ok" ? "RIGHT" : status === "bad" ? "WRONG" : "SKIPPED"}</span><span className="qs">{q.q.split("\n")[0]}</span></summary><div className="body"><p className="qtext">{q.q}</p>{q.code && <pre className="code"><code>{q.code}</code></pre>}<p className="exp"><b>Answer {q.ans}:</b> {q.exp}</p><Teaching question={q} picked={picked} /><p className="mono muted" style={{ fontSize: 12 }}>{q.id} · {q.k === "pyq" ? q.subtopic : sectionOf(q)}</p></div></details>)}</section>
   </>;
 }
 
-export default function Quiz() {
-  const quiz = useQuiz();
-  const [open, setOpen] = useState<string | null>(null);
+export default function Quiz({ subject, initialTopic = null }: { subject: PracticeSubject; initialTopic?: string | null }) {
+  const quiz = useQuiz(subject, initialTopic !== null);
+  const [open, setOpen] = useState<string | null>(initialTopic);
   const { pick, next } = quiz;
   const activePick = quiz.state.session?.picks[quiz.state.session.list[quiz.state.session.i]];
   useEffect(() => { if (quiz.state.view !== "home") setOpen(null); }, [quiz.state.view]);
@@ -226,15 +230,15 @@ export default function Quiz() {
   }, [quiz.state.view, quiz.state.session?.kind, pick, next]);
   useEffect(() => {
     if (quiz.state.view === "q") document.getElementById("qtext")?.focus({ preventScroll: true });
-    window.scrollTo({ top: 0 });
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, [quiz.state.view, quiz.state.session?.i, quiz.state.session?.title]);
   useEffect(() => {
     if (quiz.state.view === "q" && activePick != null) document.getElementById("next")?.focus({ preventScroll: true });
   }, [quiz.state.view, activePick]);
   useEffect(() => {
     if (!open) return;
-    document.querySelector(`.setup[data-for="${open}"]`)?.scrollIntoView({ block: "nearest" });
-  }, [open]);
+    document.querySelector(`.setup[data-for="${open}"]`)?.scrollIntoView({ block: "nearest", behavior: "instant" });
+  }, [open, quiz.loaded]);
   return <div className={styles.quiz}>
     <main className="wrap" aria-live="polite">
       {quiz.error ? <><p role="alert">{quiz.error}</p><Button onClick={() => location.reload()}>Try again</Button></> : !quiz.loaded ? <p role="status">Loading questions and saved practice...</p> : quiz.state.view === "home" ? <Home quiz={quiz} open={open} setOpen={setOpen} /> : quiz.state.view === "q" ? <Question quiz={quiz} /> : <Results quiz={quiz} setup={setOpen} />}

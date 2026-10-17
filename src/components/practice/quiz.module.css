@@ -53,7 +53,7 @@
 .quiz :global(.num) { font-variant-numeric: tabular-nums; }
 
 /* buttons */
-.quiz :global(.btn) { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); padding: 8px 14px; border-radius: 999px; cursor: pointer; font-weight: 500; font-size: 14px; white-space: nowrap; }
+.quiz :global(.btn) { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); padding: 8px 14px; border-radius: 999px; cursor: pointer; font-weight: 500; font-size: 14px; white-space: normal; overflow-wrap: anywhere; }
 .quiz :global(.btn:hover) { border-color: var(--ink); }
 .quiz :global(.btn.primary) { background: var(--ink); border-color: var(--ink); color: var(--surface); }
 .quiz :global(.btn.primary:hover) { filter: brightness(1.08); }
@@ -160,6 +160,10 @@
 .quiz :global(.opt.wrong) { border-color: var(--bad); background: var(--bad-soft); }
 .quiz :global(.opt.wrong .bubble) { background: var(--bad); border-color: var(--bad); color: var(--surface); }
 .quiz :global(.opt .mark) { margin-left: auto; font-size: 12px; font-weight: 600; padding-top: 4px; white-space: nowrap; }
+@media (max-width: 620px) {
+  .quiz :global(.opt) { display: grid; grid-template-columns: 28px minmax(0, 1fr); }
+  .quiz :global(.opt .mark) { grid-column: 2; margin-left: 0; padding-top: 0; white-space: normal; }
+}
 .quiz :global(.opt.right .mark) { color: var(--ok); }
 .quiz :global(.opt.wrong .mark) { color: var(--bad); }
 .quiz :global(.feedback) { border-radius: 8px; padding: 12px 14px; background: var(--sunk); display: flex; flex-direction: column; gap: 6px; }

@@ -3,16 +3,19 @@ import { getCurrentAdmin } from "@/lib/auth";
 import { getSql } from "@/lib/db";
 import { getPracticeQuestions } from "@/lib/practice-db";
 import { validatePracticeSnapshot } from "@/lib/practice-state";
+import { getPracticeSubject } from "@/lib/practice-subjects";
 
 export const dynamic = "force-dynamic";
 const headers = { "Cache-Control": "private, no-store" };
 type SavedRow = { snapshot: unknown; revision: number; updated_at: string };
 
-export async function GET() {
+export async function GET(_request: Request, context: { params: Promise<{ subject: string }> }) {
+  const { subject } = await context.params;
+  if (!getPracticeSubject(subject)) return NextResponse.json({ error: "Unknown practice subject." }, { status: 404, headers });
   const admin = await getCurrentAdmin();
   if (!admin) return NextResponse.json({ error: "Sign in to save your practice across devices." }, { status: 401, headers });
   try {
-    const [row] = await getSql()`SELECT snapshot, revision, updated_at FROM practice_saves WHERE admin_id = ${admin.sub} AND subject = 'dsa'` as SavedRow[];
+    const [row] = await getSql()`SELECT snapshot, revision, updated_at FROM practice_saves WHERE admin_id = ${admin.sub} AND subject = ${subject}` as SavedRow[];
     return NextResponse.json({ owner: admin.sub, snapshot: row?.snapshot ?? null, revision: row?.revision ?? 0, updatedAt: row?.updated_at ?? null }, { headers });
   } catch (error) {
     console.error("Unable to load practice save.", error);
@@ -20,7 +23,10 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: Request, context: { params: Promise<{ subject: string }> }) {
+  const { subject } = await context.params;
+  const config = getPracticeSubject(subject);
+  if (!config) return NextResponse.json({ error: "Unknown practice subject." }, { status: 404, headers });
   if (request.headers.get("origin") !== new URL(request.url).origin) {
     return NextResponse.json({ error: "Invalid request origin." }, { status: 403, headers });
   }
@@ -33,7 +39,7 @@ export async function POST(request: Request) {
   let writerId = "", sequence = 0;
   let questions;
   try {
-    questions = await getPracticeQuestions();
+    questions = await getPracticeQuestions(subject);
   } catch (error) {
     console.error("Unable to validate practice save.", error);
     return NextResponse.json({ error: "Saving is temporarily unavailable. Your practice remains in this browser; please retry." }, { status: 503, headers });
@@ -48,7 +54,7 @@ export async function POST(request: Request) {
       writerId = input.writerId;
       sequence = input.sequence;
     }
-    snapshot = validatePracticeSnapshot(input.snapshot, questions);
+    snapshot = validatePracticeSnapshot(input.snapshot, questions, config.topics);
   } catch {
     return NextResponse.json({ error: "Invalid practice save. Reload the quiz and try again." }, { status: 400, headers });
   }
@@ -58,8 +64,8 @@ export async function POST(request: Request) {
     // wrong-answer request arrives later. Other tabs must still match the revision.
     const rows = await sql`
       INSERT INTO practice_saves (admin_id, subject, snapshot, writer_id, writer_sequence, writer_base_revision)
-      SELECT ${admin.sub}, 'dsa', ${JSON.stringify(snapshot)}::jsonb, ${writerId}, ${sequence}, ${revision}
-      WHERE ${revision} = 0 OR EXISTS (SELECT 1 FROM practice_saves WHERE admin_id = ${admin.sub} AND subject = 'dsa')
+      SELECT ${admin.sub}, ${subject}, ${JSON.stringify(snapshot)}::jsonb, ${writerId}, ${sequence}, ${revision}
+      WHERE ${revision} = 0 OR EXISTS (SELECT 1 FROM practice_saves WHERE admin_id = ${admin.sub} AND subject = ${subject})
       ON CONFLICT (admin_id, subject) DO UPDATE
       SET snapshot = EXCLUDED.snapshot, revision = practice_saves.revision + 1,
           writer_id = EXCLUDED.writer_id, writer_sequence = EXCLUDED.writer_sequence,
@@ -71,7 +77,7 @@ export async function POST(request: Request) {
     ` as Pick<SavedRow, "revision" | "updated_at">[];
     if (!rows.length && writerId) {
       const [newer] = await sql`SELECT revision, updated_at FROM practice_saves
-        WHERE admin_id = ${admin.sub} AND subject = 'dsa' AND writer_id = ${writerId}
+        WHERE admin_id = ${admin.sub} AND subject = ${subject} AND writer_id = ${writerId}
           AND writer_base_revision = ${revision} AND writer_sequence >= ${sequence}` as Pick<SavedRow, "revision" | "updated_at">[];
       if (newer) return NextResponse.json({ revision: newer.revision, updatedAt: newer.updated_at }, { headers });
     }

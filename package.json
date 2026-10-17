@@ -10,6 +10,7 @@
     "test:apply": "node --experimental-strip-types --test tests/job-apply-format.test.mjs",
     "db:setup": "node scripts/setup-db.mjs",
     "db:practice": "node scripts/setup-practice.mjs",
+    "db:history": "node scripts/import-history.mjs",
     "test:practice": "node --experimental-strip-types --test tests/practice-*.test.mjs"
   },
   "dependencies": {
@@ -30,6 +31,7 @@
     "shiki": "^4.4.3"
   },
   "devDependencies": {
+    "parse5": "^7.3.0",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",

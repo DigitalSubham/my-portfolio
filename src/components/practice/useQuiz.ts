@@ -1,20 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { emptyQuiz, letters, quizSnapshot, recordAnswer, remainingTime, restoreQuiz, topics, type QuizQuestion, type QuizState } from "@/lib/practice-quiz";
+import { emptyQuiz, letters, quizSnapshot, recordAnswer, remainingTime, restoreQuiz, type QuizQuestion, type QuizState } from "@/lib/practice-quiz";
 import { validatePracticeSnapshot, type PracticeQuestion, type PracticeSnapshot } from "@/lib/practice-state";
+import type { PracticeSubject } from "@/lib/practice-subjects";
 
 type AccountSave = { owner: string; revision: number; snapshot: PracticeSnapshot | null };
 type Loaded = { questions: QuizQuestion[]; account: AccountSave | null; accountError: string };
 
-async function loadQuiz(): Promise<Loaded> {
+async function loadQuiz(subject: PracticeSubject): Promise<Loaded> {
   const [bankResponse, saveResponse] = await Promise.all([
-    fetch("/api/practice/dsa/questions"),
-    fetch("/api/practice/dsa/progress", { cache: "no-store" }).catch(() => null),
+    fetch(`/api/practice/${subject.slug}/questions`),
+    fetch(`/api/practice/${subject.slug}/progress`, { cache: "no-store" }).catch(() => null),
   ]);
   const bank = await bankResponse.json() as { questions: PracticeQuestion[] };
   if (!bankResponse.ok || !Array.isArray(bank.questions) || !bank.questions.length) throw new Error("Questions could not be loaded. Please check your connection.");
-  const questions = bank.questions.map((q) => ({ ...q, k: topics.find((t) => t.name === q.topic)?.key || "" }));
+  const questions = bank.questions.map((q) => ({ ...q, k: subject.topics.find((t) => t.name === q.topic)?.key || "" }));
   if (questions.some((q) => !q.k)) throw new Error("The question bank contains an unknown topic.");
   return {
     questions,
@@ -23,7 +24,7 @@ async function loadQuiz(): Promise<Loaded> {
   };
 }
 
-export function useQuiz() {
+export function useQuiz(subject: PracticeSubject, openTopics = false) {
   const [loaded, setLoaded] = useState<Loaded | null>(null);
   const [state, setState] = useState<QuizState>(emptyQuiz);
   const [error, setError] = useState("");
@@ -69,7 +70,7 @@ export function useQuiz() {
     const sequence = ++r.sequence;
     if (r.active) { setSaving(true); setNote("Saving..."); }
     try {
-      const response = await fetch("/api/practice/dsa/progress", {
+      const response = await fetch(`/api/practice/${subject.slug}/progress`, {
         method: "POST", headers: { "Content-Type": "application/json" }, keepalive: leaving,
         body: JSON.stringify({ revision: r.baseRevision, writerId: r.writerId, sequence, snapshot }),
       });
@@ -123,28 +124,30 @@ export function useQuiz() {
     let cancelled = false;
     const r = runtime.current;
     r.active = true;
-    initialRequest.current ||= loadQuiz();
+    initialRequest.current ||= loadQuiz(subject);
     void initialRequest.current.then((data) => {
       if (cancelled) return;
       r.account = data.account; r.questions = data.questions;
       r.revision = data.account?.revision || 0; r.baseRevision = r.revision;
       r.writerId = crypto.randomUUID();
-      r.key = `tre-dsa-session-v2-${data.account?.owner || "guest"}`;
+      const prefix = subject.slug === "dsa" ? "tre-dsa-session-v2" : `practice-${subject.slug}-session-v1`;
+      r.key = `${prefix}-${data.account?.owner || "guest"}`;
       let restored = emptyQuiz();
       try {
         const local = JSON.parse(localStorage.getItem(r.key) || "null");
         const remote = data.account?.snapshot;
         let saved = remote && (!local || local.revision !== r.revision) ? remote : local?.snapshot || remote;
         if (!saved) {
-          const guest = data.account && JSON.parse(localStorage.getItem("tre-dsa-session-v2-guest") || "null");
-          saved = guest?.snapshot || { ...emptyQuiz(), progress: JSON.parse(localStorage.getItem("tre-dsa-progress-v1") || "{}") };
+          const guest = data.account && JSON.parse(localStorage.getItem(`${prefix}-guest`) || "null");
+          saved = guest?.snapshot || { ...emptyQuiz(), progress: subject.slug === "dsa" ? JSON.parse(localStorage.getItem("tre-dsa-progress-v1") || "{}") : {} };
         }
-        restored = restoreQuiz(validatePracticeSnapshot(saved, data.questions));
+        restored = restoreQuiz(validatePracticeSnapshot(saved, data.questions, subject.topics));
       } catch {
         if (data.account?.snapshot) {
-          try { restored = restoreQuiz(validatePracticeSnapshot(data.account.snapshot, data.questions)); } catch { /* Keep an empty local session if its questions were removed. */ }
+          try { restored = restoreQuiz(validatePracticeSnapshot(data.account.snapshot, data.questions, subject.topics)); } catch { /* Keep an empty local session if its questions were removed. */ }
         }
       }
+      if (openTopics) restored = { ...restored, view: "home" };
       current.current = restored; setState(restored); setLoaded(data);
       setNote(data.accountError || (data.account ? "Account save loaded" : "Progress is kept in this browser."));
       saveLocal();
@@ -239,5 +242,5 @@ export function useQuiz() {
     localStorage.removeItem(runtime.current.key); location.reload();
   }
 
-  return { loaded, state, error, note, saving, conflict, clock, save: () => saveCloud(), start, pick, next, previous, quit, resume, resetSession, reset, loadSaved, finishTest };
+  return { subject, loaded, state, error, note, saving, conflict, clock, save: () => saveCloud(), start, pick, next, previous, quit, resume, resetSession, reset, loadSaved, finishTest };
 }

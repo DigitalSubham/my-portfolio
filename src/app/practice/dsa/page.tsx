@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import Quiz from "./Quiz";
+import Quiz from "@/components/practice/Quiz";
+import { getPracticeSubject } from "@/lib/practice-subjects";
 
 export const metadata: Metadata = {
   title: "TRE DSA Question Bank",
@@ -9,5 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function DsaPracticePage() {
-  return <Quiz />;
+  return <Quiz subject={getPracticeSubject("dsa")!} />;
 }

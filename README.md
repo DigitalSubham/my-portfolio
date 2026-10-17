@@ -40,7 +40,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 The React quiz at `/practice/dsa` loads its complete question bank from
 `/api/practice/dsa/questions` once, then handles questions, navigation, answers,
 explanations, filters, review and scoring in the browser.
-Its components and scoped styles live in `src/app/practice/dsa`; it does not
+Its shared components and scoped styles live in `src/components/practice`; it does not
 embed, load or depend on a standalone HTML file or public quiz script.
 The old `/dsa-practice.html` address permanently redirects to `/practice/dsa`.
 
@@ -64,3 +64,21 @@ An older tab cannot overwrite a newer checkpoint without loading it first.
 running development server using Playwright and Chrome. It creates a temporary
 test account and removes it with its saved data afterward. Set
 `PLAYWRIGHT_MODULE` to a Playwright module path if it is not installed locally.
+
+## History Study Pack
+
+`/practice/history` uses the same quiz with its own question bank, chapter keys,
+browser cache and account checkpoint. `/practice/history/notes` provides the Hindi
+chapter reader, search, revision tables, source qualifications and PDF download.
+
+Run `npm run db:history -- /path/to/BPSC_Updated_History_Study_Pack` to import the
+supplied JSON and parse the notes into safe structured content. All question
+fields and note text are preserved. Questions and notes are stored in the
+database; the original HTML is not embedded or required at runtime. Imports
+update only the history content and preserve DSA content and saved progress.
+Import audit hashes in `src/content/history/import-audit.json` verify text and
+question fidelity. Uncertain and out-of-scope source items are retained in the
+source reconciliation file, not added as scored questions.
+
+`node tests/history-browser.mjs` checks history save isolation, the Hindi reader,
+mobile tables, chapter search and PDF delivery using a temporary test account.

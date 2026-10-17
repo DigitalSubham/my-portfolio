@@ -39,17 +39,18 @@ function object(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
-export function validatePracticeSnapshot(value: unknown, questions: PracticeQuestion[]): PracticeSnapshot {
+export function validatePracticeSnapshot(value: unknown, questions: PracticeQuestion[], allowedTopics?: readonly { key: string; name: string }[]): PracticeSnapshot {
   const fail = (): never => { throw new Error("Invalid practice save. Reload the quiz and try again."); };
   if (!object(value) || value.version !== 1 || !object(value.progress) || !["home", "q", "done"].includes(String(value.view))) return fail();
   const byId = new Map(questions.map((question) => [question.id, question]));
   const progress: PracticeSnapshot["progress"] = {};
-  const topicKeys = new Set(["pyq", "arrays", "lists", "stacks", "queues", "trees", "sorting", "graphs", "hashing", "analysis", "paradigms"]);
+  const topicKeys = new Set(allowedTopics ? allowedTopics.map((topic) => topic.key) : ["pyq", "arrays", "lists", "stacks", "queues", "trees", "sorting", "graphs", "hashing", "analysis", "paradigms"]);
+  const keyByName = allowedTopics ? new Map(allowedTopics.map((topic) => [topic.name, topic.key])) : null;
   for (const [key, entry] of Object.entries(value.progress)) {
     if (!topicKeys.has(key) || !object(entry) || !object(entry.r) || typeof entry.h !== "string" || !/^[01]{0,50}$/.test(entry.h)) return fail();
     const records: Record<string, [number, number, number]> = {};
     for (const [id, record] of Object.entries(entry.r)) {
-      if (!byId.has(id) || !Array.isArray(record) || record.length !== 3 ||
+      if (!byId.has(id) || keyByName && keyByName.get(byId.get(id)!.topic) !== key || !Array.isArray(record) || record.length !== 3 ||
         !record.every(Number.isSafeInteger) || record[0] < 1 || record[0] > 1_000_000 ||
         record[1] < 0 || record[1] > record[0] || ![0, 1].includes(record[2])) return fail();
       records[id] = record as [number, number, number];

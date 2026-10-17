@@ -1,0 +1,3213 @@
+[
+  {
+    "source_id": "BIHAR-01-01",
+    "source": "BIHAR",
+    "page": 1,
+    "number": 1,
+    "stem": "1. When is Bihar Foundation Day celebrated?",
+    "question_ids": [
+      "HIST24-012"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-01-02",
+    "source": "BIHAR",
+    "page": 1,
+    "number": 2,
+    "stem": "2. What is the state flower of Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-01-03",
+    "source": "BIHAR",
+    "page": 1,
+    "number": 3,
+    "stem": "3. What is the state animal of Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-01-04",
+    "source": "BIHAR",
+    "page": 1,
+    "number": 4,
+    "stem": "4. What is the state bird of Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-01-05",
+    "source": "BIHAR",
+    "page": 1,
+    "number": 5,
+    "stem": "5. Which season is the longest in Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-01-06",
+    "source": "BIHAR",
+    "page": 1,
+    "number": 6,
+    "stem": "6. How many administrative divisions are there in Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-02-07",
+    "source": "BIHAR",
+    "page": 2,
+    "number": 7,
+    "stem": "7. Which is the largest river in Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-02-08",
+    "source": "BIHAR",
+    "page": 2,
+    "number": 8,
+    "stem": "8. What is the state tree of Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-02-09",
+    "source": "BIHAR",
+    "page": 2,
+    "number": 9,
+    "stem": "9. Which state's border does not touch Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-02-10",
+    "source": "BIHAR",
+    "page": 2,
+    "number": 10,
+    "stem": "10. How many total districts are there in Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-02-11",
+    "source": "BIHAR",
+    "page": 2,
+    "number": 11,
+    "stem": "11. Which is the highest peak in Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-02-12",
+    "source": "BIHAR",
+    "page": 2,
+    "number": 12,
+    "stem": "12. Who appoints the Governor of Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-02-13",
+    "source": "BIHAR",
+    "page": 2,
+    "number": 13,
+    "stem": "13. What is the term length for a Bihar Legislative Council member?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-03-14",
+    "source": "BIHAR",
+    "page": 3,
+    "number": 14,
+    "stem": "14. In which year was the Patna High Court established?",
+    "question_ids": [
+      "HIST24-032"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-03-15",
+    "source": "BIHAR",
+    "page": 3,
+    "number": 15,
+    "stem": "15. Patna, the capital of Bihar, is situated on the bank of which river?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-04-01",
+    "source": "BIHAR",
+    "page": 4,
+    "number": 1,
+    "stem": "1. What is the state sport of Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-04-02",
+    "source": "BIHAR",
+    "page": 4,
+    "number": 2,
+    "stem": "2. What was the old name of Patna, the capital of Bihar?",
+    "question_ids": [
+      "HIST01-012"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-04-03",
+    "source": "BIHAR",
+    "page": 4,
+    "number": 3,
+    "stem": "3. When was the Panchayati Raj system implemented in Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-04-04",
+    "source": "BIHAR",
+    "page": 4,
+    "number": 4,
+    "stem": "4. Who was the first female Chief Minister of Bihar?",
+    "question_ids": [
+      "HIST24-033"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-04-05",
+    "source": "BIHAR",
+    "page": 4,
+    "number": 5,
+    "stem": "5. Which is the main tourist spot in Bihar related to Buddhism?",
+    "question_ids": [
+      "HIST03-002"
+    ],
+    "status": "adapted",
+    "note": "Reframed vague main tourist spot as the enlightenment site."
+  },
+  {
+    "source_id": "BIHAR-04-06",
+    "source": "BIHAR",
+    "page": 4,
+    "number": 6,
+    "stem": "6. Which is the largest district in Bihar by area?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-05-07",
+    "source": "BIHAR",
+    "page": 5,
+    "number": 7,
+    "stem": "7. What is the official language of Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-05-08",
+    "source": "BIHAR",
+    "page": 5,
+    "number": 8,
+    "stem": "8. In which district of Bihar is the \"Mahabodhi Temple\" located?",
+    "question_ids": [
+      "HIST03-037"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-05-09",
+    "source": "BIHAR",
+    "page": 5,
+    "number": 9,
+    "stem": "9. Where is the \"Sonepur Mela\" held in Bihar?",
+    "question_ids": [
+      "HIST24-034"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-05-10",
+    "source": "BIHAR",
+    "page": 5,
+    "number": 10,
+    "stem": "10. Who is the current Governor of Bihar? (As of 2024)",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-05-11",
+    "source": "BIHAR",
+    "page": 5,
+    "number": 11,
+    "stem": "11. Which is the most famous Buddhist university in Bihar?",
+    "question_ids": [
+      "HIST05-009"
+    ],
+    "status": "adapted",
+    "note": "Reframed subjective most famous wording as a specific institutional association."
+  },
+  {
+    "source_id": "BIHAR-05-12",
+    "source": "BIHAR",
+    "page": 5,
+    "number": 12,
+    "stem": "12. Which river is known as the \"Sorrow of Bihar\"?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-05-13",
+    "source": "BIHAR",
+    "page": 5,
+    "number": 13,
+    "stem": "13. Who is the Chief Justice of the Patna High Court?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-06-14",
+    "source": "BIHAR",
+    "page": 6,
+    "number": 14,
+    "stem": "14. What is the state emblem of Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-06-15",
+    "source": "BIHAR",
+    "page": 6,
+    "number": 15,
+    "stem": "15. In which district are the ruins of 'Nalanda University' located in Bihar?",
+    "question_ids": [
+      "HIST05-033"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-06-16",
+    "source": "BIHAR",
+    "page": 6,
+    "number": 16,
+    "stem": "16. Which river forms the natural border between Nepal and Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-06-17",
+    "source": "BIHAR",
+    "page": 6,
+    "number": 17,
+    "stem": "17. Which district is famous for the production of \"Makhana\" in Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-07-01",
+    "source": "BIHAR",
+    "page": 7,
+    "number": 1,
+    "stem": "1. Who led the Champaran Satyagraha in Bihar in 1917?",
+    "question_ids": [
+      "HIST15-028"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-07-02",
+    "source": "BIHAR",
+    "page": 7,
+    "number": 2,
+    "stem": "2. During the Quit India Movement of 1942, which place in Bihar was famous for its rebellion?",
+    "question_ids": [
+      "HIST22-016"
+    ],
+    "status": "adapted",
+    "note": "Replaced vague famous rebellion with specific dates and Patna protest."
+  },
+  {
+    "source_id": "BIHAR-07-03",
+    "source": "BIHAR",
+    "page": 7,
+    "number": 3,
+    "stem": "3. The Battle of Buxar in 1764 was fought near which town in Bihar?",
+    "question_ids": [
+      "HIST07-002"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-07-04",
+    "source": "BIHAR",
+    "page": 7,
+    "number": 4,
+    "stem": "4. Which Mughal ruler constructed the famous Sher Shah Suri Tomb in Sasaram, Bihar?",
+    "question_ids": [
+      "HIST06-030"
+    ],
+    "status": "adapted",
+    "note": "Corrected false Mughal description."
+  },
+  {
+    "source_id": "BIHAR-07-05",
+    "source": "BIHAR",
+    "page": 7,
+    "number": 5,
+    "stem": "5. Which mineral is prominently found in the district of Gaya in Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-07-06",
+    "source": "BIHAR",
+    "page": 7,
+    "number": 6,
+    "stem": "6. In the revolt of 1857, which leader from Bihar led the fight against the British?",
+    "question_ids": [
+      "HIST09-006"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-08-07",
+    "source": "BIHAR",
+    "page": 8,
+    "number": 7,
+    "stem": "7. Which river was associated with the mineral wealth of Rajgir in Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-08-08",
+    "source": "BIHAR",
+    "page": 8,
+    "number": 8,
+    "stem": "8. Who was the first Mughal governor of Bihar?",
+    "question_ids": [],
+    "status": "unscored_uncertainty",
+    "note": "UNSCORED: first Mughal governor needs a specified territorial and administrative context; the supplied options are not safely supported. Do not guess from a coaching key."
+  },
+  {
+    "source_id": "BIHAR-08-09",
+    "source": "BIHAR",
+    "page": 8,
+    "number": 9,
+    "stem": "9. Which mineral is majorly extracted from the Rohtas district of Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-08-10",
+    "source": "BIHAR",
+    "page": 8,
+    "number": 10,
+    "stem": "10. Which Mughal Emperor visited Bihar during his campaign against Sher Shah Suri?",
+    "question_ids": [
+      "HIST06-006"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-08-11",
+    "source": "BIHAR",
+    "page": 8,
+    "number": 11,
+    "stem": "11. In which year did the Patna massacre occur during the revolt against the British?",
+    "question_ids": [
+      "HIST07-032"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-08-12",
+    "source": "BIHAR",
+    "page": 8,
+    "number": 12,
+    "stem": "12. The Chuar rebellion of 1799 is associated with which region of Bihar?",
+    "question_ids": [
+      "HIST08-035"
+    ],
+    "status": "adapted",
+    "note": "Corrected Jungle Mahals location and avoided projecting current Bihar boundaries."
+  },
+  {
+    "source_id": "BIHAR-09-13",
+    "source": "BIHAR",
+    "page": 9,
+    "number": 13,
+    "stem": "13. Which mineral is found in large quantities in Jamui district of Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-09-14",
+    "source": "BIHAR",
+    "page": 9,
+    "number": 14,
+    "stem": "14. Which British officer was killed during the Battle of Buxar?",
+    "question_ids": [
+      "HIST07-028"
+    ],
+    "status": "adapted",
+    "note": "Corrected false death-at-Buxar premise."
+  },
+  {
+    "source_id": "BIHAR-09-15",
+    "source": "BIHAR",
+    "page": 9,
+    "number": 15,
+    "stem": "15. During which Mughal Emperor's reign was Patna renamed Azimabad?",
+    "question_ids": [
+      "HIST06-033"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-09-16",
+    "source": "BIHAR",
+    "page": 9,
+    "number": 16,
+    "stem": "16. Which place in Bihar is known for the early evidence of the Non-Cooperation Movement?",
+    "question_ids": [
+      "HIST16-017"
+    ],
+    "status": "adapted",
+    "note": "Replaced ambiguous earliest-evidence premise with Bihar Vidyapeeth milestone."
+  },
+  {
+    "source_id": "BIHAR-09-17",
+    "source": "BIHAR",
+    "page": 9,
+    "number": 17,
+    "stem": "17. Which Mughal general established his rule in Bihar in 1537?",
+    "question_ids": [
+      "HIST06-028"
+    ],
+    "status": "adapted",
+    "note": "Corrected Sher Shah's false Mughal identity; the unexplained 1537 claim is not retained as settled."
+  },
+  {
+    "source_id": "BIHAR-10-18",
+    "source": "BIHAR",
+    "page": 10,
+    "number": 18,
+    "stem": "18. Which mineral is found in the mica belt of Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-10-19",
+    "source": "BIHAR",
+    "page": 10,
+    "number": 19,
+    "stem": "19. Which Mughal ruler built the Rohtas Fort in Bihar?",
+    "question_ids": [
+      "HIST06-031"
+    ],
+    "status": "adapted",
+    "note": "Two forts distinguished; unsupported Mughal-builder claim removed."
+  },
+  {
+    "source_id": "BIHAR-10-20",
+    "source": "BIHAR",
+    "page": 10,
+    "number": 20,
+    "stem": "20. Which region in Bihar was the center of the Indigo revolt in the 19th century?",
+    "question_ids": [
+      "HIST08-033"
+    ],
+    "status": "adapted",
+    "note": "Distinguished Bengal 1859-60 from Bihar's Champaran campaign in 1917."
+  },
+  {
+    "source_id": "BIHAR-10-21",
+    "source": "BIHAR",
+    "page": 10,
+    "number": 21,
+    "stem": "21. The mineral pyrite is primarily found in which district of Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-10-22",
+    "source": "BIHAR",
+    "page": 10,
+    "number": 22,
+    "stem": "22. Who was the Mughal governor of Bihar during the Battle of Haldighati?",
+    "question_ids": [],
+    "status": "unscored_uncertainty",
+    "note": "UNSCORED: the question conflates the 1576 Haldighati command with later Bihar governorship. No exact governor is guessed from the defective options."
+  },
+  {
+    "source_id": "BIHAR-10-23",
+    "source": "BIHAR",
+    "page": 10,
+    "number": 23,
+    "stem": "23. During the 1857 revolt, which place in Bihar was an important center for the rebels?",
+    "question_ids": [
+      "HIST09-020"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-11-24",
+    "source": "BIHAR",
+    "page": 11,
+    "number": 24,
+    "stem": "24. Which mineral is abundantly found in the Chotanagpur plateau region of Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-11-25",
+    "source": "BIHAR",
+    "page": 11,
+    "number": 25,
+    "stem": "25. The Mughal period in Bihar saw the rise of which famous Sufi saint?",
+    "question_ids": [],
+    "status": "unscored_uncertainty",
+    "note": "UNSCORED: the vague Mughal-period Sufi question does not identify a securely unique Bihar saint from its options. Chapter 6 separately covers Sharafuddin Yahya Maneri."
+  },
+  {
+    "source_id": "BIHAR-12-01",
+    "source": "BIHAR",
+    "page": 12,
+    "number": 1,
+    "stem": "1. Who was the founder of the Indian National Congress (INC)?",
+    "question_ids": [
+      "HIST11-007"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-12-02",
+    "source": "BIHAR",
+    "page": 12,
+    "number": 2,
+    "stem": "2. In which session of the INC was the resolution of 'Poorna Swaraj' adopted? A) Lahore Session, 1929 B) Karachi Session, 1931 C) Calcutta Session, 1928 D) More than one of the above E) None of the above",
+    "question_ids": [
+      "HIST18-017"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-12-03",
+    "source": "BIHAR",
+    "page": 12,
+    "number": 3,
+    "stem": "3. Who led the Salt March to Dandi in 1930?",
+    "question_ids": [
+      "HIST19-001"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-12-04",
+    "source": "BIHAR",
+    "page": 12,
+    "number": 4,
+    "stem": "4. Which of the following movements was launched against the partition of Bengal in 1905?",
+    "question_ids": [
+      "HIST12-005"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-12-05",
+    "source": "BIHAR",
+    "page": 12,
+    "number": 5,
+    "stem": "5. Who was the Viceroy of India during the Quit India Movement in 1942?",
+    "question_ids": [
+      "HIST22-033"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-12-06",
+    "source": "BIHAR",
+    "page": 12,
+    "number": 6,
+    "stem": "6. In which year was the Non-Cooperation Movement launched by Mahatma Gandhi?",
+    "question_ids": [
+      "HIST16-011"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-13-07",
+    "source": "BIHAR",
+    "page": 13,
+    "number": 7,
+    "stem": "7. Which act introduced the principle of 'Diarchy' in the provinces?",
+    "question_ids": [
+      "HIST14-015"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-13-08",
+    "source": "BIHAR",
+    "page": 13,
+    "number": 8,
+    "stem": "8. Who among the following gave the slogan \"Inquilab Zindabad\"?",
+    "question_ids": [
+      "HIST13-036"
+    ],
+    "status": "adapted",
+    "note": "Coinage and popularisation distinguished."
+  },
+  {
+    "source_id": "BIHAR-13-09",
+    "source": "BIHAR",
+    "page": 13,
+    "number": 9,
+    "stem": "9. Which session of INC is known for the split between Moderates and Extremists?",
+    "question_ids": [
+      "HIST12-003"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-13-10",
+    "source": "BIHAR",
+    "page": 13,
+    "number": 10,
+    "stem": "10. Who was the President of INC during the Lahore Session in 1929 where the demand for 'Purna Swaraj' was declared?",
+    "question_ids": [
+      "HIST18-018"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-14-01",
+    "source": "BIHAR",
+    "page": 14,
+    "number": 1,
+    "stem": "1. Who was the leader of the Bardoli Satyagraha in 1928?",
+    "question_ids": [
+      "HIST17-021"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-14-02",
+    "source": "BIHAR",
+    "page": 14,
+    "number": 2,
+    "stem": "2. The Rowlatt Act was passed in which year?",
+    "question_ids": [
+      "HIST16-001"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-14-03",
+    "source": "BIHAR",
+    "page": 14,
+    "number": 3,
+    "stem": "3. Who gave the slogan \"Do or Die\" during the Quit India Movement?",
+    "question_ids": [
+      "HIST22-029"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-14-04",
+    "source": "BIHAR",
+    "page": 14,
+    "number": 4,
+    "stem": "4. The 'Forward Bloc' was formed by which leader in 1939?",
+    "question_ids": [
+      "HIST21-008"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-14-05",
+    "source": "BIHAR",
+    "page": 14,
+    "number": 5,
+    "stem": "5. Which revolutionary was associated with the Kakori Conspiracy Case?",
+    "question_ids": [
+      "HIST13-030"
+    ],
+    "status": "adapted",
+    "note": "Kakori participants explained; the original has multiple relevant revolutionaries."
+  },
+  {
+    "source_id": "BIHAR-14-06",
+    "source": "BIHAR",
+    "page": 14,
+    "number": 6,
+    "stem": "6. Who among the following was not a part of the Cabinet Mission in 1946?",
+    "question_ids": [
+      "HIST23-029"
+    ],
+    "status": "adapted",
+    "note": "All named members identified rather than forcing an incorrect exclusion."
+  },
+  {
+    "source_id": "BIHAR-15-07",
+    "source": "BIHAR",
+    "page": 15,
+    "number": 7,
+    "stem": "7. Who started the Home Rule Movement in India?",
+    "question_ids": [
+      "HIST14-001",
+      "HIST14-002"
+    ],
+    "status": "adapted",
+    "note": "Both leagues covered; original redundant Both A and B option removed."
+  },
+  {
+    "source_id": "BIHAR-15-08",
+    "source": "BIHAR",
+    "page": 15,
+    "number": 8,
+    "stem": "8. Which pact ended the Non-Cooperation Movement?",
+    "question_ids": [
+      "HIST16-033"
+    ],
+    "status": "adapted",
+    "note": "Corrected false premise that a pact ended Non-Cooperation."
+  },
+  {
+    "source_id": "BIHAR-15-09",
+    "source": "BIHAR",
+    "page": 15,
+    "number": 9,
+    "stem": "9. Who among the following was associated with the founding of the Ghadar Party?",
+    "question_ids": [
+      "HIST13-011"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-15-10",
+    "source": "BIHAR",
+    "page": 15,
+    "number": 10,
+    "stem": "10. In which session of the INC was the 'Swaraj is my birthright' slogan adopted?",
+    "question_ids": [
+      "HIST12-034"
+    ],
+    "status": "adapted",
+    "note": "Personal slogan distinguished from Congress resolution."
+  },
+  {
+    "source_id": "BIHAR-15-11",
+    "source": "BIHAR",
+    "page": 15,
+    "number": 11,
+    "stem": "11. Which freedom fighter founded the Azad Hind Fauj (Indian National Army)?",
+    "question_ids": [
+      "HIST23-028"
+    ],
+    "status": "adapted",
+    "note": "Mohan Singh's first phase and Bose's reorganisation distinguished."
+  },
+  {
+    "source_id": "BIHAR-15-12",
+    "source": "BIHAR",
+    "page": 15,
+    "number": 12,
+    "stem": "12. Which revolutionary is known for the slogan \"Tum Mujhe Khoon Do, Main Tumhe Azaadi Dunga\"?",
+    "question_ids": [
+      "HIST23-040"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-16-13",
+    "source": "BIHAR",
+    "page": 16,
+    "number": 13,
+    "stem": "13. Which commission was opposed by the Indian National Congress because it had no Indian members?",
+    "question_ids": [
+      "HIST18-011"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-16-14",
+    "source": "BIHAR",
+    "page": 16,
+    "number": 14,
+    "stem": "14. Who was the first Indian woman President of the Indian National Congress?",
+    "question_ids": [
+      "HIST14-003"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-16-15",
+    "source": "BIHAR",
+    "page": 16,
+    "number": 15,
+    "stem": "15. Which leader is associated with the 'Komagata Maru' incident?",
+    "question_ids": [
+      "HIST13-033"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-17-01",
+    "source": "BIHAR",
+    "page": 17,
+    "number": 1,
+    "stem": "1. Which district is famous for the \"Champa\" flower in Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-17-02",
+    "source": "BIHAR",
+    "page": 17,
+    "number": 2,
+    "stem": "2. Which river forms the boundary between Bihar and Jharkhand?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-17-03",
+    "source": "BIHAR",
+    "page": 17,
+    "number": 3,
+    "stem": "3. In which city is the Takht Shri Harmandir Sahib located?",
+    "question_ids": [
+      "HIST06-014"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-17-04",
+    "source": "BIHAR",
+    "page": 17,
+    "number": 4,
+    "stem": "4. Which district of Bihar is known for its \"Maner\" sweets?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-17-05",
+    "source": "BIHAR",
+    "page": 17,
+    "number": 5,
+    "stem": "5. Which mountain range is located in the southern part of Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-17-06",
+    "source": "BIHAR",
+    "page": 17,
+    "number": 6,
+    "stem": "6. Which river is known as the \"Sorrow of Bihar\" due to frequent changes in its course?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-18-07",
+    "source": "BIHAR",
+    "page": 18,
+    "number": 7,
+    "stem": "7. Which city of Bihar is known for the production of \"Sikki\" grass crafts?",
+    "question_ids": [
+      "HIST24-036"
+    ],
+    "status": "adapted",
+    "note": "Avoided a misleading exclusive-city claim."
+  },
+  {
+    "source_id": "BIHAR-18-08",
+    "source": "BIHAR",
+    "page": 18,
+    "number": 8,
+    "stem": "8. Which is the main festival celebrated by the people of Mithilanchal in Bihar?",
+    "question_ids": [
+      "HIST24-037"
+    ],
+    "status": "adapted",
+    "note": "Reframed subjective main-festival claim around a distinct ritual."
+  },
+  {
+    "source_id": "BIHAR-18-09",
+    "source": "BIHAR",
+    "page": 18,
+    "number": 9,
+    "stem": "9. Which of the following districts is known for its saltpetre production?",
+    "question_ids": [
+      "HIST07-010"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-18-10",
+    "source": "BIHAR",
+    "page": 18,
+    "number": 10,
+    "stem": "10. Which district in Bihar is famous for its historical Sonpur Mela?",
+    "question_ids": [
+      "HIST24-034"
+    ],
+    "status": "adapted",
+    "note": "Duplicate source topic."
+  },
+  {
+    "source_id": "BIHAR-18-11",
+    "source": "BIHAR",
+    "page": 18,
+    "number": 11,
+    "stem": "11. Which district is famous for the ruins of ancient Pataliputra?",
+    "question_ids": [
+      "HIST01-012"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-18-12",
+    "source": "BIHAR",
+    "page": 18,
+    "number": 12,
+    "stem": "12. Which city in Bihar is known for the \"Makhana\" (Fox nut) production?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-19-13",
+    "source": "BIHAR",
+    "page": 19,
+    "number": 13,
+    "stem": "13. In which district is the Vikramshila University located?",
+    "question_ids": [
+      "HIST05-033"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-19-14",
+    "source": "BIHAR",
+    "page": 19,
+    "number": 14,
+    "stem": "14. Where is the Mahabodhi Temple located?",
+    "question_ids": [
+      "HIST03-037"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-19-15",
+    "source": "BIHAR",
+    "page": 19,
+    "number": 15,
+    "stem": "15. Which of the following is a major tributary of the Ganges in Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-19-16",
+    "source": "BIHAR",
+    "page": 19,
+    "number": 16,
+    "stem": "16. Which district of Bihar is famous for Madhubani paintings?",
+    "question_ids": [
+      "HIST24-015"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-19-17",
+    "source": "BIHAR",
+    "page": 19,
+    "number": 17,
+    "stem": "17. Which river flows from Nepal to Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-19-18",
+    "source": "BIHAR",
+    "page": 19,
+    "number": 18,
+    "stem": "18. Which of the following rivers does not originate in Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-20-19",
+    "source": "BIHAR",
+    "page": 20,
+    "number": 19,
+    "stem": "19. Which national park in Bihar is famous for its wildlife sanctuary?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-20-20",
+    "source": "BIHAR",
+    "page": 20,
+    "number": 20,
+    "stem": "20. In which district is the ancient Nalanda University located?",
+    "question_ids": [
+      "HIST05-033"
+    ],
+    "status": "adapted",
+    "note": "Duplicate source topic."
+  },
+  {
+    "source_id": "BIHAR-21-01",
+    "source": "BIHAR",
+    "page": 21,
+    "number": 1,
+    "stem": "1. Which city is known as the \"Silk City\" of Bihar?",
+    "question_ids": [
+      "HIST24-035"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "BIHAR-21-02",
+    "source": "BIHAR",
+    "page": 21,
+    "number": 2,
+    "stem": "2. What is the name of the wildlife sanctuary famous for the one-horned rhinoceros in Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-21-03",
+    "source": "BIHAR",
+    "page": 21,
+    "number": 3,
+    "stem": "3. What is the main soil type found in the northern plains of Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-21-04",
+    "source": "BIHAR",
+    "page": 21,
+    "number": 4,
+    "stem": "4. The Chotanagpur Plateau, known for its mineral resources, extends into which part of Bihar?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-21-05",
+    "source": "BIHAR",
+    "page": 21,
+    "number": 5,
+    "stem": "5. Which of the following lakes in Bihar is Asia’s largest freshwater oxbow lake?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-21-06",
+    "source": "BIHAR",
+    "page": 21,
+    "number": 6,
+    "stem": "6. Who established the Bihar Vidyapeeth, a nationalist educational institution in Bihar, during the freedom struggle?",
+    "question_ids": [
+      "HIST16-017"
+    ],
+    "status": "adapted",
+    "note": "Institutional milestone replaces the ambiguous single-founder wording."
+  },
+  {
+    "source_id": "BIHAR-22-07",
+    "source": "BIHAR",
+    "page": 22,
+    "number": 7,
+    "stem": "7. The Tropic of Cancer passes through which of the following states?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-22-08",
+    "source": "BIHAR",
+    "page": 22,
+    "number": 8,
+    "stem": "8. Which one of the following longitudes is the standard meridian of India?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-22-09",
+    "source": "BIHAR",
+    "page": 22,
+    "number": 9,
+    "stem": "9. The Southernmost point of India is",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-22-10",
+    "source": "BIHAR",
+    "page": 22,
+    "number": 10,
+    "stem": "10. Name the place in India where Bay of Bengal, Arabian sea and Indian ocean meet.",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-22-11",
+    "source": "BIHAR",
+    "page": 22,
+    "number": 11,
+    "stem": "11. India's share of total land area in the world is about",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-22-12",
+    "source": "BIHAR",
+    "page": 22,
+    "number": 12,
+    "stem": "12. Which of the following Indian states does not share border with Bhutan?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-23-13",
+    "source": "BIHAR",
+    "page": 23,
+    "number": 13,
+    "stem": "13. Which one of the following countries shares the longest land frontier with India?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-23-14",
+    "source": "BIHAR",
+    "page": 23,
+    "number": 14,
+    "stem": "14. Which of the following has oldest rocks in the country?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-23-15",
+    "source": "BIHAR",
+    "page": 23,
+    "number": 15,
+    "stem": "15. In which part of Himalayas is 'Karewa' landform found?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-23-16",
+    "source": "BIHAR",
+    "page": 23,
+    "number": 16,
+    "stem": "16. The valley of Kashmir is located in between the following ranges:",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-24-01",
+    "source": "BIHAR",
+    "page": 24,
+    "number": 1,
+    "stem": "1. Which of the following mountain systems of India is the oldest?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-24-02",
+    "source": "BIHAR",
+    "page": 24,
+    "number": 2,
+    "stem": "2.Match List I and List II and select the correct answer by using the codes given below the list. List I (States) List II (Highest peaks)",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-24-03",
+    "source": "BIHAR",
+    "page": 24,
+    "number": 3,
+    "stem": "3.Which of the following hills are present where Eastern ghats and Western ghats meet?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-24-04",
+    "source": "BIHAR",
+    "page": 24,
+    "number": 4,
+    "stem": "4.Dodda Betta peak is situated in",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-24-05",
+    "source": "BIHAR",
+    "page": 24,
+    "number": 5,
+    "stem": "5.Which of the following is the highest peak in South India?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-24-06",
+    "source": "BIHAR",
+    "page": 24,
+    "number": 6,
+    "stem": "6.The Narmada and Tapi rivers flank",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-25-07",
+    "source": "BIHAR",
+    "page": 25,
+    "number": 7,
+    "stem": "7.Consider the following relief features.",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-25-08",
+    "source": "BIHAR",
+    "page": 25,
+    "number": 8,
+    "stem": "8.Which one of the following statements is not correct?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-25-09",
+    "source": "BIHAR",
+    "page": 25,
+    "number": 9,
+    "stem": "9.The hills situated closer to Kanyakumari are",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-25-10",
+    "source": "BIHAR",
+    "page": 25,
+    "number": 10,
+    "stem": "10.Select from the codes given below the correct locational sequence of the following hills proceeding from South to North.",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-25-11",
+    "source": "BIHAR",
+    "page": 25,
+    "number": 11,
+    "stem": "11.In which state is the Nelang valley located?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-26-12",
+    "source": "BIHAR",
+    "page": 26,
+    "number": 12,
+    "stem": "12.Palghat is situated between",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-26-01",
+    "source": "BIHAR",
+    "page": 26,
+    "number": 1,
+    "stem": "1. In India, strong El Nino is the cause of:",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-26-02",
+    "source": "BIHAR",
+    "page": 26,
+    "number": 2,
+    "stem": "2. 'Rana Pratap Sagar Dam' is built on which river?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-26-03",
+    "source": "BIHAR",
+    "page": 26,
+    "number": 3,
+    "stem": "3. The place closest to the centre of the earth at sea level is:",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-26-04",
+    "source": "BIHAR",
+    "page": 26,
+    "number": 4,
+    "stem": "4. Sargasso Sea is a part of:",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-26-05",
+    "source": "BIHAR",
+    "page": 26,
+    "number": 5,
+    "stem": "5. ITCZ (Intertropical Convergence Zone) means:",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-26-06",
+    "source": "BIHAR",
+    "page": 26,
+    "number": 6,
+    "stem": "6. Which strait connects the Indian Ocean and the Red Sea?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-27-07",
+    "source": "BIHAR",
+    "page": 27,
+    "number": 7,
+    "stem": "7. In which of the following regions is the ozone layer found?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-27-09",
+    "source": "BIHAR",
+    "page": 27,
+    "number": 9,
+    "stem": "9. 'Greenhouse effect' means:",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "BIHAR-27-10",
+    "source": "BIHAR",
+    "page": 27,
+    "number": 10,
+    "stem": "10. With the help of which organisms can biodegradable wastes be converted into usable substances?",
+    "status": "outside_requested_history_scope",
+    "question_ids": [],
+    "note": "This source item concerns general geography, environment, current office-holders, state symbols, administration or other GS outside this history-and-national-movement pack. It has not been silently counted as covered."
+  },
+  {
+    "source_id": "INM-01-01",
+    "source": "INM",
+    "page": 1,
+    "number": 1,
+    "stem": "1. Who founded the Indian Association in 1857?",
+    "question_ids": [
+      "HIST11-037"
+    ],
+    "status": "adapted",
+    "note": "Corrected 1857 to 1876 and included both founders."
+  },
+  {
+    "source_id": "INM-01-02",
+    "source": "INM",
+    "page": 1,
+    "number": 2,
+    "stem": "2. Who founded the Bombay Presidency Association?",
+    "question_ids": [
+      "HIST11-036"
+    ],
+    "status": "adapted",
+    "note": "Multiple correct founders retained."
+  },
+  {
+    "source_id": "INM-01-03",
+    "source": "INM",
+    "page": 1,
+    "number": 3,
+    "stem": "3. Who laid the foundation stone of National Vidyapeeth college in Bihar?",
+    "question_ids": [
+      "HIST16-017"
+    ],
+    "status": "adapted",
+    "note": "Changed ambiguous foundation-stone wording to inauguration."
+  },
+  {
+    "source_id": "INM-01-04",
+    "source": "INM",
+    "page": 1,
+    "number": 4,
+    "stem": "4. When did the British Government appoint the Sedler University Commission for reforms in education?",
+    "question_ids": [
+      "HIST10-033"
+    ],
+    "status": "adapted",
+    "note": "Appointment and report dates distinguished."
+  },
+  {
+    "source_id": "INM-01-05",
+    "source": "INM",
+    "page": 1,
+    "number": 5,
+    "stem": "5. Where did the 1921 Moplah Rebellion take place?",
+    "question_ids": [
+      "HIST16-025"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-01-06",
+    "source": "INM",
+    "page": 1,
+    "number": 6,
+    "stem": "6. Who was the leader of the Munda Rebellion?",
+    "question_ids": [
+      "HIST08-002"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-02-07",
+    "source": "INM",
+    "page": 2,
+    "number": 7,
+    "stem": "7. Which British commander was defeated by the Santhals in 1855 AD?",
+    "question_ids": [
+      "HIST08-037"
+    ],
+    "status": "adapted",
+    "note": "Name transliteration corrected."
+  },
+  {
+    "source_id": "INM-02-08",
+    "source": "INM",
+    "page": 2,
+    "number": 8,
+    "stem": "8. Which rebellion is mentioned in Bankim Chandra Chatterjee’s novel, Anand Math?",
+    "question_ids": [
+      "HIST08-009"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-02-09",
+    "source": "INM",
+    "page": 2,
+    "number": 9,
+    "stem": "9. Who among the following was the leader of the Indigo Revolt?",
+    "question_ids": [
+      "HIST08-033"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-02-10",
+    "source": "INM",
+    "page": 2,
+    "number": 10,
+    "stem": "10. The Revolt of 1857 was described as India's First War of Independence by whom?",
+    "question_ids": [
+      "HIST09-023"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-02-11",
+    "source": "INM",
+    "page": 2,
+    "number": 11,
+    "stem": "11. On which of the following dates was the Proclamation of Queen Victoria issued?",
+    "question_ids": [
+      "HIST09-022"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-02-12",
+    "source": "INM",
+    "page": 2,
+    "number": 12,
+    "stem": "12. Which commander of the British army was sent against Kunwar Singh during the revolt of 1857?",
+    "question_ids": [
+      "HIST09-010"
+    ],
+    "status": "adapted",
+    "note": "Reframed to a precise action; the original generic commander question has defective options."
+  },
+  {
+    "source_id": "INM-02-13",
+    "source": "INM",
+    "page": 2,
+    "number": 13,
+    "stem": "13. Which part of Bihar remained unaffected by the revolt of 1857?",
+    "question_ids": [],
+    "status": "unscored_uncertainty",
+    "note": "UNSCORED: blanket unaffected-region claim is unclear; Jigsaw is corrupted text. Notes cover the verified centres rather than asserting an entire district was unaffected."
+  },
+  {
+    "source_id": "INM-03-14",
+    "source": "INM",
+    "page": 3,
+    "number": 14,
+    "stem": "14. Where did Rani Lakshmibai of Jhansi die?",
+    "question_ids": [
+      "HIST09-036"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-03-15",
+    "source": "INM",
+    "page": 3,
+    "number": 15,
+    "stem": "15. Who led the revolt of 1857 in Bihar?",
+    "question_ids": [
+      "HIST09-006"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-03-16",
+    "source": "INM",
+    "page": 3,
+    "number": 16,
+    "stem": "16. Who was the Governor General of India in 1857?",
+    "question_ids": [
+      "HIST09-011"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-03-17",
+    "source": "INM",
+    "page": 3,
+    "number": 17,
+    "stem": "17. Where did the Revolution of 1857 start?",
+    "question_ids": [
+      "HIST09-018"
+    ],
+    "status": "adapted",
+    "note": "Distinguishes Meerut's outbreak from Mangal Pandey's earlier action."
+  },
+  {
+    "source_id": "INM-03-18",
+    "source": "INM",
+    "page": 3,
+    "number": 18,
+    "stem": "18. Under whose leadership did the revolt of 1857 proceed in Lucknow?",
+    "question_ids": [
+      "HIST09-003"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-04-01",
+    "source": "INM",
+    "page": 4,
+    "number": 1,
+    "stem": "1. During which period were Swadeshi and boycott adopted as methods of struggle for the first time?",
+    "question_ids": [
+      "HIST12-005"
+    ],
+    "status": "adapted",
+    "note": "Reframed from an unsupported first-ever claim to the Swadeshi method."
+  },
+  {
+    "source_id": "INM-04-02",
+    "source": "INM",
+    "page": 4,
+    "number": 2,
+    "stem": "2. Who is known as 'Frontier Gandhi'?",
+    "question_ids": [
+      "HIST19-039"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-04-03",
+    "source": "INM",
+    "page": 4,
+    "number": 3,
+    "stem": "3. Who organised 'Khudai Khidmatgar' in 1929?",
+    "question_ids": [
+      "HIST19-010"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-04-04",
+    "source": "INM",
+    "page": 4,
+    "number": 4,
+    "stem": "4. Whom did Sardar Udham Singh kill?",
+    "question_ids": [
+      "HIST13-032"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-04-05",
+    "source": "INM",
+    "page": 4,
+    "number": 5,
+    "stem": "5. Who established a branch of Anushilan Samiti in Patna in 1913?",
+    "question_ids": [
+      "HIST13-007"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-04-06",
+    "source": "INM",
+    "page": 4,
+    "number": 6,
+    "stem": "6. One of the founding leaders of the Hindustan Socialist Republican Association was",
+    "question_ids": [
+      "HIST13-035"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-04-07",
+    "source": "INM",
+    "page": 4,
+    "number": 7,
+    "stem": "7. In which year was the 'Hindustan Republican Association' established?",
+    "question_ids": [
+      "HIST13-034"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-05-08",
+    "source": "INM",
+    "page": 5,
+    "number": 8,
+    "stem": "8. Who among the following was not related to the Kakori incident?",
+    "question_ids": [
+      "HIST13-030"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-05-09",
+    "source": "INM",
+    "page": 5,
+    "number": 9,
+    "stem": "9. At which place did Khudiram Bose attempt to assassinate Kingsford?",
+    "question_ids": [
+      "HIST13-021"
+    ],
+    "status": "adapted",
+    "note": "Event and target covered with corrected victim distinction."
+  },
+  {
+    "source_id": "INM-05-10",
+    "source": "INM",
+    "page": 5,
+    "number": 10,
+    "stem": "10. Who is related to 'Innovative India'?",
+    "question_ids": [
+      "HIST13-002"
+    ],
+    "status": "adapted",
+    "note": "Corrected mistranslation Innovative India to Abhinav Bharat."
+  },
+  {
+    "source_id": "INM-05-11",
+    "source": "INM",
+    "page": 5,
+    "number": 11,
+    "stem": "11. Who among these was famous as 'Sher-e-Punjab'?",
+    "question_ids": [
+      "HIST11-044"
+    ],
+    "status": "adapted",
+    "note": "Qualified Punjab Kesari to avoid the Ranjit Singh ambiguity."
+  },
+  {
+    "source_id": "INM-05-12",
+    "source": "INM",
+    "page": 5,
+    "number": 12,
+    "stem": "12. Which of the following leaders belonged to the extremist group of the Congress?",
+    "question_ids": [
+      "HIST12-033"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-05-13",
+    "source": "INM",
+    "page": 5,
+    "number": 13,
+    "stem": "13. In which of the following sessions of the Indian National Congress were the resolutions related to Fundamental Rights passed for the first time?",
+    "question_ids": [
+      "HIST19-017"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-05-14",
+    "source": "INM",
+    "page": 5,
+    "number": 14,
+    "stem": "14. Who was the President of the Indian National Congress at the time of the partition of India?",
+    "question_ids": [
+      "HIST23-035"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-06-15",
+    "source": "INM",
+    "page": 6,
+    "number": 15,
+    "stem": "15. Who was the President of the Indian National Congress session at Gaya in 1922?",
+    "question_ids": [
+      "HIST18-001"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-06-16",
+    "source": "INM",
+    "page": 6,
+    "number": 16,
+    "stem": "16. On which seat did the 27th session of the Indian National Congress take place?",
+    "question_ids": [
+      "HIST11-016"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-06-17",
+    "source": "INM",
+    "page": 6,
+    "number": 17,
+    "stem": "17. Which session of the Indian National Congress was presided over by Mahatma Gandhi?",
+    "question_ids": [
+      "HIST11-043"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-06-18",
+    "source": "INM",
+    "page": 6,
+    "number": 18,
+    "stem": "18. Who was the first Indian woman President of the Indian National Congress?",
+    "question_ids": [
+      "HIST14-003"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-06-19",
+    "source": "INM",
+    "page": 6,
+    "number": 19,
+    "stem": "19. Where was the first session of the Indian National Congress held?",
+    "question_ids": [
+      "HIST11-005"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-06-20",
+    "source": "INM",
+    "page": 6,
+    "number": 20,
+    "stem": "20. Who presided over the second session of the Indian National Congress?",
+    "question_ids": [
+      "HIST11-022"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-07-01",
+    "source": "INM",
+    "page": 7,
+    "number": 1,
+    "stem": "1. In which movement did the farmers of Bihar refuse to pay Chowkidari tax?",
+    "question_ids": [
+      "HIST19-038"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-07-02",
+    "source": "INM",
+    "page": 7,
+    "number": 2,
+    "stem": "2. Where did Mahatma Gandhi start the civil disobedience movement in the year 1930?",
+    "question_ids": [
+      "HIST19-032"
+    ],
+    "status": "adapted",
+    "note": "Departure and salt-law violation distinguished."
+  },
+  {
+    "source_id": "INM-07-03",
+    "source": "INM",
+    "page": 7,
+    "number": 3,
+    "stem": "3. When did Simon Commission come to India for the first time?",
+    "question_ids": [
+      "HIST18-010"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-07-04",
+    "source": "INM",
+    "page": 7,
+    "number": 4,
+    "stem": "4. Who founded Swaraj Dal in Bihar?",
+    "question_ids": [
+      "HIST18-031"
+    ],
+    "status": "adapted",
+    "note": "Collective formation replaces uncertain single-founder premise."
+  },
+  {
+    "source_id": "INM-07-05",
+    "source": "INM",
+    "page": 7,
+    "number": 5,
+    "stem": "5. For what purpose was the Swaraj Party formed within the Congress by C.R. Das and Motilal Nehru?",
+    "question_ids": [
+      "HIST18-024"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-07-06",
+    "source": "INM",
+    "page": 7,
+    "number": 6,
+    "stem": "6. After which incident did Mahatma Gandhi call the Non-Cooperation Movement a Himalayan mistake?",
+    "question_ids": [
+      "HIST16-032"
+    ],
+    "status": "adapted",
+    "note": "Corrected to 1919 Rowlatt context."
+  },
+  {
+    "source_id": "INM-08-07",
+    "source": "INM",
+    "page": 8,
+    "number": 7,
+    "stem": "7. In which field was Rahul Sankrityayan active during the Non-Cooperation Movement of 1920?",
+    "question_ids": [
+      "HIST16-038"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-08-08",
+    "source": "INM",
+    "page": 8,
+    "number": 8,
+    "stem": "8. Who led the farmers in Bihar during the Non- Cooperation Movement?",
+    "question_ids": [
+      "HIST16-019"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-08-09",
+    "source": "INM",
+    "page": 8,
+    "number": 9,
+    "stem": "9. The first President of the All India Trade Union Congress was",
+    "question_ids": [
+      "HIST17-014"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-08-10",
+    "source": "INM",
+    "page": 8,
+    "number": 10,
+    "stem": "10. Who was associated with the Bihar Kisan Sabha?",
+    "question_ids": [
+      "HIST17-038"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-08-11",
+    "source": "INM",
+    "page": 8,
+    "number": 11,
+    "stem": "11. Who successfully led the Bardoli Satyagraha?",
+    "question_ids": [
+      "HIST17-021"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-08-12",
+    "source": "INM",
+    "page": 8,
+    "number": 12,
+    "stem": "12. Where was the first session of the All India Kisan Sabha held?",
+    "question_ids": [
+      "HIST17-011"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-08-13",
+    "source": "INM",
+    "page": 8,
+    "number": 13,
+    "stem": "13. During 1937-1938, the Bakasht Movement in Bihar was organized by whom?",
+    "question_ids": [
+      "HIST17-039"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-09-14",
+    "source": "INM",
+    "page": 9,
+    "number": 14,
+    "stem": "14. Who formed the Bihar Provincial Kisan Sabha?",
+    "question_ids": [
+      "HIST17-005"
+    ],
+    "status": "adapted",
+    "note": "Provincial organisation and leader also explained in the chapter."
+  },
+  {
+    "source_id": "INM-09-15",
+    "source": "INM",
+    "page": 9,
+    "number": 15,
+    "stem": "15. What compensation tax did indigo farmers have to pay if they wanted exemption from indigo cultivation?",
+    "question_ids": [
+      "HIST15-033"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-09-16",
+    "source": "INM",
+    "page": 9,
+    "number": 16,
+    "stem": "16. The Eka Movement was launched in the rural areas of which state?",
+    "question_ids": [
+      "HIST17-034"
+    ],
+    "status": "adapted",
+    "note": "Awadh described as a region rather than a current state."
+  },
+  {
+    "source_id": "INM-09-17",
+    "source": "INM",
+    "page": 9,
+    "number": 17,
+    "stem": "17. Who was not associated with the Champaran Movement?",
+    "question_ids": [
+      "HIST15-038"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-09-18",
+    "source": "INM",
+    "page": 9,
+    "number": 18,
+    "stem": "18. Who used the word Sarvodaya for the first time?",
+    "question_ids": [
+      "HIST15-040"
+    ],
+    "status": "adapted",
+    "note": "Replaces an absolute first-use claim with a verifiable book association."
+  },
+  {
+    "source_id": "INM-09-19",
+    "source": "INM",
+    "page": 9,
+    "number": 19,
+    "stem": "19. All India Harijan Sangh was founded by whom in 1932?",
+    "question_ids": [
+      "HIST19-042"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-09-20",
+    "source": "INM",
+    "page": 9,
+    "number": 20,
+    "stem": "20. Who was the political guru of Mahatma Gandhi?",
+    "question_ids": [
+      "HIST15-002"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-10-01",
+    "source": "INM",
+    "page": 10,
+    "number": 1,
+    "stem": "1. Who participated in the Satyagraha launched by Gandhiji in Ahmedabad in 1917-18?",
+    "question_ids": [
+      "HIST15-037"
+    ],
+    "status": "adapted",
+    "note": "Corrected date and overlapping categories."
+  },
+  {
+    "source_id": "INM-10-02",
+    "source": "INM",
+    "page": 10,
+    "number": 2,
+    "stem": "2. Who saved Gandhiji's life in Bihar during the Champaran Satyagraha?",
+    "question_ids": [
+      "HIST15-039"
+    ],
+    "status": "adapted",
+    "note": "Corrected Miya Duck to Batakh Mian."
+  },
+  {
+    "source_id": "INM-10-03",
+    "source": "INM",
+    "page": 10,
+    "number": 3,
+    "stem": "3. How much area of land is kept unclaimed for indigo plant in the Tinkathiya area of Bihar?",
+    "question_ids": [
+      "HIST15-026"
+    ],
+    "status": "adapted",
+    "note": "Corrected unclaimed to cultivation obligation."
+  },
+  {
+    "source_id": "INM-10-04",
+    "source": "INM",
+    "page": 10,
+    "number": 4,
+    "stem": "4. When did Gandhiji enter Indian politics?",
+    "question_ids": [
+      "HIST15-001"
+    ],
+    "status": "adapted",
+    "note": "Ambiguous entered politics replaced by a specific milestone; 1917 and 1919 are separately explained."
+  },
+  {
+    "source_id": "INM-10-05",
+    "source": "INM",
+    "page": 10,
+    "number": 5,
+    "stem": "5. Which of the following was Gandhi's first Satyagraha movement in India in which he used civil disobedience?",
+    "question_ids": [
+      "HIST15-028"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-10-06",
+    "source": "INM",
+    "page": 10,
+    "number": 6,
+    "stem": "6. Lucknow Pact was signed?",
+    "question_ids": [
+      "HIST14-010"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-11-07",
+    "source": "INM",
+    "page": 11,
+    "number": 7,
+    "stem": "7. Who raised the issue of indigo growers of Bihar in the 1916 Lucknow session of the Indian National Congress?",
+    "question_ids": [
+      "HIST14-011"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-11-08",
+    "source": "INM",
+    "page": 11,
+    "number": 8,
+    "stem": "8. In which year did Bihar get the status of a separate province during the British rule?",
+    "question_ids": [
+      "HIST01-017"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-11-09",
+    "source": "INM",
+    "page": 11,
+    "number": 9,
+    "stem": "9. Which of the following Acts introduced the Pushak Electoral College in India?",
+    "question_ids": [
+      "HIST12-032"
+    ],
+    "status": "adapted",
+    "note": "Restored separate-electorate wording and 1909 answer."
+  },
+  {
+    "source_id": "INM-11-10",
+    "source": "INM",
+    "page": 11,
+    "number": 10,
+    "stem": "10. On which date was Liberation Day celebrated by the Muslim League?",
+    "question_ids": [
+      "HIST21-025"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-11-11",
+    "source": "INM",
+    "page": 11,
+    "number": 11,
+    "stem": "11. The resolution demanding the establishment of Pakistan was passed by the Muslim League in the year:",
+    "question_ids": [
+      "HIST21-012"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-11-12",
+    "source": "INM",
+    "page": 11,
+    "number": 12,
+    "stem": "12. When was the Lucknow Pact signed between the Muslim League and the Indian National Congress?",
+    "question_ids": [
+      "HIST14-010"
+    ],
+    "status": "adapted",
+    "note": "Duplicate source topic mapped once."
+  },
+  {
+    "source_id": "INM-12-13",
+    "source": "INM",
+    "page": 12,
+    "number": 13,
+    "stem": "13. Who among the following founded the All India Muslim League?",
+    "question_ids": [
+      "HIST12-035"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-12-14",
+    "source": "INM",
+    "page": 12,
+    "number": 14,
+    "stem": "14. Who hoisted the flag of Swaraj for India at the Calcutta session of the Indian National Congress (INC) held in 1916?",
+    "question_ids": [
+      "HIST12-029"
+    ],
+    "status": "adapted",
+    "note": "Corrected 1916 to 1906 for the Calcutta declaration."
+  },
+  {
+    "source_id": "INM-12-15",
+    "source": "INM",
+    "page": 12,
+    "number": 15,
+    "stem": "15. In which year was the Bengal partition done by Lord Curzon in 1905 cancelled?",
+    "question_ids": [
+      "HIST12-024"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-12-16",
+    "source": "INM",
+    "page": 12,
+    "number": 16,
+    "stem": "16. In which place was the organization called Golden League established in support of the Boycott and Swadeshi movement?",
+    "question_ids": [
+      "HIST12-030"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-12-17",
+    "source": "INM",
+    "page": 12,
+    "number": 17,
+    "stem": "17. Who among the following became India's unofficial ambassador to England?",
+    "question_ids": [
+      "HIST11-045"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-12-18",
+    "source": "INM",
+    "page": 12,
+    "number": 18,
+    "stem": "18. Ghadar Party was established in the year:",
+    "question_ids": [
+      "HIST13-009"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-12-19",
+    "source": "INM",
+    "page": 12,
+    "number": 19,
+    "stem": "19. Who was the founder of India House in London?",
+    "question_ids": [
+      "HIST13-003"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-13-01",
+    "source": "INM",
+    "page": 13,
+    "number": 1,
+    "stem": "1. Gandhi-Irwin Pact was signed in",
+    "question_ids": [
+      "HIST19-014"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-13-02",
+    "source": "INM",
+    "page": 13,
+    "number": 2,
+    "stem": "2. Who played an important role in the signing of the Gandhi-Irwin Pact?",
+    "question_ids": [
+      "HIST19-041"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-13-03",
+    "source": "INM",
+    "page": 13,
+    "number": 3,
+    "stem": "3. Which of the following Indian leaders attended the first round table conference in London?",
+    "question_ids": [
+      "HIST19-040"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-13-04",
+    "source": "INM",
+    "page": 13,
+    "number": 4,
+    "stem": "4. Who participated in all three round table conferences?",
+    "question_ids": [
+      "HIST19-040"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-13-05",
+    "source": "INM",
+    "page": 13,
+    "number": 5,
+    "stem": "5. In which round table conference did the Indian National Congress not participate?",
+    "question_ids": [
+      "HIST19-034"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-13-06",
+    "source": "INM",
+    "page": 13,
+    "number": 6,
+    "stem": "6. On which question did the second round table conference fail?",
+    "question_ids": [
+      "HIST19-045"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-13-07",
+    "source": "INM",
+    "page": 13,
+    "number": 7,
+    "stem": "7. Who was the Prime Minister of England at the time of the Round Table Conference?",
+    "question_ids": [
+      "HIST19-044"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-14-08",
+    "source": "INM",
+    "page": 14,
+    "number": 8,
+    "stem": "8. When was the Poona Pact signed?",
+    "question_ids": [
+      "HIST19-036"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-14-09",
+    "source": "INM",
+    "page": 14,
+    "number": 9,
+    "stem": "9. A separate electorate was created for the first time by Ramsay MacDonald’s Communal Award of August 1932",
+    "question_ids": [
+      "HIST19-043"
+    ],
+    "status": "adapted",
+    "note": "The group-specific distinction replaces a misleading universal first claim."
+  },
+  {
+    "source_id": "INM-14-10",
+    "source": "INM",
+    "page": 14,
+    "number": 10,
+    "stem": "10. Congress Socialist Party was established in 1934",
+    "question_ids": [
+      "HIST17-019"
+    ],
+    "status": "adapted",
+    "note": "CSP leadership pair covered across president and secretary questions."
+  },
+  {
+    "source_id": "INM-14-11",
+    "source": "INM",
+    "page": 14,
+    "number": 11,
+    "stem": "11. The first meeting of the Congress Socialist Party was held",
+    "question_ids": [
+      "HIST17-019"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-14-12",
+    "source": "INM",
+    "page": 14,
+    "number": 12,
+    "stem": "12. Who formed the Bihar Samajwadi Party in the year 1931?",
+    "question_ids": [
+      "HIST17-037"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-14-13",
+    "source": "INM",
+    "page": 14,
+    "number": 13,
+    "stem": "13. Who is known as Loknayak?",
+    "question_ids": [
+      "HIST11-044"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-14-14",
+    "source": "INM",
+    "page": 14,
+    "number": 14,
+    "stem": "14. For what reason did the elected government of Bihar resign in February 1938?",
+    "question_ids": [
+      "HIST20-041"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-15-15",
+    "source": "INM",
+    "page": 15,
+    "number": 15,
+    "stem": "15. Who among these was the first governor of Bihar?",
+    "question_ids": [
+      "HIST20-043"
+    ],
+    "status": "adapted",
+    "note": "Specified the 1936 administrative context."
+  },
+  {
+    "source_id": "INM-15-16",
+    "source": "INM",
+    "page": 15,
+    "number": 16,
+    "stem": "16. The objective of the Butler Committee of 1917 was",
+    "question_ids": [
+      "HIST20-045"
+    ],
+    "status": "adapted",
+    "note": "Corrected 1917 to 1927."
+  },
+  {
+    "source_id": "INM-15-17",
+    "source": "INM",
+    "page": 15,
+    "number": 17,
+    "stem": "17. The resolution demanding the creation of Pakistan was passed by the Muslim League in the year",
+    "question_ids": [
+      "HIST21-012"
+    ],
+    "status": "adapted",
+    "note": "Duplicate source topic."
+  },
+  {
+    "source_id": "INM-15-18",
+    "source": "INM",
+    "page": 15,
+    "number": 18,
+    "stem": "18. Where did Vinoba Bhave start Individual Satyagraha in 1940?",
+    "question_ids": [
+      "HIST21-033"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-15-19",
+    "source": "INM",
+    "page": 15,
+    "number": 19,
+    "stem": "19. Who was the third Satyagrahi in the Individual Satyagraha movement started by Mahatma Gandhi in 1940?",
+    "question_ids": [
+      "HIST21-032"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-15-20",
+    "source": "INM",
+    "page": 15,
+    "number": 20,
+    "stem": "20. Who was the first Satyagrahi in the Individual Satyagraha movement?",
+    "question_ids": [
+      "HIST21-015"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-16-01",
+    "source": "INM",
+    "page": 16,
+    "number": 1,
+    "stem": "1. Who wrote the book 'India Divided'?",
+    "question_ids": [
+      "HIST24-019"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-16-02",
+    "source": "INM",
+    "page": 16,
+    "number": 2,
+    "stem": "2. Who is the author of the book 'Unhappy India'?",
+    "question_ids": [
+      "HIST11-042"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-16-03",
+    "source": "INM",
+    "page": 16,
+    "number": 3,
+    "stem": "3. Who wrote the book 'India for Indians'?",
+    "question_ids": [
+      "HIST11-042"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-16-04",
+    "source": "INM",
+    "page": 16,
+    "number": 4,
+    "stem": "4. Who was the editor of Hindu Patriot?",
+    "question_ids": [
+      "HIST10-037"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-16-05",
+    "source": "INM",
+    "page": 16,
+    "number": 5,
+    "stem": "5. Which of the following books is written by Tilak?",
+    "question_ids": [
+      "HIST11-030"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-16-06",
+    "source": "INM",
+    "page": 16,
+    "number": 6,
+    "stem": "6. Who is considered the creator of modern Bihar?",
+    "question_ids": [
+      "HIST11-013"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-16-07",
+    "source": "INM",
+    "page": 16,
+    "number": 7,
+    "stem": "7. Arrange the following events during British rule according to the chronology:",
+    "question_ids": [
+      "HIST19-046"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-17-08",
+    "source": "INM",
+    "page": 17,
+    "number": 8,
+    "stem": "8. Who was the first Indian to become a member of Communist International?",
+    "question_ids": [
+      "HIST17-040"
+    ],
+    "status": "adapted",
+    "note": "Reframed first-ever membership as the securely identified Roy association."
+  },
+  {
+    "source_id": "INM-17-09",
+    "source": "INM",
+    "page": 17,
+    "number": 9,
+    "stem": "9. Arrange the following events during India’s freedom struggle in sequence:",
+    "question_ids": [
+      "HIST14-033"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-17-10",
+    "source": "INM",
+    "page": 17,
+    "number": 10,
+    "stem": "10. ‘Khudai Khidmatgar’ founded by Khan Abdul Ghaffar Khan was also known by what name?",
+    "question_ids": [
+      "HIST19-039"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-17-11",
+    "source": "INM",
+    "page": 17,
+    "number": 11,
+    "stem": "11. Which of the following events occurred first?",
+    "question_ids": [
+      "HIST08-032"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-17-12",
+    "source": "INM",
+    "page": 17,
+    "number": 12,
+    "stem": "12. Which of the following era is correct? i. 1905 Partition of Bengal ii. 1908 Split in Congress iii. 1919 Rowlatt Satyagraha",
+    "question_ids": [
+      "HIST12-029"
+    ],
+    "status": "adapted",
+    "note": "Corrected Congress split to 1907."
+  },
+  {
+    "source_id": "INM-17-13",
+    "source": "INM",
+    "page": 17,
+    "number": 13,
+    "stem": "13. Who is considered the father of Dyarchy?",
+    "question_ids": [
+      "HIST20-047"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-18-14",
+    "source": "INM",
+    "page": 18,
+    "number": 14,
+    "stem": "14. When was the Pitts India Act passed by the British Parliament?",
+    "question_ids": [
+      "HIST20-002"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-18-15",
+    "source": "INM",
+    "page": 18,
+    "number": 15,
+    "stem": "15. What was abolished in the Government of India Act 1935?",
+    "question_ids": [
+      "HIST20-013"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-18-16",
+    "source": "INM",
+    "page": 18,
+    "number": 16,
+    "stem": "16. Who described the Government of India Act 1935 as 'Charter of slavery'?",
+    "question_ids": [
+      "HIST20-048"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-18-17",
+    "source": "INM",
+    "page": 18,
+    "number": 17,
+    "stem": "17. In which of the following Acts, separate electorate was introduced in India?",
+    "question_ids": [
+      "HIST20-008"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-18-18",
+    "source": "INM",
+    "page": 18,
+    "number": 18,
+    "stem": "18. Montagu-Chelmsford report became the basis of which act?",
+    "question_ids": [
+      "HIST20-009"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-18-19",
+    "source": "INM",
+    "page": 18,
+    "number": 19,
+    "stem": "19. In which year was the 'Regulating Act' passed?",
+    "question_ids": [
+      "HIST20-001"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-18-20",
+    "source": "INM",
+    "page": 18,
+    "number": 20,
+    "stem": "20. Who was the last Governor General of independent India?",
+    "question_ids": [
+      "HIST23-034"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-19-21",
+    "source": "INM",
+    "page": 19,
+    "number": 21,
+    "stem": "21. Which of the following political parties was in power in Britain at the time of India's independence?",
+    "question_ids": [
+      "HIST23-037"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-19-22",
+    "source": "INM",
+    "page": 19,
+    "number": 22,
+    "stem": "22. Who among the following headed the Boundary Commission set up in 1947 to draw the international boundaries between India and Pakistan?",
+    "question_ids": [
+      "HIST23-038"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-19-23",
+    "source": "INM",
+    "page": 19,
+    "number": 23,
+    "stem": "23. When was the Indian Independence Bill passed in the House of Lords in England?",
+    "question_ids": [
+      "HIST23-031"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-19-24",
+    "source": "INM",
+    "page": 19,
+    "number": 24,
+    "stem": "24. Which department did Rajendra Prasad hold in the interim government formed in 1946?",
+    "question_ids": [
+      "HIST23-030"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-19-25",
+    "source": "INM",
+    "page": 19,
+    "number": 25,
+    "stem": "25. Who was the Finance Minister in the interim government?",
+    "question_ids": [
+      "HIST23-030"
+    ],
+    "status": "adapted",
+    "note": "League entry timing clarified."
+  },
+  {
+    "source_id": "INM-20-01",
+    "source": "INM",
+    "page": 20,
+    "number": 1,
+    "stem": "1. Who was the Congress President who held talks with both the Cripps Mission and Lord Wavell?",
+    "question_ids": [
+      "HIST21-030"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-20-02",
+    "source": "INM",
+    "page": 20,
+    "number": 2,
+    "stem": "2. Who among the following was not a member of the Cabinet Mission?",
+    "question_ids": [
+      "HIST23-029"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-20-03",
+    "source": "INM",
+    "page": 20,
+    "number": 3,
+    "stem": "3. The Cabinet Mission was chaired by whom?",
+    "question_ids": [
+      "HIST23-029"
+    ],
+    "status": "adapted",
+    "note": "Pethick-Lawrence's chairmanship explained."
+  },
+  {
+    "source_id": "INM-20-04",
+    "source": "INM",
+    "page": 20,
+    "number": 4,
+    "stem": "4. What new name did Subhash Chandra Bose give to Nicobar Island?",
+    "question_ids": [
+      "HIST23-033"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-20-05",
+    "source": "INM",
+    "page": 20,
+    "number": 5,
+    "stem": "5. In which year was the Indian National Army established?",
+    "question_ids": [
+      "HIST23-028"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-20-06",
+    "source": "INM",
+    "page": 20,
+    "number": 6,
+    "stem": "6. Which country added the honorific ‘Netaji’ before the name of Subhash Chandra Bose?",
+    "question_ids": [
+      "HIST23-039"
+    ],
+    "status": "adapted",
+    "note": "People's honorific distinguished from a formal national award."
+  },
+  {
+    "source_id": "INM-20-07",
+    "source": "INM",
+    "page": 20,
+    "number": 7,
+    "stem": "7. Who founded the Forward Block?",
+    "question_ids": [
+      "HIST21-008"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-21-08",
+    "source": "INM",
+    "page": 21,
+    "number": 8,
+    "stem": "8. Azad Dast was active during which movement in Bihar?",
+    "question_ids": [
+      "HIST22-005"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-21-09",
+    "source": "INM",
+    "page": 21,
+    "number": 9,
+    "stem": "9. On the occasion of which festival in 1942, Jayaprakash Narayan escaped from Hazaribagh jail?",
+    "question_ids": [
+      "HIST22-020"
+    ],
+    "status": "adapted",
+    "note": "Diwali association explained."
+  },
+  {
+    "source_id": "INM-21-10",
+    "source": "INM",
+    "page": 21,
+    "number": 10,
+    "stem": "10. Where was Dr. Rajendra Prasad arrested and sent on 9 August 1942?",
+    "question_ids": [
+      "HIST22-028"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-21-11",
+    "source": "INM",
+    "page": 21,
+    "number": 11,
+    "stem": "11. Who started the secret radio during the Quit India Movement?",
+    "question_ids": [
+      "HIST22-001"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-21-12",
+    "source": "INM",
+    "page": 21,
+    "number": 12,
+    "stem": "12. Which prominent leader of Bihar was known as 'Bihar Kesari' and actively participated in the Quit India Movement?",
+    "question_ids": [
+      "HIST11-044"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-21-13",
+    "source": "INM",
+    "page": 21,
+    "number": 13,
+    "stem": "13. Who was the Prime Minister of England during the Quit India Movement?",
+    "question_ids": [
+      "HIST22-031"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-22-14",
+    "source": "INM",
+    "page": 22,
+    "number": 14,
+    "stem": "14. \"Do or Die\" is related to which movement?",
+    "question_ids": [
+      "HIST22-029"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-22-15",
+    "source": "INM",
+    "page": 22,
+    "number": 15,
+    "stem": "15. Where was the formation of a national government under the leadership of Siyaram Singh announced in the 1942 movement?",
+    "question_ids": [
+      "HIST22-026"
+    ],
+    "status": "adapted",
+    "note": "Reframed to documented organisation, not an unspecified national government."
+  },
+  {
+    "source_id": "INM-22-16",
+    "source": "INM",
+    "page": 22,
+    "number": 16,
+    "stem": "16. Where was Gandhiji imprisoned after the Quit India resolution was passed?",
+    "question_ids": [
+      "HIST22-027"
+    ],
+    "status": "adapted",
+    "note": ""
+  },
+  {
+    "source_id": "INM-22-17",
+    "source": "INM",
+    "page": 22,
+    "number": 17,
+    "stem": "17. When did the Quit India Movement begin?",
+    "question_ids": [
+      "HIST22-016"
+    ],
+    "status": "adapted",
+    "note": "Resolution and arrests distinguished."
+  },
+  {
+    "source_id": "INM-22-18",
+    "source": "INM",
+    "page": 22,
+    "number": 18,
+    "stem": "18. In whose view the Cripps proposal was a \"post- dated cheque drawn on a broken bank\"?",
+    "question_ids": [],
+    "status": "unscored_uncertainty",
+    "note": "UNSCORED: Gandhi's post-dated-cheque criticism is discussed, but the exact broken/crashing-bank wording has attribution complications. Do not grade a precise quotation as settled."
+  },
+  {
+    "source_id": "INM-22-19",
+    "source": "INM",
+    "page": 22,
+    "number": 19,
+    "stem": "19. When did Sir Stafford Cripps reach Delhi?",
+    "question_ids": [],
+    "status": "unscored_uncertainty",
+    "note": "UNSCORED: accounts differ between 22 March arrival and 23 March public opening. Notes explain the distinction; the exact arrival-day question is not scored."
+  },
+  {
+    "source_id": "INM-22-20",
+    "source": "INM",
+    "page": 22,
+    "number": 20,
+    "stem": "20. Who was the first Satyagrahi of the Individual Satyagraha movement?",
+    "question_ids": [
+      "HIST21-015"
+    ],
+    "status": "adapted",
+    "note": "Duplicate source question."
+  }
+]

@@ -1,0 +1,86 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap");
+
+.reader { min-height: 100svh; background: #f6f8fa; color: #20282a; --reader-accent: #096c64; --reader-line: #d7dfe2; --reader-muted: #57686d; font: 16px/1.6 var(--font-ui); letter-spacing: 0; }
+.reader :global(*) { box-sizing: border-box; }
+.reader :global(.reader-container) { max-width: 1260px; margin: auto; padding: 24px 24px 64px; }
+.reader :global(a) { text-underline-offset: 3px; }
+.reader :global(a:focus-visible), .reader :global(button:focus-visible), .reader :global(input:focus-visible), .reader :global(summary:focus-visible) { outline: 2px solid var(--reader-accent); outline-offset: 3px; }
+.reader :global(.reader-bar) { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-bottom: 24px; border-bottom: 1px solid var(--reader-line); margin-bottom: 32px; }
+.reader :global(.reader-bar > a), .reader :global(.reader-bar > div) { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.reader :global(.reader-button), .reader :global(.reader-icon) { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--reader-line); border-radius: 6px; background: #fff; padding: 9px 13px; font: 600 14px/1.5 var(--font-ui); color: #1d4945; overflow-wrap: anywhere; }
+.reader :global(.reader-button:hover), .reader :global(.reader-icon:hover) { border-color: var(--reader-accent); background: #edf7f4; }
+.reader :global(svg) { flex-shrink: 0; }
+.reader :global(.reader-heading) { max-width: 850px; margin-bottom: 36px; }
+.reader :global(.reader-heading h1) { font-size: 36px; line-height: 1.22; font-weight: 700; margin: 10px 0 16px; letter-spacing: 0; }
+.reader :global(.reader-eyebrow) { color: var(--reader-accent); font-size: 13px; font-weight: 700; }
+.reader :global(.reader-muted) { color: var(--reader-muted); overflow-wrap: anywhere; }
+.reader :global(.catalog-heading) { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+.reader :global(.catalog-heading h2) { font-size: 23px; font-weight: 700; }
+.reader :global(.chapter-search) { display: flex; align-items: center; gap: 12px; max-width: 600px; padding: 10px 14px; background: #fff; border: 1px solid var(--reader-line); border-radius: 6px; margin: 0 0 12px; }
+.reader :global(.chapter-search input) { width: 100%; min-width: 0; outline: none; background: transparent; }
+.reader :global(.chapter-list) { list-style: none; padding: 0; margin: 18px 0 36px; border-top: 1px solid var(--reader-line); }
+.reader :global(.chapter-list > li) { display: grid; grid-template-columns: 38px minmax(0, 1fr) auto; gap: 18px; align-items: start; padding: 22px 0; border-bottom: 1px solid var(--reader-line); }
+.reader :global(.chapter-number) { color: var(--reader-accent); font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.reader :global(.chapter-list h3) { font-family: "Noto Sans Devanagari", sans-serif; font-size: 19px; line-height: 1.65; font-weight: 600; margin-bottom: 5px; overflow-wrap: anywhere; }
+.reader :global(.chapter-list p), .reader :global(.chapter-list small) { color: var(--reader-muted); font-size: 14px; }
+.reader :global(.chapter-list nav) { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.reader :global(.source-disclosure) { border-block: 1px solid var(--reader-line); padding: 20px 0; margin-bottom: 24px; }
+.reader :global(.source-disclosure summary) { font-weight: 600; cursor: pointer; }
+.reader :global(.reading-layout) { display: grid; grid-template-columns: 245px minmax(0, 1fr); gap: 42px; align-items: start; }
+.reader :global(.reading-sidebar) { position: sticky; top: 20px; max-height: calc(100svh - 40px); overflow-y: auto; font-size: 14px; }
+.reader :global(.reading-sidebar nav) { display: flex; flex-direction: column; gap: 13px; border-left: 2px solid var(--reader-line); padding-left: 14px; margin: 20px 0; }
+.reader :global(.reading-sidebar nav a) { line-height: 1.8; font-family: "Noto Sans Devanagari", sans-serif; }
+.reader :global(.mobile-contents) { display: none; }
+.reader :global(.reading-tools) { display: flex; align-items: center; gap: 4px; }
+.reader :global(.reading-tools button) { width: 38px; height: 38px; display: inline-grid; place-items: center; border: 1px solid var(--reader-line); border-radius: 6px; cursor: pointer; background: #fff; }
+.reader :global(.reading-tools button:disabled) { opacity: .4; cursor: default; }
+.reader :global(.reading-tools output) { min-width: 26px; text-align: center; font-size: 13px; font-variant-numeric: tabular-nums; }
+.reader :global(.note-body) { min-width: 0; --reading-size: 18px; font: 400 var(--reading-size)/1.95 "Noto Sans Devanagari", system-ui, sans-serif; }
+.reader :global(.note-body h1) { font-size: 30px; line-height: 1.6; font-weight: 700; margin: 5px 0 24px; overflow-wrap: anywhere; }
+.reader :global(.note-body h2) { font-size: 23px; line-height: 1.7; font-weight: 700; margin: 38px 0 15px; scroll-margin-top: 30px; overflow-wrap: anywhere; }
+.reader :global(.note-body h3) { font-size: 20px; line-height: 1.7; font-weight: 600; margin: 26px 0 12px; scroll-margin-top: 30px; }
+.reader :global(.note-body p) { margin: 0 0 19px; overflow-wrap: anywhere; }
+.reader :global(.note-body a) { color: var(--reader-accent); text-decoration: underline; overflow-wrap: anywhere; }
+.reader :global(.note-body b), .reader :global(.note-body strong) { font-weight: 700; }
+.reader :global(.note-body ul) { padding-left: 24px; list-style: disc; }
+.reader :global(.note-body li) { padding-block: 3px; }
+.reader :global(.note-body .eyebrow) { color: var(--reader-accent); font-size: 14px; font-weight: 600; margin: 0; }
+.reader :global(.note-body .gloss) { color: #446871; font-size: .9em; }
+.reader :global(.note-body .source) { font-size: 14px; color: var(--reader-muted); border-top: 1px solid var(--reader-line); padding-top: 14px; margin-top: 28px; }
+.reader :global(.note-body .revision), .reader :global(.note-body .cause), .reader :global(.note-body .bridge), .reader :global(.note-body .warning), .reader :global(.note-body .ending) { border-left: 3px solid var(--reader-accent); background: #e8f3f0; padding: 18px 20px; margin-block: 24px; }
+.reader :global(.note-body .warning) { border-color: #a75b27; background: #fff1df; }
+.reader :global(.table-scroll) { max-width: 100%; overflow-x: auto; margin: 24px 0; border: 1px solid var(--reader-line); background: #fff; }
+.reader :global(.table-scroll table) { min-width: 550px; width: 100%; border-collapse: collapse; font-size: .9em; line-height: 1.85; }
+.reader :global(.table-scroll th), .reader :global(.table-scroll td) { text-align: left; vertical-align: top; padding: 13px 15px; border: 1px solid var(--reader-line); overflow-wrap: anywhere; }
+.reader :global(.table-scroll th) { background: #e8efef; font-weight: 600; }
+.reader :global(.chapter-pagination) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; border-top: 1px solid var(--reader-line); padding-top: 26px; margin-top: 45px; }
+.reader :global(.chapter-pagination a) { justify-content: space-between; text-align: left; font-family: "Noto Sans Devanagari", sans-serif; line-height: 1.8; }
+@media (max-width: 850px) {
+  .reader :global(.reading-layout) { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+  .reader :global(.reading-sidebar) { position: static; max-height: none; }
+  .reader :global(.reading-sidebar nav) { max-height: 160px; overflow-y: auto; }
+  .reader :global(.reading-sidebar .desktop-contents) { display: none; }
+  .reader :global(.mobile-contents) { display: block; margin: 14px 0; border-block: 1px solid var(--reader-line); padding: 12px 0; }
+  .reader :global(.mobile-contents summary) { cursor: pointer; color: var(--reader-accent); font-weight: 600; }
+  .reader :global(.chapter-list > li) { grid-template-columns: 30px minmax(0, 1fr); gap: 12px; }
+  .reader :global(.chapter-list nav) { grid-column: 2; }
+}
+@media (max-width: 620px) {
+  .reader :global(.reader-container) { padding: 18px 16px 48px; }
+  .reader :global(.reader-heading h1) { font-size: 28px; }
+  .reader :global(.note-body h1) { font-size: 25px; }
+  .reader :global(.note-body h2) { font-size: 21px; }
+  .reader :global(.chapter-pagination) { grid-template-columns: minmax(0, 1fr); }
+  .reader :global(.reader-bar:has(.reading-tools)) { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+  .reader :global(.reader-bar:has(.reading-tools) > div) { display: contents; }
+  .reader :global(.reader-bar .reading-tools) { grid-column: 1; grid-row: 2; }
+  .reader :global(.reader-bar:has(.reading-tools) .reader-button) { grid-column: 2; grid-row: 1; justify-self: end; }
+  .reader :global(.reader-bar:has(.reading-tools) .reader-icon) { grid-column: 2; grid-row: 2; justify-self: end; }
+}
+@media print {
+  .reader { background: #fff; color: #000; }
+  .reader :global(.reader-bar), .reader :global(.reading-sidebar), .reader :global(.chapter-pagination) { display: none; }
+  .reader :global(.reading-layout) { display: block; }
+  .reader :global(.table-scroll) { overflow: visible; }
+  .reader :global(.table-scroll table) { min-width: 0; }
+}

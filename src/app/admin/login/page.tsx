@@ -3,6 +3,7 @@ import { SubmitButton } from "../_components/FormButtons";
 import LinkPending from "../_components/LinkPending";
 import { AlertCircle, ArrowLeft, CheckCircle2, LayoutDashboard, LogIn } from "lucide-react";
 import { loginAction } from "../actions";
+import { practiceReturnPath } from "@/lib/practice-subjects";
 
 type Props = {
   searchParams: Promise<{ error?: string; reset?: string; next?: string }>;
@@ -47,7 +48,7 @@ export default async function AdminLoginPage({ searchParams }: Props) {
           )}
 
           <form action={loginAction} className="mt-6 grid gap-4">
-            {["/practice/dsa", "/dsa-practice.html"].includes(params.next || "") && <input type="hidden" name="next" value="/practice/dsa" />}
+            {practiceReturnPath(params.next) !== "/admin" && <input type="hidden" name="next" value={practiceReturnPath(params.next)} />}
             <label className="adm-label">
               Email
               <input name="email" type="email" autoComplete="email" required className="adm-input" />
