@@ -23,7 +23,7 @@ async function dockIsReachable(page) {
 }
 
 try {
-  for (const subject of ["dsa", "history"]) {
+  for (const subject of ["dsa", "history", "oops"]) {
     const response = await fetch(`${base}/api/practice/${subject}/questions`);
     const bank = (await response.json()).questions;
     const answers = new Map(bank.map((q) => [q.id, "ABCDE".indexOf(q.ans)]));
@@ -39,7 +39,7 @@ try {
       page.on("request", (request) => { if (request.url().includes("/api/practice/")) calls.push(request.method()); });
       await page.goto(`${base}/practice/${subject}`);
       await page.locator(".ledger").waitFor({ timeout: 30000 });
-      const key = subject === "dsa" ? "arrays" : "chapter-01";
+      const key = subject === "dsa" ? "arrays" : subject === "history" ? "chapter-01" : "classes";
       await page.locator(`[data-act="setup"][data-key="${key}"]`).click();
       const sizeOption = page.locator('label[for="ps-0"]');
       await sizeOption.scrollIntoViewIfNeeded();

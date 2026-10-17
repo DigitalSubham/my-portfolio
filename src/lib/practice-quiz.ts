@@ -34,6 +34,7 @@ export function shuffle<T>(values: T[]): T[] {
 }
 
 export function recordAnswer(state: QuizState, q: QuizQuestion, correct: boolean): QuizState {
+  if (q.unscored) return state;
   const topic = state.progress[q.k] || { r: {}, h: "" };
   const before = topic.r[q.id] || [0, 0, 0];
   const record: [number, number, number] = [before[0] + 1, before[1] + (correct ? 1 : 0), correct ? 1 : 0];
@@ -41,6 +42,7 @@ export function recordAnswer(state: QuizState, q: QuizQuestion, correct: boolean
 }
 
 export function quizStats(state: QuizState, questions: QuizQuestion[], history = "") {
+  questions = questions.filter((q) => !q.unscored);
   let done = 0, attempts = 0, correct = 0, wrong = 0, lastRight = 0;
   for (const q of questions) {
     const r = recordOf(state, q);

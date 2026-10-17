@@ -196,7 +196,7 @@ export function useQuiz(subject: PracticeSubject, openTopics = false) {
     const correct = letters[index] === q.ans;
     if (session.kind === "practice") next = recordAnswer(next, q, correct);
     commit({ ...next, session: { ...session, picks: { ...session.picks, [q.id]: index } } });
-    if (session.kind === "practice" && !correct) scheduleWrongSave();
+    if (session.kind === "practice" && !q.unscored && !correct) scheduleWrongSave();
   }
 
   function next(skip = false) {

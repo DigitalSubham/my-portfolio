@@ -1,0 +1,269 @@
+[
+  {
+    "key": "refresh",
+    "number": 1,
+    "title": "Start Here: Your Python and JavaScript Bridge",
+    "summary": "Refresh what you already know, then attach the new syntax to familiar ideas. You do not need to become an expert in three languages before understanding OOP questions.",
+    "pages": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "count": 6
+  },
+  {
+    "key": "c-basics",
+    "number": 2,
+    "title": "C Foundations: Read a Program Without Guessing",
+    "summary": "C has no built-in class, inheritance or virtual keywords. Learn its typed variables, control flow, functions, arrays, pointers and structs first; these make C++ code far less intimidating.",
+    "pages": [
+      1
+    ],
+    "count": 3
+  },
+  {
+    "key": "cpp-basics",
+    "number": 3,
+    "title": "C++ Syntax, References and Expressions",
+    "summary": "Learn the symbols that appear repeatedly in the MCQs: std::, cout, &, *, ->, references, sizeof, comma expressions and default arguments.",
+    "pages": [
+      3,
+      4,
+      36,
+      38
+    ],
+    "count": 14
+  },
+  {
+    "key": "java-basics",
+    "number": 4,
+    "title": "Java Syntax and Reference Variables",
+    "summary": "Read Java from the outside in: class, main, types, references, methods and access. Similar-looking C++ punctuation is not automatically valid Java.",
+    "pages": [
+      3,
+      4,
+      9,
+      15,
+      19,
+      43,
+      44
+    ],
+    "count": 2
+  },
+  {
+    "key": "classes",
+    "number": 5,
+    "title": "Classes, Objects, Members and Nested Classes",
+    "summary": "Turn the blueprint metaphor into concrete declarations. Separate a class definition, an object, a pointer/reference, and a method call.",
+    "pages": [
+      2,
+      3,
+      4,
+      13
+    ],
+    "count": 17
+  },
+  {
+    "key": "constructors",
+    "number": 6,
+    "title": "Constructors: Initialization, Defaults and Copies",
+    "summary": "Follow object creation one step at a time. Learn what the compiler supplies, what it does not supply, and why a constructor is not an ordinary returning function.",
+    "pages": [
+      4,
+      5,
+      6,
+      7,
+      21
+    ],
+    "count": 10
+  },
+  {
+    "key": "lifetime",
+    "number": 7,
+    "title": "Memory, Destructors, Copying and Object Lifetime",
+    "summary": "Separate the object's lifetime from the lifetime of a pointer variable. This prevents many of the most serious mistakes in the assignments.",
+    "pages": [
+      7,
+      8,
+      25,
+      29,
+      30
+    ],
+    "count": 18
+  },
+  {
+    "key": "access",
+    "number": 8,
+    "title": "Access Control: Keep the Language Label",
+    "summary": "Learn exactly what public, private, protected and omitted modifiers mean. Do not transfer C++ defaults into Java or Python.",
+    "pages": [
+      9,
+      10,
+      14,
+      15,
+      19
+    ],
+    "count": 12
+  },
+  {
+    "key": "encapsulation",
+    "number": 9,
+    "title": "Encapsulation and Abstraction, Without Confusing Them",
+    "summary": "Use an account with a rule: its balance must not become negative. A getter/setter pair is not automatically a safe design; the operations must preserve the rule.",
+    "pages": [
+      11,
+      12,
+      13,
+      34,
+      35,
+      36
+    ],
+    "count": 12
+  },
+  {
+    "key": "inheritance",
+    "number": 10,
+    "title": "Inheritance Shapes, Access and the Diamond",
+    "summary": "Separate three questions: the shape of the hierarchy, the accessibility of inherited operations, and which implementation a call selects.",
+    "pages": [
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21
+    ],
+    "count": 12
+  },
+  {
+    "key": "overloading",
+    "number": 11,
+    "title": "Overloading: Pick by the Parameters",
+    "summary": "Overloading chooses among several declarations with one name. Follow the argument types before thinking about the returned value.",
+    "pages": [
+      22,
+      23,
+      27
+    ],
+    "count": 17
+  },
+  {
+    "key": "dispatch",
+    "number": 12,
+    "title": "Overriding, Virtual Calls and Name Hiding",
+    "summary": "For every call, write down the handle's declared type, the actual object's type, and whether the operation is virtual. Those three facts solve most polymorphism output questions.",
+    "pages": [
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "count": 27
+  },
+  {
+    "key": "abstract",
+    "number": 13,
+    "title": "Abstract Classes, Pure Virtuals and Interfaces",
+    "summary": "An abstract type can define a contract without being directly constructible. An abstract base pointer is not an abstract base object.",
+    "pages": [
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36
+    ],
+    "count": 11
+  },
+  {
+    "key": "this-super",
+    "number": 14,
+    "title": "this, self, super and Method Chaining",
+    "summary": "Use the current object to resolve names, then distinguish a parent-qualified operation from a runtime virtual call.",
+    "pages": [
+      36,
+      37,
+      38
+    ],
+    "count": 3
+  },
+  {
+    "key": "static",
+    "number": 15,
+    "title": "Static Members, Local Statics and Shared State",
+    "summary": "The word static has several contexts. First ask whether it describes a local variable, a file-scope name, a class field, or a member function.",
+    "pages": [
+      40,
+      41,
+      42
+    ],
+    "count": 8
+  },
+  {
+    "key": "const-final",
+    "number": 16,
+    "title": "const, final and Read-Only Views",
+    "summary": "Read exactly what is protected: a value, a pointer, an object's observable state, a method override, or a class's inheritance. Similar words do different jobs.",
+    "pages": [
+      38,
+      42,
+      43,
+      44
+    ],
+    "count": 7
+  },
+  {
+    "key": "templates",
+    "number": 17,
+    "title": "Templates, Generics and Duck Typing",
+    "summary": "Reuse an algorithm across types, but keep the three languages' mechanisms distinct. Generic does not mean every operation works on every possible type.",
+    "pages": [
+      23,
+      24
+    ],
+    "count": 2
+  },
+  {
+    "key": "inline-friends",
+    "number": 18,
+    "title": "Inline, Friend Functions and Friend Classes",
+    "summary": "Keep performance hints separate from language permissions. inline does not mean 'must be faster', and friend does not mean 'a member of this class'.",
+    "pages": [
+      39,
+      40,
+      44,
+      45
+    ],
+    "count": 6
+  },
+  {
+    "key": "exceptions",
+    "number": 19,
+    "title": "Exceptions: Follow the Normal Path and Error Path",
+    "summary": "The supplied syllabus lists exceptions but does not develop them into a full chapter. This added foundation fills that gap and explains the assignment questions.",
+    "pages": [
+      1
+    ],
+    "count": 4
+  },
+  {
+    "key": "tracing",
+    "number": 20,
+    "title": "Output Questions: A Safe Step-by-Step Method",
+    "summary": "Classify the program before calculating an output. A compiler error, undefined behavior, an implementation-specific assumption and a normal result are different answers.",
+    "pages": [
+      3,
+      4,
+      26,
+      27
+    ],
+    "count": 8
+  }
+]

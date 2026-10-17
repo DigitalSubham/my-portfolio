@@ -45,7 +45,7 @@ function Setup({ topic, quiz, close }: { topic: string; quiz: QuizController; cl
   const [error, setError] = useState("");
   const test = topic === "test";
   const bank = quiz.loaded!.questions;
-  const base = test ? bank : bank.filter((q) => q.k === topic);
+  const base = test ? bank.filter((q) => !q.unscored) : bank.filter((q) => q.k === topic);
   const stats = quizStats(quiz.state, base);
   const sections = [...new Set(base.map(sectionOf))];
   function submit(event: FormEvent<HTMLFormElement>) {
@@ -56,8 +56,8 @@ function Setup({ topic, quiz, close }: { topic: string; quiz: QuizController; cl
     if (test) {
       const count = Number(values.get("tn") || 16);
       const from = values.get("tf");
-      let pool = from === "pyq" ? bank.filter((q) => q.k === "pyq") : from === "new" ? bank.filter((q) => !recordOf(quiz.state, q)) : bank;
-      if (pool.length < count) pool = from === "pyq" ? bank.filter((q) => q.k === "pyq") : bank;
+      let pool = from === "pyq" ? base.filter((q) => q.k === "pyq") : from === "new" ? base.filter((q) => !recordOf(quiz.state, q)) : base;
+      if (pool.length < count) pool = from === "pyq" ? base.filter((q) => q.k === "pyq") : base;
       questions = shuffle(pool).slice(0, count);
       title = `Timed test \u00b7 ${questions.length} questions`;
     } else {
@@ -80,7 +80,7 @@ function Setup({ topic, quiz, close }: { topic: string; quiz: QuizController; cl
       <fieldset className="seg"><legend>Number of questions (1 minute each)</legend><Segments name="tn" values={[["16", "16"], ["30", "30"], ["50", "50"]]} selected="16" /></fieldset>
       <fieldset className="seg"><legend>Questions from</legend><Segments name="tf" values={[["all", "All topics"], ["new", "Ones I haven't tried"], ...(quiz.subject.topics.some((t) => t.key === "pyq") ? [["pyq", "Past papers only"]] as [string, string][] : [])]} selected="all" /></fieldset>
     </> : <>
-      <fieldset className="seg"><legend>Which questions</legend><Segments name="pm" values={[["new", `New first (${stats.total - stats.done} left)`], ["all", `Shuffle all ${stats.total}`], ["wrong", `Only my wrong ones (${stats.wrong})`]]} selected={stats.done < stats.total ? "new" : "all"} /></fieldset>
+      <fieldset className="seg"><legend>Which questions</legend><Segments name="pm" values={[["new", `New first (${stats.total - stats.done} scored left)`], ["all", `Shuffle all ${base.length}`], ["wrong", `Only my wrong ones (${stats.wrong})`]]} selected={stats.done < stats.total ? "new" : "all"} /></fieldset>
       <fieldset className="seg"><legend>How many</legend><Segments name="ps" values={[["10", "10"], ["25", "25"], ["50", "50"], ["0", "All"]]} selected="25" /></fieldset>
       <fieldset className="seg"><legend>Level</legend><Segments name="pl" values={[["0", "All levels"], ["1", "Easy"], ["2", "Medium"], ["3", "Hard"]]} selected="0" /></fieldset>
       {sections.length > 1 && topic !== "pyq" && <fieldset><legend>Sub-topic</legend><select id="psub" name="psub" className="btn"><option value="">All {sections.length} sub-topics</option>{sections.map((section) => <option key={section}>{section}</option>)}</select></fieldset>}
@@ -112,8 +112,8 @@ function Home({ quiz, open, setOpen }: { quiz: QuizController; open: string | nu
   function toggle(key: string) { setOpen(open === key ? null : key); setConfirmReset(false); }
   return <>
     <header className="top"><div className="brand"><span className="eyebrow">{quiz.subject.eyebrow}</span><h1>{quiz.subject.title}</h1><p className="muted">{bank.length} questions. {quiz.subject.description}</p></div><SaveControls quiz={quiz} /></header>
-    {quiz.subject.notesHref && <nav className="actions" aria-label="History views"><Link className="btn" href={quiz.subject.notesHref}>Read Hindi notes</Link><span className="chip">Practice questions</span></nav>}
-    {quiz.subject.formatNote && <aside className="tip">{quiz.subject.formatNote} <Link href="/practice/history/notes/sources">Source notes and corrections</Link></aside>}
+    {quiz.subject.notesHref && <nav className="actions" aria-label="Study views"><Link className="btn" href={quiz.subject.notesHref}>{quiz.subject.notesLabel || "Read Hindi notes"}</Link><span className="chip">Practice questions</span></nav>}
+    {quiz.subject.formatNote && <aside className="tip">{quiz.subject.formatNote} <Link href={`${quiz.subject.notesHref}/sources`}>Source notes and corrections</Link></aside>}
     <section className="summary" aria-label="Your progress"><Stat value={all.done}>of {all.total} questions tried</Stat><Stat value={percent(all.acc)}>accuracy overall</Stat><Stat value={`${ready}/${topics.length}`}>topics ready (85%+ on last 50)</Stat><Stat value={all.wrong}>questions to redo</Stat></section>
     <section className="actions"><Button className="btn primary" action="setup" data-key="test" onClick={() => toggle("test")}>Timed test</Button>
       {quiz.state.session && !quiz.state.session.done && <Button className="btn primary" action="resume" onClick={quiz.resume}>Continue {quiz.state.session.title} · {quiz.state.session.i + 1} / {quiz.state.session.list.length}</Button>}
@@ -126,7 +126,7 @@ function Home({ quiz, open, setOpen }: { quiz: QuizController; open: string | nu
         const questions = bank.filter((q) => q.k === t.key);
         const count = new Set(questions.map(sectionOf)).size;
         return <article className={`topic${t.key === "pyq" ? " pyq" : ""}`} id={`t-${t.key}`} key={t.key}>
-          <div className="t-main"><div className="t-head"><h3>{t.label}</h3><span className="t-meta num">{stats.total} questions{t.key !== "pyq" && ` \u00b7 ${count} sub-topics`}</span></div>
+          <div className="t-main"><div className="t-head"><h3>{t.label}</h3><span className="t-meta num">{stats.total} questions{questions.length > stats.total && ` + ${questions.length - stats.total} review-only`}{t.key !== "pyq" && ` \u00b7 ${count} sub-topics`}</span></div>
             {t.note && <p className="t-meta">{t.note}</p>}
             <div className="bar" role="img" aria-label={`${stats.done} of ${stats.total} tried`}><i className="c" style={{ width: `${stats.total ? stats.lastRight / stats.total * 100 : 0}%` }} /><i className="w" style={{ width: `${stats.total ? stats.wrong / stats.total * 100 : 0}%` }} /></div>
             <p className="t-line num"><span>{stats.done} of {stats.total} tried</span><span>{stats.attempts ? `${percent(stats.acc)} correct overall` : ""}</span></p>
@@ -140,9 +140,9 @@ function Home({ quiz, open, setOpen }: { quiz: QuizController; open: string | nu
     </section>
     {weakSections.length > 0 && <section className="weak"><h2>Sub-topics to revisit</h2><p className="muted" style={{ fontSize: 14 }}>Below 70% correct, with at least 5 attempts. Revise the concept first, then drill.</p><ul>{weakSections.map((w) => <li key={`${w.key}|${w.section}`}><span className="w-name">{w.section}<small>{topicLabel(quiz, w.key)} · {percent(w.correct / w.attempts)} of {w.attempts} attempts correct</small></span><Button onClick={() => quiz.start(shuffle(bank.filter((q) => q.k === w.key && sectionOf(q) === w.section)).slice(0, 25), `${topicLabel(quiz, w.key)} \u00b7 ${w.section}`, w.key)}>Drill this</Button></li>)}</ul></section>}
     <section className="notes">
-      <div><h3>How the options work</h3><p>Every practice question has five options: A–C are content, <b>D</b> is “More than one of the above” and <b>E</b> is “None of the above”. Read all three substantive choices before answering.</p></div>
+      <div><h3>How the options work</h3><p>{quiz.subject.optionsNote || "Every practice question has five options: A-C are content, D is More than one of the above and E is None of the above. Read all three substantive choices before answering."}</p></div>
       <div><h3>When is a topic ready?</h3><p>A topic turns green once your last 50 answers in it are at least 85% correct. Redo your wrong ones about a week later; a question leaves the redo list when you get it right.</p></div>
-      <div><h3>Where the answers come from</h3><p>{quiz.subject.slug === "dsa" ? "Every answer was checked twice, the second time by an independent blind solve, and every trace, calculation and code answer was run as code. Each option has its own explanation. Past-paper answers are worked out here, not BPSC's official key; TRE 3 Q94 is ambiguous as printed." : "The supplied history study pack includes chapter explanations and source corrections. Uncertain source items are not scored. These are practice questions, not an official answer key."}</p></div>
+      <div><h3>Where the answers come from</h3><p>{quiz.subject.sourceNote || (quiz.subject.slug === "dsa" ? "Every answer was checked twice, the second time by an independent blind solve, and every trace, calculation and code answer was run as code. Each option has its own explanation. Past-paper answers are worked out here, not BPSC's official key; TRE 3 Q94 is ambiguous as printed." : "The supplied history study pack includes chapter explanations and source corrections. Uncertain source items are not scored. These are practice questions, not an official answer key.")}</p></div>
       <div><h3>Keyboard</h3><p><kbd>A</kbd>–<kbd>E</kbd> or <kbd>1</kbd>–<kbd>5</kbd> to answer, <kbd>Enter</kbd> for the next question, <kbd>S</kbd> to skip in a timed test.</p></div>
     </section>
     <div className="reset">{confirmReset ? <><span>Clear every answer and start over?</span><Button className="btn danger" onClick={() => { quiz.reset(); setConfirmReset(false); }}>Yes, clear my progress</Button><Button className="link" onClick={() => setConfirmReset(false)}>Keep it</Button></> : <Button className="link" action="reset" onClick={() => setConfirmReset(true)}>Reset progress</Button>}</div>
@@ -159,6 +159,8 @@ function Teaching({ question: q, picked }: { question: QuizQuestion; picked?: nu
     {q.work && <><h4>Step by step</h4><pre className="work">{q.work}</pre></>}
     {q.why?.length === 5 && <><h4>Every option explained</h4><ul className="why">{q.why.map((why, i) => <li className={`${letters[i] === q.ans ? "is-ans " : ""}${picked === i ? "is-pick" : ""}`} key={i}><span className="wl">{letters[i]}</span><div><div className="wo"><span className="wb">{letters[i] === q.ans ? "Answer" : "Not the answer"}{picked === i ? " \u00b7 your pick" : ""}</span>{q.opts[i]}</div><div className="wt">{why.replace(/^[A-E]\s*[\u2014\u2013-]\s*(Correct|Wrong)\.\s*/, "")}</div></div></li>)}</ul></>}
     {q.tip && <p className="tip"><b>Exam tip:</b> {q.tip}</p>}
+    {q.noteHref && <p><Link className="btn" href={q.noteHref}>Read the related lesson</Link></p>}
+    {q.source && <details className="tip"><summary>Original assignment and answer key</summary><p>Assignment {q.source.document.slice(-1)}, question {q.source.number}, page {q.source.pages.join(", ")}. The supplied key says {q.source.answer}{q.source.keyNumber !== q.source.number ? ` (printed key number ${q.source.keyNumber})` : ""}. {q.unscored ? "The wording is not reliable enough for scoring; use the explanation above." : q.source.answer !== q.ans ? `The reviewed answer is ${q.ans}; the explanation above gives the correction.` : "The explanation above clarifies the rule and its limits."}</p><a href={`/study/oops/${q.source.document}.pdf#page=${q.source.pages[0]}`} target="_blank" rel="noopener noreferrer">Open original page</a></details>}
   </section>;
 }
 
@@ -167,8 +169,8 @@ function Question({ quiz }: { quiz: QuizController }) {
   const bank = quiz.loaded!.questions;
   const q = bank.find((q) => q.id === session.list[session.i])!;
   const picked = session.picks[q.id], reveal = session.kind === "practice" && picked != null;
-  const answered = Object.keys(session.picks).length;
-  const right = bank.filter((q) => session.picks[q.id] != null && letters[session.picks[q.id]] === q.ans).length;
+  const answered = bank.filter((q) => !q.unscored && session.picks[q.id] != null).length;
+  const right = bank.filter((q) => !q.unscored && session.picks[q.id] != null && letters[session.picks[q.id]] === q.ans).length;
   const left = remainingTime(quiz.state);
   const last = session.i === session.list.length - 1;
   return <>
@@ -179,13 +181,14 @@ function Question({ quiz }: { quiz: QuizController }) {
     </header>
     <div className="track"><i style={{ width: `${(session.i + (reveal ? 1 : 0)) / session.list.length * 100}%` }} /></div>
     <article className="qcard"><div className="qmeta"><span className="tag">{q.k === "pyq" ? q.subtopic : sectionOf(q)}</span><span className="tag">{levelLabels[q.level]}</span><span className="tag">{typeLabels[q.type]}</span><span className="qid">{q.id}</span></div>
-      <p className="qtext" id="qtext" tabIndex={-1}>{q.q}</p>{q.code && <pre className="code"><code>{q.code}</code></pre>}
+      <p className="qtext" id="qtext" tabIndex={-1}>{q.q}</p>{q.code && <pre className="code"><code>{q.code}</code></pre>}{q.transcriptionNote && <p className="tip">{q.transcriptionNote}</p>}
       <ol className="omr">{q.opts.map((option, i) => {
-        const correct = letters[i] === q.ans;
+        const correct = !q.unscored && letters[i] === q.ans;
         const mark = reveal ? correct ? picked === i ? "Your answer · correct" : "Correct answer" : picked === i ? "Your answer" : "" : "";
-        return <li key={i}><button type="button" className={`opt${picked === i ? " picked" : ""}${reveal && correct ? " right" : ""}${reveal && picked === i && !correct ? " wrong" : ""}`} data-act="pick" data-i={i} disabled={reveal} aria-label={`Option ${letters[i]}: ${option}`} onClick={() => quiz.pick(i)}><span className="bubble">{letters[i]}</span><span className="otext">{option}</span>{mark && <span className="mark">{mark}</span>}</button></li>;
+        return <li key={i}><button type="button" className={`opt${picked === i ? " picked" : ""}${reveal && correct ? " right" : ""}${reveal && picked === i && !correct && !q.unscored ? " wrong" : ""}`} data-act="pick" data-i={i} disabled={reveal} aria-label={`Option ${letters[i]}: ${option}`} onClick={() => quiz.pick(i)}><span className="bubble">{letters[i]}</span><span className="otext">{option}</span>{mark && <span className="mark">{mark}</span>}</button></li>;
       })}</ol>
-      {reveal && <><div className="feedback" role="status"><p className={`verdict ${letters[picked] === q.ans ? "ok" : "bad"}`}>{letters[picked] === q.ans ? "Correct" : `Not quite. The answer is ${q.ans}.`}</p><p className="exp">{q.exp}</p></div><Teaching question={q} picked={picked} /></>}
+      {q.unscored && <p className="tip">Review only. Choose an option to reveal the discussion; this question does not affect your score.</p>}
+      {reveal && <><div className="feedback" role="status"><p className={`verdict ${q.unscored ? "" : letters[picked] === q.ans ? "ok" : "bad"}`}>{q.unscored ? "Review only · not scored" : letters[picked] === q.ans ? "Correct" : `Not quite. The answer is ${q.ans}.`}</p><p className="exp">{q.exp}</p></div><Teaching question={q} picked={picked} /></>}
     </article>
     <nav className={`qnav${session.kind === "test" ? " test-nav" : ""}`} aria-label="Question navigation">
       <div className="qnav-status"><span className="num muted">{session.kind === "practice" ? `${right} correct of ${answered} answered` : `${answered} answered \u00b7 ${session.list.slice(0, session.i).filter((id) => session.picks[id] == null).length} skipped`}</span>{session.kind === "test" && !last && <Button className="link" action="finish" onClick={quiz.finishTest}>Finish test</Button>}</div>
@@ -204,19 +207,20 @@ function Results({ quiz, setup }: { quiz: QuizController; setup: (key: string) =
   const rows = session.list.map((id) => {
     const q = bank.find((q) => q.id === id)!;
     const picked = session.picks[id];
-    return { q, picked, status: picked == null ? "skip" : letters[picked] === q.ans ? "ok" : "bad" };
+    return { q, picked, status: q.unscored ? "review" : picked == null ? "skip" : letters[picked] === q.ans ? "ok" : "bad" };
   });
-  const correct = rows.filter((r) => r.status === "ok").length, wrong = rows.filter((r) => r.status === "bad").length, skipped = rows.length - correct - wrong;
-  const missed = rows.filter((r) => r.status !== "ok");
-  const order: Record<string, number> = { bad: 0, skip: 1, ok: 2 };
+  const scoredCount = rows.filter((r) => r.status !== "review").length;
+  const correct = rows.filter((r) => r.status === "ok").length, wrong = rows.filter((r) => r.status === "bad").length, skipped = scoredCount - correct - wrong;
+  const missed = rows.filter((r) => r.status === "bad" || r.status === "skip");
+  const order: Record<string, number> = { bad: 0, skip: 1, review: 2, ok: 3 };
   return <>
     <div className="qbar"><Button className="link" action="quit" onClick={quiz.quit}>← Topics</Button><span className="qtitle">{session.title}</span><span /></div><SaveControls quiz={quiz} />
-    <header className="result-head"><span className="eyebrow">{session.kind === "test" ? "Timed test result" : "Practice summary"}</span><h1 className="num">{session.kind === "test" ? Math.round((correct - wrong / 3) * 100) / 100 : correct} / {rows.length}{session.kind === "practice" ? " correct" : ""}</h1><p className="muted">{session.kind === "test" ? `Practice score (+1, −⅓, 0). Time used ${formatTime(session.used || 0)} of ${formatTime(session.limit || 0)}.` : correct === rows.length ? "Clean sheet. Move on or try a harder level." : "The ones you missed are on your redo list."}</p></header>
+    <header className="result-head"><span className="eyebrow">{session.kind === "test" ? "Timed test result" : "Practice summary"}</span><h1 className="num">{session.kind === "test" ? Math.round((correct - wrong / 3) * 100) / 100 : correct} / {scoredCount}{session.kind === "practice" ? " correct" : ""}</h1><p className="muted">{session.kind === "test" ? `Practice score (+1, −⅓, 0). Time used ${formatTime(session.used || 0)} of ${formatTime(session.limit || 0)}.` : correct === scoredCount && scoredCount > 0 ? "Clean sheet. Move on or try a harder level." : `${rows.length - scoredCount} review-only questions excluded. Incorrect scored answers are on your redo list.`}</p></header>
     {session.kind === "test" && <section className="summary"><Stat value={correct}>correct</Stat><Stat value={wrong}>wrong (−{Math.round(wrong / 3 * 100) / 100})</Stat><Stat value={skipped}>skipped</Stat><Stat value={percent(correct + wrong ? correct / (correct + wrong) : null)}>accuracy on attempted</Stat></section>}
     <section className="actions">{missed.length > 0 && session.kind === "practice" && <Button className="btn primary" action="redo-session" onClick={() => quiz.start(shuffle(missed.map((r) => r.q)), session.title.replace(/ \u00b7 redo$/, "") + " \u00b7 redo", session.key)}>Redo the {missed.length} I missed</Button>}
       {session.key && <Button action="setup-again" onClick={() => { quiz.quit(); setup(session.key!); }}>Practise {topicLabel(quiz, session.key)} again</Button>}<Button action="quit" onClick={quiz.quit}>Back to topics</Button>
     </section>
-    <section className="review"><h2>Review</h2>{[...rows].sort((a, b) => order[a.status] - order[b.status]).map(({ q, picked, status }) => <details key={q.id} open={status === "bad" && session.kind === "test" ? true : undefined}><summary><span className={`st ${status}`}>{status === "ok" ? "RIGHT" : status === "bad" ? "WRONG" : "SKIPPED"}</span><span className="qs">{q.q.split("\n")[0]}</span></summary><div className="body"><p className="qtext">{q.q}</p>{q.code && <pre className="code"><code>{q.code}</code></pre>}<p className="exp"><b>Answer {q.ans}:</b> {q.exp}</p><Teaching question={q} picked={picked} /><p className="mono muted" style={{ fontSize: 12 }}>{q.id} · {q.k === "pyq" ? q.subtopic : sectionOf(q)}</p></div></details>)}</section>
+    <section className="review"><h2>Review</h2>{[...rows].sort((a, b) => order[a.status] - order[b.status]).map(({ q, picked, status }) => <details key={q.id} open={status === "bad" && session.kind === "test" ? true : undefined}><summary><span className={`st ${status}`}>{status === "ok" ? "RIGHT" : status === "bad" ? "WRONG" : status === "review" ? "REVIEW ONLY" : "SKIPPED"}</span><span className="qs">{q.q.split("\n")[0]}</span></summary><div className="body"><p className="qtext">{q.q}</p>{q.code && <pre className="code"><code>{q.code}</code></pre>}<p className="exp"><b>{q.unscored ? "Review only:" : `Answer ${q.ans}:`}</b> {q.exp}</p><Teaching question={q} picked={picked} /><p className="mono muted" style={{ fontSize: 12 }}>{q.id} · {q.k === "pyq" ? q.subtopic : sectionOf(q)}</p></div></details>)}</section>
   </>;
 }
 

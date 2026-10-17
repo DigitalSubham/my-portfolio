@@ -14,6 +14,10 @@ export type PracticeQuestion = {
   why?: string[];
   tip?: string;
   sec?: string;
+  unscored?: boolean;
+  noteHref?: string;
+  transcriptionNote?: string;
+  source?: { document: string; number: number; pages: number[]; keyNumber: number; answer: string; explanation: string; originalText: string };
   [key: string]: unknown;
 };
 
