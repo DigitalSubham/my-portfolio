@@ -1,0 +1,86 @@
+[
+  {
+    "key": "fnd",
+    "name": "DBMS Fundamentals & Architecture",
+    "label": "DBMS Fundamentals & Architecture",
+    "count": 45
+  },
+  {
+    "key": "erm",
+    "name": "ER & EER Model",
+    "label": "ER & EER Model",
+    "count": 40
+  },
+  {
+    "key": "key",
+    "name": "Relational Model, Keys & Constraints",
+    "label": "Relational Model, Keys & Constraints",
+    "count": 45
+  },
+  {
+    "key": "ral",
+    "name": "Relational Algebra & Calculus",
+    "label": "Relational Algebra & Calculus",
+    "count": 40
+  },
+  {
+    "key": "sqd",
+    "name": "SQL: DDL, DML, DCL, TCL & Data Types",
+    "label": "SQL: DDL, DML, DCL, TCL & Data Types",
+    "count": 45
+  },
+  {
+    "key": "sqq",
+    "name": "SQL Queries, Operators & Functions",
+    "label": "SQL Queries, Operators & Functions",
+    "count": 60
+  },
+  {
+    "key": "sqj",
+    "name": "SQL Joins, Subqueries, Views & Database Objects",
+    "label": "SQL Joins, Subqueries, Views & Database Objects",
+    "count": 50
+  },
+  {
+    "key": "qpo",
+    "name": "Query Processing, Optimization & Advanced SQL",
+    "label": "Query Processing, Optimization & Advanced SQL",
+    "count": 40
+  },
+  {
+    "key": "nrm",
+    "name": "Functional Dependencies & Normalization",
+    "label": "Functional Dependencies & Normalization",
+    "count": 60
+  },
+  {
+    "key": "txn",
+    "name": "Transactions & Concurrency Control",
+    "label": "Transactions & Concurrency Control",
+    "count": 50
+  },
+  {
+    "key": "str",
+    "name": "Recovery, Storage, Indexing & Advanced Databases",
+    "label": "Recovery, Storage, Indexing & Advanced Databases",
+    "count": 45
+  },
+  {
+    "key": "adb",
+    "name": "Storage, Parallel DBs, Warehousing, Mining, XML & Security",
+    "label": "Storage, Parallel DBs, Warehousing, Mining, XML & Security",
+    "count": 40
+  },
+  {
+    "key": "prd",
+    "name": "MySQL, Oracle, SQL Server & Python–SQL Connectivity",
+    "label": "MySQL, Oracle, SQL Server & Python–SQL Connectivity",
+    "count": 40
+  },
+  {
+    "key": "pyq",
+    "name": "Past Papers (TRE 1-3)",
+    "label": "Past Papers (TRE 1-3)",
+    "count": 35
+  }
+]

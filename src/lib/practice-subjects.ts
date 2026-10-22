@@ -1,5 +1,6 @@
 import chapters from "@/content/history/chapters.json";
 import oopChapters from "@/content/oops/chapters.json";
+import dbmsTopics from "@/content/dbms/topics.json";
 import { topics as dsaTopics } from "./practice-quiz";
 
 export type PracticeTopic = { key: string; name: string; label: string; note?: string };
@@ -10,6 +11,12 @@ export type PracticeSubject = {
 };
 
 export const practiceSubjects: PracticeSubject[] = [
+  {
+    slug: "dbms", title: "TRE DBMS Question Bank", eyebrow: "BPSC TRE · Computer Science · Database Management Systems",
+    description: "Database fundamentals, SQL, normalization, transactions, indexing and more, including 35 past-paper questions.",
+    topics: dbmsTopics,
+    sourceNote: "Questions, answers and explanations are preserved from the supplied DBMS question bank. Past-paper labels follow that file; this is a practice resource, not an official answer key.",
+  },
   {
     slug: "oops", title: "OOP & Language Foundations", eyebrow: "BPSC TRE · Computer Science · C / C++ / Java / Python",
     description: "Both assignments, with explanations and a beginner-friendly path from Python to C, C++ and Java.",

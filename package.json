@@ -12,6 +12,7 @@
     "db:practice": "node scripts/setup-practice.mjs",
     "db:history": "node scripts/import-history.mjs",
     "db:oops": "node scripts/import-oops.mjs --database",
+    "db:dbms": "node scripts/import-dbms.mjs --database",
     "test:oops-code": "node scripts/check-oops-examples.mjs && node scripts/check-oops-questions.mjs",
     "test:practice": "node --experimental-strip-types --test tests/practice-*.test.mjs"
   },

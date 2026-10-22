@@ -1,0 +1,76 @@
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { createHmac, randomUUID, scryptSync } from 'node:crypto';
+import { readFile, mkdir } from 'node:fs/promises';
+import nextEnv from '@next/env';
+import { neon } from '@neondatabase/serverless';
+
+nextEnv.loadEnvConfig(process.cwd());
+const { chromium } = createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const base = process.env.PRACTICE_TEST_URL || 'http://localhost:3000';
+const bank = JSON.parse(await readFile(new URL('../db/seeds/dbms-questions.json', import.meta.url), 'utf8'));
+const sql = neon(process.env.DATABASE_URL);
+const email = `dbms-test-${randomUUID()}@example.invalid`, salt = randomUUID();
+const hash = scryptSync(randomUUID(), salt, 64).toString('hex');
+const [admin] = await sql`INSERT INTO admins (email, password_hash, password_salt) VALUES (${email}, ${hash}, ${salt}) RETURNING id`;
+const unsigned = [{ alg: 'HS256', typ: 'JWT' }, { sub: String(admin.id), email, exp: Math.floor(Date.now() / 1000) + 3600 }].map((value) => Buffer.from(JSON.stringify(value)).toString('base64url')).join('.');
+const token = `${unsigned}.${createHmac('sha256', process.env.JWT_SECRET).update(unsigned).digest('base64url')}`;
+let browser;
+try {
+  browser = await chromium.launch({ channel: 'chrome', headless: true });
+  const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  await context.addCookies([{ name: 'portfolio_admin_token', value: token, url: base }]);
+  const page = await context.newPage(), errors = [], calls = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  page.on('dialog', (dialog) => dialog.accept());
+  page.on('request', (request) => { if (request.url().includes('/api/practice/')) calls.push(request.method()); });
+  assert.deepEqual((await context.request.get(`${base}/api/practice/dbms/questions`).then((r) => r.json())).questions, bank);
+  await page.goto(`${base}/practice/dbms?topic=sqq`);
+  await page.locator('.setup[data-for="sqq"]').waitFor();
+  assert.equal(await page.locator('.ledger > article').count(), 14);
+  await page.locator('[data-act="start"][data-key="sqq"]').click();
+  for (let i = 0; i < 3; i++) {
+    const id = await page.locator('.qid').innerText();
+    const q = bank.find((q) => q.id === id);
+    await page.locator(`[data-act="pick"][data-i="${'ABCDE'.indexOf(q.ans)}"]`).click();
+    assert.equal(await page.locator('.why > li').count(), 5);
+    await page.locator('[data-act="next"]').click();
+  }
+  assert.equal(calls.length, 2, 'correct answers and navigation make no extra requests');
+  const savedId = await page.locator('.qid').innerText();
+  const q = bank.find((q) => q.id === savedId);
+  await page.locator(`[data-act="pick"][data-i="${('ABCDE'.indexOf(q.ans) + 1) % 5}"]`).click();
+  await page.getByRole('status').filter({ hasText: 'Saved to your account' }).waitFor();
+  assert.equal(calls.filter((method) => method === 'POST').length, 1);
+  const phone = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true });
+  await phone.addCookies([{ name: 'portfolio_admin_token', value: token, url: base }]);
+  const mobile = await phone.newPage();
+  mobile.on('pageerror', (error) => errors.push(error.message));
+  mobile.on('dialog', (dialog) => dialog.accept());
+  await mobile.goto(`${base}/practice/dbms`);
+  await mobile.locator('.qid').waitFor();
+  assert.equal(await mobile.locator('.qid').innerText(), savedId);
+  assert.equal(await mobile.locator('.qnav').evaluate((node) => getComputedStyle(node).position), 'fixed');
+  assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+  await mkdir('screenshots/practice', { recursive: true });
+  await mobile.screenshot({ path: 'screenshots/practice/dbms-mobile.png' });
+  await mobile.locator('[data-act="previous"]').click();
+  assert.equal(await mobile.locator('.opt.picked').count(), 1);
+  await mobile.locator('[data-act="quit"]').click();
+  await mobile.locator('[data-act="setup"][data-key="test"]').click();
+  await mobile.locator('label[for="tf-2"]').click();
+  await mobile.locator('[data-act="start-test"]').click();
+  const session = await mobile.evaluate((id) => JSON.parse(localStorage.getItem(`practice-dbms-session-v1-${id}`)).snapshot.session, admin.id);
+  assert.equal(session.list.length, 16);
+  assert.ok(session.list.every((id) => bank.find((q) => q.id === id).topic === 'Past Papers (TRE 1-3)'));
+  assert.equal((await context.request.get(`${base}/api/practice/dsa/progress`).then((r) => r.json())).snapshot, null);
+  const guest = await browser.newPage();
+  await guest.goto(`${base}/practice/dbms`);
+  await guest.locator('.ledger').waitFor();
+  assert.equal(await guest.getByRole('link', { name: 'Sign in to save', exact: true }).getAttribute('href'), '/admin/login?next=/practice/dbms');
+  assert.deepEqual(errors, []);
+  console.log('Passed: exact 635-question DB bank, 14 topics, explanations, no per-question requests, wrong-answer saving, mobile navigation, cross-device resume, Previous, past-paper timed tests, isolated progress and sign-in return.');
+} finally {
+  if (browser) await browser.close();
+  await sql`DELETE FROM admins WHERE id = ${admin.id} AND email = ${email}`;
+}

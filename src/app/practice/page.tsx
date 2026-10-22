@@ -8,6 +8,11 @@ import { toPageNavItems } from "@/lib/nav";
 
 const practiceSubjects = [
   {
+    title: "DBMS Practice",
+    description: "635 questions across 14 topics, including SQL, normalization, transactions, indexing and 35 past-paper questions.",
+    href: "/practice/dbms", meta: "Question bank",
+  },
+  {
     title: "OOP & Language Foundations",
     description: "Complete OOP, C, C++ and Java notes with Python comparisons, 51 worked examples and all 199 supplied assignment questions.",
     href: "/practice/oops", notesHref: "/practice/oops/notes", meta: "Notes & practice",
