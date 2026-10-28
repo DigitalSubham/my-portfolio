@@ -116,6 +116,24 @@ try {
   assert.ok((await mobile.locator(".review details").count()) > 0);
 
   const guest = await browser.newContext();
+  for (const subject of ["dsa", "dbms", "oops", "history"]) {
+    const path = `/practice/${subject}?chapter=chapter-01`;
+    const deniedPage = await guest.request.get(`${baseURL}${path}`, { maxRedirects: 0 });
+    assert.equal(deniedPage.status(), 307);
+    const login = new URL(deniedPage.headers().location, baseURL);
+    assert.equal(login.pathname, "/admin/login");
+    assert.equal(login.searchParams.get("next"), path);
+    const deniedBank = await guest.request.get(`${baseURL}/api/practice/${subject}/questions`);
+    assert.equal(deniedBank.status(), 401);
+    assert.equal(deniedBank.headers()["cache-control"], "private, no-store");
+  }
+  const invalidSession = await browser.newContext();
+  await invalidSession.addCookies([{ ...cookie, value: `${token}invalid` }]);
+  assert.equal((await invalidSession.request.get(`${baseURL}/practice/dsa`, { maxRedirects: 0 })).status(), 307);
+  assert.equal((await invalidSession.request.get(`${baseURL}/api/practice/dsa/questions`)).status(), 401);
+  await invalidSession.close();
+  assert.equal((await guest.request.get(`${baseURL}/practice`)).status(), 200);
+  assert.equal((await guest.request.get(`${baseURL}/practice/oops/notes`)).status(), 200);
   const denied = await guest.request.get(`${baseURL}/api/practice/dsa/progress`);
   assert.equal(denied.status(), 401);
   const deniedSave = await guest.request.post(`${baseURL}/api/practice/dsa/progress`, { headers: { Origin: baseURL }, data: {} });
@@ -125,21 +143,17 @@ try {
   await sql`DELETE FROM practice_saves WHERE admin_id = ${admin.id} AND subject = 'dsa'`;
   const guestPage = await guest.newPage();
   await guestPage.goto(`${baseURL}/practice/dsa`);
-  await guestPage.locator('#t-arrays [data-act="setup"]').click();
-  await guestPage.locator('[data-act="start"][data-key="arrays"]').click();
-  const guestQuestion = await guestPage.locator(".qid").innerText();
-  await guestPage.keyboard.press("ABCDE"[answerFor.get(guestQuestion)]);
-  assert.equal(await guestPage.locator(".opt.picked").count(), 1);
-  await guestPage.keyboard.press("Enter");
-  assert.notEqual(await guestPage.locator(".qid").innerText(), guestQuestion);
-  await guestPage.locator('[data-act="previous"]').click();
-  await guestPage.getByRole("link", { name: "Sign in to save" }).click();
+  assert.equal(new URL(guestPage.url()).pathname, "/admin/login");
+  assert.equal(await guestPage.locator('[data-act="start"]').count(), 0);
+  await guestPage.getByText("Sign in to start practising and save your progress to your account.").waitFor();
   await guestPage.getByLabel("Email", { exact: true }).fill(email);
   await guestPage.getByLabel("Password", { exact: true }).fill(password);
   await guestPage.getByRole("button", { name: "Sign in", exact: true }).click();
   await guestPage.waitForURL(`${baseURL}/practice/dsa`);
-  await guestPage.locator(".qid").waitFor();
-  assert.equal(await guestPage.locator(".qid").innerText(), guestQuestion);
+  await guestPage.locator('#t-arrays [data-act="setup"]').click();
+  await guestPage.locator('[data-act="start"][data-key="arrays"]').click();
+  const guestQuestion = await guestPage.locator(".qid").innerText();
+  await guestPage.keyboard.press("ABCDE"[answerFor.get(guestQuestion)]);
   assert.equal(await guestPage.locator(".opt.picked").count(), 1);
   await guestPage.getByRole("button", { name: "Save progress", exact: true }).click();
   await guestPage.getByRole("status").filter({ hasText: "Saved to your account" }).waitFor();
@@ -169,6 +183,20 @@ try {
   assert.equal(afterRace.snapshot.session.i, 3, "an older wrong-answer save cannot overwrite the exit checkpoint");
   assert.equal((await sendSequence(1, 4, randomUUID(), afterRace.revision)).status(), 200);
   assert.equal((await sendSequence(3, 5)).status(), 409, "another device's save must still block stale writers");
+  const unavailable = await browser.newContext();
+  await unavailable.addCookies([cookie]);
+  const unavailablePage = await unavailable.newPage();
+  await unavailablePage.route("**/api/practice/dsa/progress", (route) => route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: "Unavailable" }) }));
+  await unavailablePage.goto(`${baseURL}/practice/dsa`);
+  await unavailablePage.getByRole("alert").filter({ hasText: "Saved practice could not be loaded" }).waitFor();
+  assert.equal(await unavailablePage.locator('[data-act="start"]').count(), 0, "practice cannot start while the account save is unavailable");
+  await unavailable.close();
+  await guestPage.goto(`${baseURL}/practice/dsa`);
+  await guestPage.locator(".qid").waitFor();
+  await guest.clearCookies();
+  await guestPage.getByRole("button", { name: "Save progress", exact: true }).click();
+  await guestPage.getByRole("link", { name: "Sign in to practise", exact: true }).waitFor();
+  assert.equal(await guestPage.locator('[data-act="pick"]').count(), 0, "practice stops when the session expires during a save");
   assert.deepEqual(errors, []);
   console.log("Passed: DB bank load, no requests for correct answers or navigation, wrong-answer autosave, leave autosave, question-45 cross-device resume, Previous, stale-save conflict, reset, timed tests, mobile layout, access controls, and sign-in return.");
 } finally {

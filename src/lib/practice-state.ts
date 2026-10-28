@@ -21,23 +21,30 @@ export type PracticeQuestion = {
   [key: string]: unknown;
 };
 
+export type PracticeSession = {
+  kind: "practice" | "test";
+  title: string;
+  list: string[];
+  i: number;
+  picks: Record<string, number>;
+  key: string | null;
+  done: boolean;
+  limit?: number;
+  remainingSeconds?: number;
+  used?: number;
+};
+
 export type PracticeSnapshot = {
   version: 1;
   progress: Record<string, { r: Record<string, [number, number, number]>; h: string }>;
-  session: null | {
-    kind: "practice" | "test";
-    title: string;
-    list: string[];
-    i: number;
-    picks: Record<string, number>;
-    key: string | null;
-    done: boolean;
-    limit?: number;
-    remainingSeconds?: number;
-    used?: number;
-  };
+  session: PracticeSession | null;
+  sessions?: Record<string, PracticeSession>;
   view: "home" | "q" | "done";
 };
+
+export function practiceSessionKey(session: Pick<PracticeSession, "kind" | "key">): string {
+  return session.kind === "test" ? "$test" : session.key ?? "$review";
+}
 
 function object(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -61,9 +68,7 @@ export function validatePracticeSnapshot(value: unknown, questions: PracticeQues
     }
     progress[key] = { r: records, h: entry.h };
   }
-  let session: PracticeSnapshot["session"] = null;
-  if (value.session !== null) {
-    const saved = value.session;
+  function validateSession(saved: unknown): PracticeSession {
     if (!object(saved) || !["practice", "test"].includes(String(saved.kind)) ||
       typeof saved.title !== "string" || saved.title.length > 250 || !Array.isArray(saved.list) ||
       !saved.list.length || saved.list.length > questions.length || new Set(saved.list).size !== saved.list.length ||
@@ -76,7 +81,7 @@ export function validatePracticeSnapshot(value: unknown, questions: PracticeQues
       if (!saved.list.includes(id) || !Number.isInteger(pick) || Number(pick) < 0 || Number(pick) > 4) return fail();
       picks[id] = Number(pick);
     }
-    session = {
+    const session: PracticeSession = {
       kind: saved.kind as "practice" | "test", title: saved.title, list: saved.list as string[],
       i: Number(saved.i), picks, key: saved.key as string | null, done: saved.done,
     };
@@ -88,7 +93,21 @@ export function validatePracticeSnapshot(value: unknown, questions: PracticeQues
       session.remainingSeconds = Number(saved.remainingSeconds);
       session.used = Number(saved.used);
     }
+    return session;
+  }
+  const session = value.session === null ? null : validateSession(value.session);
+  let sessions: PracticeSnapshot["sessions"];
+  if (value.sessions !== undefined) {
+    if (!object(value.sessions) || Object.keys(value.sessions).length > topicKeys.size + 2) return fail();
+    sessions = {};
+    for (const [key, saved] of Object.entries(value.sessions)) {
+      if (!topicKeys.has(key) && key !== "$test" && key !== "$review") return fail();
+      const entry = validateSession(saved);
+      if (practiceSessionKey(entry) !== key) return fail();
+      if (entry.key && keyByName && entry.list.some((id) => keyByName.get(byId.get(id)!.topic) !== entry.key)) return fail();
+      sessions[key] = entry;
+    }
   }
   if (value.view !== "home" && !session || value.view === "done" && !session?.done || value.view === "q" && session?.done) return fail();
-  return { version: 1, progress, session, view: value.view as PracticeSnapshot["view"] };
+  return { version: 1, progress, session, ...(sessions ? { sessions } : {}), view: value.view as PracticeSnapshot["view"] };
 }

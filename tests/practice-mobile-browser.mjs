@@ -1,9 +1,19 @@
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
 import { mkdir } from "node:fs/promises";
+import { createHmac, randomUUID, scryptSync } from "node:crypto";
+import nextEnv from "@next/env";
+import { neon } from "@neondatabase/serverless";
 
+nextEnv.loadEnvConfig(process.cwd());
 const { chromium } = createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE || "playwright");
 const base = process.env.PRACTICE_TEST_URL || "http://localhost:3000";
+const sql = neon(process.env.DATABASE_URL);
+const email = `practice-mobile-${randomUUID()}@example.invalid`, salt = randomUUID();
+const hash = scryptSync(randomUUID(), salt, 64).toString("hex");
+const [admin] = await sql`INSERT INTO admins (email, password_hash, password_salt) VALUES (${email}, ${hash}, ${salt}) RETURNING id`;
+const unsigned = [{ alg: "HS256", typ: "JWT" }, { sub: String(admin.id), email, exp: Math.floor(Date.now() / 1000) + 3600 }].map((value) => Buffer.from(JSON.stringify(value)).toString("base64url")).join(".");
+const token = `${unsigned}.${createHmac("sha256", process.env.JWT_SECRET).update(unsigned).digest("base64url")}`;
 const browser = await chromium.launch({ headless: true, channel: "chrome" });
 const errors = [];
 let activePage;
@@ -24,12 +34,14 @@ async function dockIsReachable(page) {
 
 try {
   for (const subject of ["dsa", "history", "oops"]) {
-    const response = await fetch(`${base}/api/practice/${subject}/questions`);
+    const response = await fetch(`${base}/api/practice/${subject}/questions`, { headers: { Cookie: `portfolio_admin_token=${token}` } });
     const bank = (await response.json()).questions;
     const answers = new Map(bank.map((q) => [q.id, "ABCDE".indexOf(q.ans)]));
     for (const viewport of [{ width: 320, height: 568 }, { width: 390, height: 844 }, { width: 844, height: 390 }]) {
       console.log(`Checking ${subject} at ${viewport.width} x ${viewport.height}`);
       const context = await browser.newContext({ viewport, isMobile: true, hasTouch: true });
+      await context.addCookies([{ name: "portfolio_admin_token", value: token, url: base }]);
+      await sql`DELETE FROM practice_saves WHERE admin_id = ${admin.id} AND subject = ${subject}`;
       const page = await context.newPage();
       activePage = page;
       page.setDefaultTimeout(10000);
@@ -50,7 +62,7 @@ try {
       await dockIsReachable(page);
       await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
       const back = await page.locator('[data-act="quit"]').boundingBox();
-      const save = await page.getByRole("link", { name: "Sign in to save" }).boundingBox();
+      const save = await page.getByRole("button", { name: "Save progress", exact: true }).boundingBox();
       assert.ok(back.x + back.width < save.x, "Topics and Save occupy opposite sides");
       assert.equal(await page.locator('[data-act="next"]').isDisabled(), true);
       const firstId = await page.locator(".qid").innerText();
@@ -82,6 +94,8 @@ try {
       await page.locator('[data-act="finish"]').click();
       await page.getByRole("heading", { name: "Review", exact: true }).waitFor();
       assert.equal(await page.locator(".qnav").count(), 0, "dock disappears outside a question session");
+      await page.getByRole("button", { name: "Save progress", exact: true }).click();
+      await page.getByRole("status").filter({ hasText: "Saved to your account" }).waitFor();
       await context.close();
     }
   }
@@ -92,4 +106,5 @@ try {
   throw error;
 } finally {
   await browser.close();
+  await sql`DELETE FROM admins WHERE id = ${admin.id} AND email = ${email}`;
 }

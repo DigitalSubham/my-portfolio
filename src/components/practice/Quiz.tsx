@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ChevronLeft, LogIn, Save } from "lucide-react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
-import { formatTime, letters, percent, quizStats, recordOf, remainingTime, sectionOf, shuffle, topicStatus, type QuizQuestion } from "@/lib/practice-quiz";
+import { formatTime, letters, percent, quizStats, recordOf, remainingTime, savedQuizSession, sectionOf, shuffle, topicStatus, type QuizQuestion } from "@/lib/practice-quiz";
 import type { PracticeSubject } from "@/lib/practice-subjects";
 import { useQuiz } from "./useQuiz";
 import styles from "./quiz.module.css";
@@ -44,6 +44,7 @@ function Segments({ name, values, selected }: { name: string; values: [string, s
 function Setup({ topic, quiz, close }: { topic: string; quiz: QuizController; close: () => void }) {
   const [error, setError] = useState("");
   const test = topic === "test";
+  const saved = savedQuizSession(quiz.state, test ? "$test" : topic);
   const bank = quiz.loaded!.questions;
   const base = test ? bank.filter((q) => !q.unscored) : bank.filter((q) => q.k === topic);
   const stats = quizStats(quiz.state, base);
@@ -76,6 +77,7 @@ function Setup({ topic, quiz, close }: { topic: string; quiz: QuizController; cl
     quiz.start(questions, title, test ? null : topic, test);
   }
   return <form className="setup" data-for={topic} onSubmit={submit}>
+    {saved && !saved.done && <p className="hint">You have an unfinished {test ? "timed test" : "practice session"} at question {saved.i + 1} of {saved.list.length}. Starting again replaces only this session. <Button action="resume-topic" data-key={topic} onClick={() => quiz.resumeTopic(test ? "$test" : topic)}>Continue saved session</Button></p>}
     {test ? <>
       <fieldset className="seg"><legend>Number of questions (1 minute each)</legend><Segments name="tn" values={[["16", "16"], ["30", "30"], ["50", "50"]]} selected="16" /></fieldset>
       <fieldset className="seg"><legend>Questions from</legend><Segments name="tf" values={[["all", "All topics"], ["new", "Ones I haven't tried"], ...(quiz.subject.topics.some((t) => t.key === "pyq") ? [["pyq", "Past papers only"]] as [string, string][] : [])]} selected="all" /></fieldset>
@@ -124,6 +126,8 @@ function Home({ quiz, open, setOpen }: { quiz: QuizController; open: string | nu
       {topics.map((t) => {
         const stats = topicStats(t.key), status = topicStatus(stats);
         const questions = bank.filter((q) => q.k === t.key);
+        const saved = savedQuizSession(quiz.state, t.key);
+        const unfinished = saved && !saved.done;
         const count = new Set(questions.map(sectionOf)).size;
         return <article className={`topic${t.key === "pyq" ? " pyq" : ""}`} id={`t-${t.key}`} key={t.key}>
           <div className="t-main"><div className="t-head"><h3>{t.label}</h3><span className="t-meta num">{stats.total} questions{questions.length > stats.total && ` + ${questions.length - stats.total} review-only`}{t.key !== "pyq" && ` \u00b7 ${count} sub-topics`}</span></div>
@@ -131,7 +135,7 @@ function Home({ quiz, open, setOpen }: { quiz: QuizController; open: string | nu
             <div className="bar" role="img" aria-label={`${stats.done} of ${stats.total} tried`}><i className="c" style={{ width: `${stats.total ? stats.lastRight / stats.total * 100 : 0}%` }} /><i className="w" style={{ width: `${stats.total ? stats.wrong / stats.total * 100 : 0}%` }} /></div>
             <p className="t-line num"><span>{stats.done} of {stats.total} tried</span><span>{stats.attempts ? `${percent(stats.acc)} correct overall` : ""}</span></p>
           </div>
-          <div className="t-side"><span className={`chip ${status.cls}`}>{status.text}</span><div className="t-actions"><Button className="btn primary" action="setup" data-key={t.key} onClick={() => toggle(t.key)}>Practise</Button>
+          <div className="t-side"><span className={`chip ${status.cls}`}>{status.text}</span><div className="t-actions">{unfinished ? <><Button className="btn primary" action="resume-topic" data-key={t.key} onClick={() => quiz.resumeTopic(t.key)}>Continue · {saved.i + 1} / {saved.list.length}</Button><Button action="setup" data-key={t.key} onClick={() => toggle(t.key)}>New practice</Button></> : <Button className="btn primary" action="setup" data-key={t.key} onClick={() => toggle(t.key)}>Practise</Button>}
             {stats.wrong > 0 && <Button action="wrong" onClick={() => quiz.start(wrongQuestions(questions), `${t.label} \u00b7 wrong ones`, t.key)}>Wrong ({stats.wrong})</Button>}
           </div></div>
           {open === t.key && <Setup key={t.key} topic={t.key} quiz={quiz} close={() => setOpen(null)} />}
@@ -225,7 +229,8 @@ function Results({ quiz, setup }: { quiz: QuizController; setup: (key: string) =
 }
 
 export default function Quiz({ subject, initialTopic = null }: { subject: PracticeSubject; initialTopic?: string | null }) {
-  const quiz = useQuiz(subject, initialTopic !== null);
+  const quiz = useQuiz(subject, initialTopic);
+  const returnPath = `/practice/${subject.slug}${initialTopic ? `?${subject.slug === "dbms" ? "topic" : "chapter"}=${encodeURIComponent(initialTopic)}` : ""}`;
   const [open, setOpen] = useState<string | null>(initialTopic);
   const { pick, next } = quiz;
   const activePick = quiz.state.session?.picks[quiz.state.session.list[quiz.state.session.i]];
@@ -256,7 +261,7 @@ export default function Quiz({ subject, initialTopic = null }: { subject: Practi
   }, [open, quiz.loaded]);
   return <div className={styles.quiz}>
     <main className={`wrap${quiz.state.view === "q" ? " question-view" : ""}`} aria-live="polite">
-      {quiz.error ? <><p role="alert">{quiz.error}</p><Button onClick={() => location.reload()}>Try again</Button></> : !quiz.loaded ? <p role="status">Loading questions and saved practice...</p> : quiz.state.view === "home" ? <Home quiz={quiz} open={open} setOpen={setOpen} /> : quiz.state.view === "q" ? <Question quiz={quiz} /> : <Results quiz={quiz} setup={setOpen} />}
+      {quiz.error ? <><p role="alert">{quiz.error}</p><Button onClick={() => location.reload()}>Try again</Button></> : !quiz.loaded ? <p role="status">Loading questions and saved practice...</p> : !quiz.loaded.account ? <><p role="alert">Sign in to continue practising and save your progress.</p><Link className="btn primary" href={`/admin/login?next=${encodeURIComponent(returnPath)}`}>Sign in to practise</Link></> : quiz.state.view === "home" ? <Home quiz={quiz} open={open} setOpen={setOpen} /> : quiz.state.view === "q" ? <Question quiz={quiz} /> : <Results quiz={quiz} setup={setOpen} />}
     </main>
   </div>;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { emptyQuiz, letters, quizSnapshot, recordAnswer, remainingTime, restoreQuiz, type QuizQuestion, type QuizState } from "@/lib/practice-quiz";
+import { emptyQuiz, letters, quizSnapshot, recordAnswer, remainingTime, restoreQuiz, savedQuizSession, switchQuizSession, type QuizQuestion, type QuizState } from "@/lib/practice-quiz";
 import { validatePracticeSnapshot, type PracticeQuestion, type PracticeSnapshot } from "@/lib/practice-state";
 import type { PracticeSubject } from "@/lib/practice-subjects";
 
@@ -10,9 +10,14 @@ type Loaded = { questions: QuizQuestion[]; account: AccountSave | null; accountE
 
 async function loadQuiz(subject: PracticeSubject): Promise<Loaded> {
   const [bankResponse, saveResponse] = await Promise.all([
-    fetch(`/api/practice/${subject.slug}/questions`),
+    fetch(`/api/practice/${subject.slug}/questions`, { cache: "no-store" }),
     fetch(`/api/practice/${subject.slug}/progress`, { cache: "no-store" }).catch(() => null),
   ]);
+  if (bankResponse.status === 401 || saveResponse?.status === 401) {
+    window.location.replace(`/admin/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
+    throw new Error("Sign in to practise and save your progress.");
+  }
+  if (!saveResponse?.ok) throw new Error("Saved practice could not be loaded. Please try again before starting.");
   const bank = await bankResponse.json() as { questions: PracticeQuestion[] };
   if (!bankResponse.ok || !Array.isArray(bank.questions) || !bank.questions.length) throw new Error("Questions could not be loaded. Please check your connection.");
   const questions = bank.questions.map((q) => ({ ...q, k: subject.topics.find((t) => t.name === q.topic)?.key || "" }));
@@ -24,7 +29,7 @@ async function loadQuiz(subject: PracticeSubject): Promise<Loaded> {
   };
 }
 
-export function useQuiz(subject: PracticeSubject, openTopics = false) {
+export function useQuiz(subject: PracticeSubject, initialTopic: string | null = null) {
   const [loaded, setLoaded] = useState<Loaded | null>(null);
   const [state, setState] = useState<QuizState>(emptyQuiz);
   const [error, setError] = useState("");
@@ -147,7 +152,10 @@ export function useQuiz(subject: PracticeSubject, openTopics = false) {
           try { restored = restoreQuiz(validatePracticeSnapshot(data.account.snapshot, data.questions, subject.topics)); } catch { /* Keep an empty local session if its questions were removed. */ }
         }
       }
-      if (openTopics) restored = { ...restored, view: "home" };
+      if (initialTopic) {
+        const saved = savedQuizSession(restored, initialTopic);
+        restored = saved && !saved.done ? switchQuizSession(restored, saved) : { ...restored, view: "home" };
+      }
       current.current = restored; setState(restored); setLoaded(data);
       setNote(data.accountError || (data.account ? "Account save loaded" : "Progress is kept in this browser."));
       saveLocal();
@@ -178,16 +186,19 @@ export function useQuiz(subject: PracticeSubject, openTopics = false) {
   }, [state.view, state.session?.kind, state.session?.done]);
 
   function start(questions: QuizQuestion[], title: string, key: string | null, test = false) {
-    if (!questions.length) return false;
+    if (!runtime.current.account || !questions.length) return false;
     const before = current.current;
-    if (before.session && !before.session.done && !window.confirm("Start a new session and replace your current session?")) return false;
+    const existing = savedQuizSession(before, test ? "$test" : key ?? "$review");
+    if (existing && !existing.done && !window.confirm("Start a new session for this topic? This replaces only this topic's unfinished session. Other topics will be kept.")) return false;
     const session: NonNullable<QuizState["session"]> = { kind: test ? "test" : "practice", title, key, list: questions.map((q) => q.id), i: 0, picks: {}, done: false };
     if (test) { session.limit = questions.length * 60; session.start = Date.now(); session.used = 0; session.remainingSeconds = session.limit; }
-    commit({ ...before, session, view: "q" });
+    commit(switchQuizSession(before, session));
+    if (before.session) void saveCloud();
     return true;
   }
 
   function pick(index: number) {
+    if (!runtime.current.account) return;
     let next = current.current;
     const session = next.session;
     if (!session || next.view !== "q") return;
@@ -220,10 +231,13 @@ export function useQuiz(subject: PracticeSubject, openTopics = false) {
     if (session?.kind === "test" && !session.done) session.used = (session.limit || 0) - remainingTime(before);
     commit({ ...before, session, view: "home" }); saveWhenLeaving();
   }
-  function resume() {
+  function resume(key?: string) {
+    if (!runtime.current.account) return;
     const before = current.current;
-    if (!before.session || before.session.done) return;
-    commit({ ...before, view: "q", session: { ...before.session, start: Date.now() - (before.session.used || 0) * 1000 } });
+    const session = key ? savedQuizSession(before, key) : before.session;
+    if (!session || session.done) return;
+    commit(switchQuizSession(before, session));
+    if (session !== before.session) void saveCloud();
   }
   function resetSession() {
     const before = current.current;
@@ -242,5 +256,5 @@ export function useQuiz(subject: PracticeSubject, openTopics = false) {
     localStorage.removeItem(runtime.current.key); location.reload();
   }
 
-  return { subject, loaded, state, error, note, saving, conflict, clock, save: () => saveCloud(), start, pick, next, previous, quit, resume, resetSession, reset, loadSaved, finishTest };
+  return { subject, loaded, state, error, note, saving, conflict, clock, save: () => saveCloud(), start, pick, next, previous, quit, resume: () => resume(), resumeTopic: (key: string) => resume(key), resetSession, reset, loadSaved, finishTest };
 }

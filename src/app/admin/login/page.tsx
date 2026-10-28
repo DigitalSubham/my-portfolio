@@ -11,6 +11,8 @@ type Props = {
 
 export default async function AdminLoginPage({ searchParams }: Props) {
   const params = await searchParams;
+  const next = practiceReturnPath(params.next);
+  const practice = next !== "/admin";
 
   return (
     <div className="adm grid min-h-screen place-items-center p-4">
@@ -30,7 +32,7 @@ export default async function AdminLoginPage({ searchParams }: Props) {
           </span>
           <h1 className="mt-5 text-2xl font-semibold tracking-tight">Welcome back</h1>
           <p className="mt-2 text-[14px] leading-6 text-[var(--adm-muted)]">
-            Sign in to manage portfolio content, SEO fields, and contact messages.
+            {practice ? "Sign in to start practising and save your progress to your account." : "Sign in to manage portfolio content, SEO fields, and contact messages."}
           </p>
 
           {params.reset && (
@@ -48,7 +50,7 @@ export default async function AdminLoginPage({ searchParams }: Props) {
           )}
 
           <form action={loginAction} className="mt-6 grid gap-4">
-            {practiceReturnPath(params.next) !== "/admin" && <input type="hidden" name="next" value={practiceReturnPath(params.next)} />}
+            {practice && <input type="hidden" name="next" value={next} />}
             <label className="adm-label">
               Email
               <input name="email" type="email" autoComplete="email" required className="adm-input" />

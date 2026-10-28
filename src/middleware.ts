@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { isPracticeQuizPath } from "./lib/practice-access";
 
 const authCookieName = "portfolio_admin_token";
 const encoder = new TextEncoder();
@@ -40,8 +41,9 @@ async function verifyJwt(token: string) {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const practice = isPracticeQuizPath(pathname);
   if (
-    !pathname.startsWith("/admin") ||
+    (!practice && !pathname.startsWith("/admin")) ||
     pathname === "/admin/login" ||
     pathname === "/admin/forgot-password"
   ) {
@@ -55,9 +57,13 @@ export async function middleware(request: NextRequest) {
 
   const url = request.nextUrl.clone();
   url.pathname = "/admin/login";
+  if (practice) {
+    url.search = "";
+    url.searchParams.set("next", `${pathname}${request.nextUrl.search}`);
+  }
   return NextResponse.redirect(url);
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/practice/:path*"],
 };

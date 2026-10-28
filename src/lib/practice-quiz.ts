@@ -68,6 +68,21 @@ export function remainingTime(state: QuizState, now = Date.now()) {
   return Math.max(0, (session.limit || 0) - elapsed);
 }
 
+const sessionKey = (session: QuizSession) => session.kind === "test" ? "$test" : session.key ?? "$review";
+
+export function savedQuizSession(state: QuizState, key: string): QuizSession | null {
+  return state.session && sessionKey(state.session) === key ? state.session : state.sessions?.[key] ?? null;
+}
+
+export function switchQuizSession(state: QuizState, session: QuizSession, now = Date.now()): QuizState {
+  const sessions = { ...state.sessions };
+  if (state.session) sessions[sessionKey(state.session)] = quizSnapshot(state, false, now).session!;
+  const active = { ...session };
+  if (active.kind === "test") active.start = now - (active.used || 0) * 1000;
+  sessions[sessionKey(active)] = active;
+  return { ...state, session: active, sessions, view: active.done ? "done" : "q" };
+}
+
 export function quizSnapshot(state: QuizState, cloud = false, now = Date.now()): PracticeSnapshot {
   const session = state.session ? { ...state.session } : null;
   if (session) {
@@ -77,7 +92,16 @@ export function quizSnapshot(state: QuizState, cloud = false, now = Date.now()):
       session.used = (session.limit || 0) - session.remainingSeconds;
     }
   }
-  return { version: 1, progress: state.progress, session, view: cloud && session && !session.done ? "q" : state.view };
+  const sessions = state.sessions ? { ...state.sessions } : undefined;
+  if (sessions && session) sessions[sessionKey(session)] = session;
+  if (sessions) {
+    for (const [key, saved] of Object.entries(sessions)) {
+      const clean = { ...saved } as QuizSession;
+      delete clean.start;
+      sessions[key] = clean;
+    }
+  }
+  return { version: 1, progress: state.progress, session, ...(sessions ? { sessions } : {}), view: cloud && session && !session.done ? "q" : state.view };
 }
 
 export function restoreQuiz(snapshot: PracticeSnapshot): QuizState {

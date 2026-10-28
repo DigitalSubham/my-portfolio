@@ -66,8 +66,9 @@ try {
   assert.equal((await context.request.get(`${base}/api/practice/dsa/progress`).then((r) => r.json())).snapshot, null);
   const guest = await browser.newPage();
   await guest.goto(`${base}/practice/dbms`);
-  await guest.locator('.ledger').waitFor();
-  assert.equal(await guest.getByRole('link', { name: 'Sign in to save', exact: true }).getAttribute('href'), '/admin/login?next=/practice/dbms');
+  assert.equal(new URL(guest.url()).pathname, '/admin/login');
+  assert.equal(new URL(guest.url()).searchParams.get('next'), '/practice/dbms');
+  assert.equal(await guest.locator('.ledger').count(), 0);
   assert.deepEqual(errors, []);
   console.log('Passed: exact 635-question DB bank, 14 topics, explanations, no per-question requests, wrong-answer saving, mobile navigation, cross-device resume, Previous, past-paper timed tests, isolated progress and sign-in return.');
 } finally {

@@ -43,7 +43,4 @@ export function getPracticeSubject(slug: string) {
   return practiceSubjects.find((subject) => subject.slug === slug);
 }
 
-export function practiceReturnPath(value: unknown) {
-  if (value === "/dsa-practice.html") return "/practice/dsa";
-  return practiceSubjects.some((subject) => value === `/practice/${subject.slug}`) ? String(value) : "/admin";
-}
+export { practiceReturnPath } from "./practice-access";

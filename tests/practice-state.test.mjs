@@ -65,3 +65,30 @@ test("invalid question positions, picks, histories and time are rejected", () =>
     assert.throws(() => validatePracticeSnapshot(input, questions), /Invalid practice save/);
   }
 });
+
+test("saved topic sessions reject invalid positions, picks and mismatched topic keys", () => {
+  const input = snapshot();
+  const session = { ...input.session, key: "arrays" };
+  input.sessions = { arrays: session };
+  assert.deepEqual(validatePracticeSnapshot(input, questions), input);
+  for (const sessions of [
+    null,
+    { missing: session },
+    { stacks: session },
+    { arrays: { ...session, i: session.list.length } },
+    { arrays: { ...session, picks: { [session.list[0]]: 5 } } },
+    { arrays: { ...session, list: ["removed-question"] } },
+    { $test: session },
+  ]) {
+    assert.throws(() => validatePracticeSnapshot({ ...input, sessions }, questions), /Invalid practice save/);
+  }
+});
+
+test("archived sessions contain only questions belonging to their topic", () => {
+  const list = questions.filter((q) => q.topic === "Arrays & Basics").slice(0, 10).map((q) => q.id);
+  const input = { version: 1, progress: {}, session: null, view: "home", sessions: { arrays: { kind: "practice", title: "Arrays", key: "arrays", list, i: 0, picks: {}, done: false } } };
+  const allowedTopics = [{ key: "arrays", name: "Arrays & Basics" }];
+  assert.deepEqual(validatePracticeSnapshot(input, questions, allowedTopics), input);
+  input.sessions.arrays.list = [questions.find((q) => q.topic !== "Arrays & Basics").id];
+  assert.throws(() => validatePracticeSnapshot(input, questions, allowedTopics), /Invalid practice save/);
+});
