@@ -11,10 +11,10 @@ type SavedRow = { snapshot: unknown; revision: number; updated_at: string };
 
 export async function GET(_request: Request, context: { params: Promise<{ subject: string }> }) {
   const { subject } = await context.params;
-  if (!getPracticeSubject(subject)) return NextResponse.json({ error: "Unknown practice subject." }, { status: 404, headers });
   const admin = await getCurrentAdmin();
   if (!admin) return NextResponse.json({ error: "Sign in to save your practice across devices." }, { status: 401, headers });
   try {
+    if (!await getPracticeSubject(subject)) return NextResponse.json({ error: "Unknown practice subject." }, { status: 404, headers });
     const [row] = await getSql()`SELECT snapshot, revision, updated_at FROM practice_saves WHERE admin_id = ${admin.sub} AND subject = ${subject}` as SavedRow[];
     return NextResponse.json({ owner: admin.sub, snapshot: row?.snapshot ?? null, revision: row?.revision ?? 0, updatedAt: row?.updated_at ?? null }, { headers });
   } catch (error) {
@@ -25,8 +25,6 @@ export async function GET(_request: Request, context: { params: Promise<{ subjec
 
 export async function POST(request: Request, context: { params: Promise<{ subject: string }> }) {
   const { subject } = await context.params;
-  const config = getPracticeSubject(subject);
-  if (!config) return NextResponse.json({ error: "Unknown practice subject." }, { status: 404, headers });
   if (request.headers.get("origin") !== new URL(request.url).origin) {
     return NextResponse.json({ error: "Invalid request origin." }, { status: 403, headers });
   }
@@ -38,7 +36,10 @@ export async function POST(request: Request, context: { params: Promise<{ subjec
   let revision;
   let writerId = "", sequence = 0;
   let questions;
+  let config;
   try {
+    config = await getPracticeSubject(subject);
+    if (!config) return NextResponse.json({ error: "Unknown practice subject." }, { status: 404, headers });
     questions = await getPracticeQuestions(subject);
   } catch (error) {
     console.error("Unable to validate practice save.", error);

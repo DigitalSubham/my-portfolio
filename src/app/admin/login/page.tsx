@@ -3,7 +3,7 @@ import { SubmitButton } from "../_components/FormButtons";
 import LinkPending from "../_components/LinkPending";
 import { AlertCircle, ArrowLeft, CheckCircle2, LayoutDashboard, LogIn } from "lucide-react";
 import { loginAction } from "../actions";
-import { practiceReturnPath } from "@/lib/practice-subjects";
+import { practiceReturnPath } from "@/lib/practice-access";
 
 type Props = {
   searchParams: Promise<{ error?: string; reset?: string; next?: string }>;

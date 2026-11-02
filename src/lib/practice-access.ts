@@ -1,5 +1,6 @@
 export function isPracticeQuizPath(pathname: string): boolean {
-  return ["dbms", "oops", "dsa", "history"].some((subject) => pathname === `/practice/${subject}`);
+  const match = /^\/practice\/([a-z0-9]+(?:-[a-z0-9]+)*)$/.exec(pathname);
+  return Boolean(match && match[0] === pathname && match[1].length <= 80);
 }
 
 export function practiceReturnPath(value: unknown): string {

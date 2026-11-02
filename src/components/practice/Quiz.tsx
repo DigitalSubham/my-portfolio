@@ -230,7 +230,7 @@ function Results({ quiz, setup }: { quiz: QuizController; setup: (key: string) =
 
 export default function Quiz({ subject, initialTopic = null }: { subject: PracticeSubject; initialTopic?: string | null }) {
   const quiz = useQuiz(subject, initialTopic);
-  const returnPath = `/practice/${subject.slug}${initialTopic ? `?${subject.slug === "dbms" ? "topic" : "chapter"}=${encodeURIComponent(initialTopic)}` : ""}`;
+  const returnPath = `/practice/${subject.slug}${initialTopic ? `?topic=${encodeURIComponent(initialTopic)}` : ""}`;
   const [open, setOpen] = useState<string | null>(initialTopic);
   const { pick, next } = quiz;
   const activePick = quiz.state.session?.picks[quiz.state.session.list[quiz.state.session.i]];

@@ -4,33 +4,10 @@ import Link from "next/link";
 import Footer from "@/components/common/Footer";
 import Navbar from "@/components/common/Navbar";
 import { getPortfolioData } from "@/lib/db";
+import { getPracticeSubjects } from "@/lib/practice-subjects";
 import { toPageNavItems } from "@/lib/nav";
 
-const practiceSubjects = [
-  {
-    title: "DBMS Practice",
-    description: "635 questions across 14 topics, including SQL, normalization, transactions, indexing and 35 past-paper questions.",
-    href: "/practice/dbms", meta: "Question bank",
-  },
-  {
-    title: "OOP & Language Foundations",
-    description: "Complete OOP, C, C++ and Java notes with Python comparisons, 51 worked examples and all 199 supplied assignment questions.",
-    href: "/practice/oops", notesHref: "/practice/oops/notes", meta: "Notes & practice",
-  },
-  {
-    title: "DSA Practice",
-    description: "TRE DSA question bank for daily revision and interview preparation.",
-    href: "/practice/dsa",
-    meta: "Question bank",
-  },
-  {
-    title: "Bihar History & Indian National Movement",
-    description: "880 English practice questions and 24 chapters of Hindi notes, with timelines and revision tables.",
-    href: "/practice/history",
-    notesHref: "/practice/history/notes",
-    meta: "Notes & practice",
-  },
-];
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { site, seo } = await getPortfolioData();
@@ -59,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function PracticePage() {
-  const { site, navItems, socials } = await getPortfolioData();
+  const [{ site, navItems, socials }, practiceSubjects] = await Promise.all([getPortfolioData(), getPracticeSubjects()]);
 
   return (
     <div className="min-h-screen bg-[#f7f7f5] text-gray-900 dark:bg-gray-950 dark:text-gray-100">
@@ -88,12 +65,12 @@ export default async function PracticePage() {
           <section className="mt-12 grid gap-6 md:grid-cols-2" aria-label="Practice subjects">
             {practiceSubjects.map((subject) => (
               <article
-                key={subject.href}
+                key={`/practice/${subject.slug}`}
                 className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900"
               >
                 <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-gray-500 dark:text-gray-400">
                   <BookOpenCheck className="h-4 w-4" aria-hidden="true" />
-                  {subject.meta}
+                  {subject.notesHref ? "Notes & practice" : "Question bank"}
                 </p>
                 <h2 className="mt-3 text-2xl font-semibold tracking-tight text-gray-950 dark:text-white">
                   {subject.title}
@@ -101,10 +78,11 @@ export default async function PracticePage() {
                 <p className="mt-3 text-[15px] leading-relaxed text-gray-600 dark:text-gray-400">
                   {subject.description}
                 </p>
+                <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{subject.questionCount} questions · {subject.topics.length} topics</p>
                 <div className="mt-6 flex flex-wrap gap-3">
                 {subject.notesHref && <Link href={subject.notesHref} className="inline-flex min-h-11 items-center gap-2 rounded-md border border-gray-300 px-5 text-sm font-semibold dark:border-gray-700">Read notes <ArrowRight className="h-4 w-4" /></Link>}
                 <Link
-                  href={subject.href}
+                  href={`/practice/${subject.slug}`}
                   className="inline-flex min-h-11 items-center gap-2 rounded-md bg-gray-950 px-5 text-sm font-semibold text-white dark:bg-white dark:text-gray-950"
                 >
                   Practise

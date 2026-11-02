@@ -12,7 +12,7 @@ import {
 } from "@/lib/auth";
 import { getAdminTable, type AdminField } from "@/lib/admin-config";
 import { addResume, deleteResume, getSql, hasDatabase, setDefaultResume } from "@/lib/db";
-import { practiceReturnPath } from "@/lib/practice-subjects";
+import { practiceReturnPath } from "@/lib/practice-access";
 import {
   draftApplication,
   sendApplication,
