@@ -228,6 +228,14 @@ function Results({ quiz, setup }: { quiz: QuizController; setup: (key: string) =
   </>;
 }
 
+function QuizLoading() {
+  return <div className={styles.loading} role="status">
+    <span className={styles.loadingSpinner} aria-hidden="true" />
+    <h2>Getting your quiz ready</h2>
+    <p className="muted">Loading questions and saved progress…</p>
+  </div>;
+}
+
 export default function Quiz({ subject, initialTopic = null }: { subject: PracticeSubject; initialTopic?: string | null }) {
   const quiz = useQuiz(subject, initialTopic);
   const returnPath = `/practice/${subject.slug}${initialTopic ? `?topic=${encodeURIComponent(initialTopic)}` : ""}`;
@@ -261,7 +269,7 @@ export default function Quiz({ subject, initialTopic = null }: { subject: Practi
   }, [open, quiz.loaded]);
   return <div className={styles.quiz}>
     <main className={`wrap${quiz.state.view === "q" ? " question-view" : ""}`} aria-live="polite">
-      {quiz.error ? <><p role="alert">{quiz.error}</p><Button onClick={() => location.reload()}>Try again</Button></> : !quiz.loaded ? <p role="status">Loading questions and saved practice...</p> : !quiz.loaded.account ? <><p role="alert">Sign in to continue practising and save your progress.</p><Link className="btn primary" href={`/admin/login?next=${encodeURIComponent(returnPath)}`}>Sign in to practise</Link></> : quiz.state.view === "home" ? <Home quiz={quiz} open={open} setOpen={setOpen} /> : quiz.state.view === "q" ? <Question quiz={quiz} /> : <Results quiz={quiz} setup={setOpen} />}
+      {quiz.error ? <><p role="alert">{quiz.error}</p><Button onClick={() => location.reload()}>Try again</Button></> : !quiz.loaded ? <QuizLoading /> : !quiz.loaded.account ? <><p role="alert">Sign in to continue practising and save your progress.</p><Link className="btn primary" href={`/admin/login?next=${encodeURIComponent(returnPath)}`}>Sign in to practise</Link></> : quiz.state.view === "home" ? <Home quiz={quiz} open={open} setOpen={setOpen} /> : quiz.state.view === "q" ? <Question quiz={quiz} /> : <Results quiz={quiz} setup={setOpen} />}
     </main>
   </div>;
 }
